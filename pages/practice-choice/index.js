@@ -32,6 +32,7 @@ const modeInfo = {
 Page({
   data: {
     mode: "",
+    scope: "all",
     title: "",
     instruction: "",
     loading: true,
@@ -51,8 +52,13 @@ Page({
   },
 
   onLoad(options) {
-    const info = modeInfo[options.mode] || modeInfo.WORD_CHOOSE_MEANING;
-    this.setData({ mode: options.mode || "WORD_CHOOSE_MEANING", ...info });
+    const scope = options.scope === "weak" ? "weak" : "all";
+    const baseInfo = modeInfo[options.mode] || modeInfo.WORD_CHOOSE_MEANING;
+    const info =
+      scope === "weak"
+        ? { title: "错题复习", instruction: "集中复习做错或标记为不熟的单词" }
+        : baseInfo;
+    this.setData({ mode: options.mode || "WORD_CHOOSE_MEANING", scope, ...info });
     wx.setNavigationBarTitle({ title: info.title });
     this.loadQuestions();
   },
@@ -65,7 +71,7 @@ Page({
     this.setData({ loading: true, error: "" });
     try {
       const result = await request({
-        url: `/practice/questions?mode=${this.data.mode}&limit=10`
+        url: `/practice/questions?mode=${this.data.mode}&limit=10&scope=${this.data.scope}`
       });
       const questions = (result.questions || []).map(decorateQuestion);
       this.setData({
@@ -227,7 +233,7 @@ Page({
   },
 
   goHome() {
-    wx.reLaunch({ url: "/pages/home/index" });
+    wx.switchTab({ url: "/pages/home/index" });
   },
 
   restart() {

@@ -1,0 +1,74 @@
+<view class="page review-page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在整理复习内容…</view>
+
+  <block wx:elif="{{overview}}">
+    <button class="smart-button" bindtap="startSmartReview">
+      开始智能复习{{overview.pendingCount ? ' · ' + overview.pendingCount + ' 项' : ''}}
+    </button>
+
+    <view class="category-tabs">
+      <view
+        wx:for="{{categoryTabs}}"
+        wx:key="type"
+        class="category-tab {{category === item.type ? 'category-tab-active' : ''}}"
+        data-type="{{item.type}}"
+        bindtap="selectCategory"
+      >
+        <text class="category-name">{{item.label}}</text>
+        <text class="category-count">{{item.pendingCount}} 待复习</text>
+      </view>
+    </view>
+
+    <view class="status-switch">
+      <view
+        class="{{status === 'PENDING' ? 'status-active' : ''}}"
+        data-status="PENDING"
+        bindtap="selectStatus"
+      >待复习</view>
+      <view
+        class="{{status === 'MASTERED' ? 'status-active' : ''}}"
+        data-status="MASTERED"
+        bindtap="selectStatus"
+      >已掌握</view>
+    </view>
+
+    <view wx:if="{{!visibleItems.length}}" class="card review-empty">
+      <text class="empty-icon">{{status === 'PENDING' ? '✓' : '☆'}}</text>
+      <text class="empty-title">{{status === 'PENDING' ? '这一类已经复习完啦' : '还没有已掌握的内容'}}</text>
+      <text class="muted">{{status === 'PENDING' ? '继续学习，新错题会自动来到这里' : '完成连续正确或手动标记后会显示在这里'}}</text>
+    </view>
+
+    <view wx:else class="review-list">
+      <view wx:for="{{visibleItems}}" wx:key="key" class="card review-card">
+        <view class="review-card-head">
+          <view class="review-copy">
+            <text class="review-item-title">{{item.title}}</text>
+            <text class="review-item-subtitle">{{item.subtitle}}</text>
+          </view>
+          <view class="wrong-pill">错 {{item.wrongCount}} 次</view>
+        </view>
+        <text wx:if="{{item.referenceAnswer}}" class="reference-answer">
+          参考：{{item.referenceAnswer}}
+        </text>
+        <view class="review-card-foot">
+          <text class="streak-text">连续答对 {{item.correctStreak}} 次</text>
+          <button
+            wx:if="{{item.status === 'PENDING'}}"
+            class="master-button"
+            data-type="{{item.type}}"
+            data-key="{{item.key}}"
+            data-status="{{item.status}}"
+            bindtap="toggleMastered"
+          >标为掌握</button>
+        </view>
+      </view>
+      <button
+        wx:if="{{status === 'PENDING'}}"
+        class="practice-category-button"
+        data-type="{{category}}"
+        bindtap="practiceCategory"
+      >复习这一类</button>
+    </view>
+  </block>
+</view>

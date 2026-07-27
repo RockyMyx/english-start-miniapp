@@ -1,0 +1,68 @@
+<view class="report-page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在整理你的学习记录…</view>
+
+  <block wx:elif="{{report}}">
+    <canvas
+      class="report-canvas"
+      canvas-id="reportPoster"
+      width="{{posterWidth}}"
+      height="{{posterHeight}}"
+      style="width: {{posterWidth}}px; height: {{posterHeight}}px;"
+    ></canvas>
+
+    <view class="share-actions">
+      <button class="friend-share" open-type="share">分享给微信好友</button>
+      <button
+        class="moment-share"
+        loading="{{saving}}"
+        disabled="{{!posterPath || saving}}"
+        bindtap="saveForMoments"
+      >保存海报发朋友圈</button>
+    </view>
+
+    <view class="card detail-card">
+      <text class="detail-title">最近 7 天</text>
+      <view class="week-chart">
+        <view wx:for="{{recentDays}}" wx:key="dateKey" class="day-column">
+          <text class="day-score">{{item.score}}</text>
+          <view class="bar-track">
+            <view class="bar-fill" style="height: {{item.barHeight}}rpx;"></view>
+          </view>
+          <text class="day-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card detail-card">
+      <view class="detail-heading">
+        <text class="detail-title">薄弱词汇</text>
+        <button
+          wx:if="{{report.weakWords.length}}"
+          class="review-button"
+          bindtap="startReview"
+        >开始复习</button>
+      </view>
+      <view wx:if="{{!report.weakWords.length}}" class="detail-empty">暂时没有薄弱词，状态很好。</view>
+      <view wx:else class="weak-list">
+        <view wx:for="{{report.weakWords}}" wx:key="id" class="weak-row">
+          <view>
+            <text class="weak-word">{{item.english}}</text>
+            <text class="weak-meaning">{{item.chinese}}</text>
+          </view>
+          <text class="weak-accuracy">正确率 {{item.accuracy}}%</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{modeStats.length}}" class="card detail-card">
+      <text class="detail-title">练习表现</text>
+      <view class="mode-list">
+        <view wx:for="{{modeStats}}" wx:key="mode" class="mode-row">
+          <text>{{item.label}}</text>
+          <text>{{item.attempts}} 题 · {{item.accuracy}}%</text>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

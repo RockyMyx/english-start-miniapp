@@ -1,7 +1,9 @@
 <view class="page">
   <view wx:if="{{error}}" class="error-banner">{{error}}</view>
   <view wx:if="{{loading}}" class="loading">正在生成本轮题目…</view>
-  <view wx:elif="{{!questions.length}}" class="empty">当前词库还不能组成选择题，请先补充词汇。</view>
+  <view wx:elif="{{!questions.length}}" class="empty">
+    {{scope === 'weak' ? '目前没有需要复习的薄弱词，继续保持！' : '当前词库还不能组成选择题，请先补充词汇。'}}
+  </view>
 
   <view wx:elif="{{finished}}" class="card round-result-card">
     <text class="round-result-emoji">{{correctCount === questions.length ? '🎉' : '👏'}}</text>

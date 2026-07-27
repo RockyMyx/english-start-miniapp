@@ -1,0 +1,172 @@
+.review-page {
+  padding-bottom: 160rpx;
+}
+
+.review-page .smart-button,
+.practice-category-button {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 106rpx;
+  margin-top: 0;
+  border-radius: 27rpx;
+  color: #ffffff;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  box-shadow: 0 10rpx 24rpx rgba(37, 99, 235, 0.18);
+  font-size: 31rpx;
+  font-weight: 750;
+}
+
+.category-tabs {
+  display: flex;
+  gap: 14rpx;
+  margin-top: 30rpx;
+}
+
+.category-tab {
+  flex: 1;
+  padding: 22rpx 10rpx;
+  border: 2rpx solid #e8edf5;
+  border-radius: 22rpx;
+  text-align: center;
+  background: #ffffff;
+}
+
+.category-name,
+.category-count {
+  display: block;
+}
+
+.category-name {
+  font-size: 28rpx;
+  font-weight: 800;
+}
+
+.category-count {
+  margin-top: 6rpx;
+  color: #94a3b8;
+  font-size: 19rpx;
+}
+
+.category-tab-active {
+  color: #1d4ed8;
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.status-switch {
+  display: flex;
+  margin-top: 28rpx;
+  padding: 7rpx;
+  border-radius: 20rpx;
+  color: #64748b;
+  background: #eaf0f7;
+  font-size: 25rpx;
+  font-weight: 700;
+}
+
+.status-switch view {
+  flex: 1;
+  padding: 16rpx;
+  border-radius: 15rpx;
+  text-align: center;
+}
+
+.status-switch .status-active {
+  color: #1d4ed8;
+  background: #ffffff;
+  box-shadow: 0 5rpx 14rpx rgba(15, 23, 42, 0.08);
+}
+
+.review-empty {
+  margin-top: 24rpx;
+  text-align: center;
+}
+
+.empty-icon,
+.empty-title {
+  display: block;
+}
+
+.empty-icon {
+  color: #22c55e;
+  font-size: 64rpx;
+}
+
+.empty-title {
+  margin: 10rpx 0 8rpx;
+  font-size: 29rpx;
+  font-weight: 800;
+}
+
+.review-list {
+  margin-top: 24rpx;
+}
+
+.review-card {
+  margin-bottom: 18rpx;
+}
+
+.review-card-head,
+.review-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.review-copy {
+  min-width: 0;
+}
+
+.review-item-title,
+.review-item-subtitle,
+.reference-answer {
+  display: block;
+}
+
+.review-item-title {
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.review-item-subtitle {
+  margin-top: 6rpx;
+  color: #7c879b;
+  font-size: 22rpx;
+}
+
+.wrong-pill {
+  flex-shrink: 0;
+  margin-left: 18rpx;
+  padding: 7rpx 14rpx;
+  border-radius: 999rpx;
+  color: #dc2626;
+  background: #fef2f2;
+  font-size: 20rpx;
+  font-weight: 700;
+}
+
+.reference-answer {
+  margin-top: 20rpx;
+  padding: 18rpx;
+  border-radius: 16rpx;
+  color: #1d4ed8;
+  background: #eff6ff;
+  font-size: 24rpx;
+}
+
+.review-card-foot {
+  margin-top: 18rpx;
+}
+
+.streak-text {
+  color: #64748b;
+  font-size: 21rpx;
+}
+
+.master-button {
+  min-height: 62rpx;
+  padding: 0 20rpx;
+  color: #2563eb;
+  background: #eff6ff;
+  font-size: 22rpx;
+}

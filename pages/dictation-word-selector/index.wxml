@@ -1,0 +1,53 @@
+<view class="page selector-page">
+  <view class="selector-summary">
+    <view>
+      <text class="summary-title">选择本轮听写词汇</text>
+      <text class="summary-count">已选择 {{selectedCount}} / {{words.length}} 个</text>
+    </view>
+    <view class="summary-tools">
+      <text bindtap="selectAll">全选</text>
+      <text bindtap="clearAll">清空</text>
+    </view>
+  </view>
+
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在读取词库…</view>
+  <view wx:elif="{{!words.length}}" class="empty">词库中还没有可以选择的单词。</view>
+  <view wx:else class="word-groups">
+    <view
+      wx:for="{{wordGroups}}"
+      wx:for-item="group"
+      wx:key="letter"
+      class="word-group"
+    >
+      <view class="letter-banner">
+        <text class="letter-title">{{group.letter}}</text>
+        <text class="letter-count">{{group.words.length}} 个</text>
+      </view>
+      <view class="word-list">
+        <view
+          wx:for="{{group.words}}"
+          wx:for-item="word"
+          wx:key="id"
+          class="word-row {{word.selected ? 'word-row-selected' : ''}}"
+          data-id="{{word.id}}"
+          bindtap="toggleWord"
+        >
+          <view class="word-copy">
+            <text class="word-english">{{word.english}}</text>
+            <text class="word-chinese">{{word.chinese}}</text>
+          </view>
+          <view class="word-check">{{word.selected ? '✓' : ''}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{words.length}}" class="confirm-bar">
+    <button
+      class="confirm-button {{!selectedCount ? 'nav-disabled' : ''}}"
+      disabled="{{!selectedCount}}"
+      bindtap="confirmSelection"
+    >确认选择 {{selectedCount}} 个</button>
+  </view>
+</view>

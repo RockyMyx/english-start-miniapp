@@ -56,17 +56,26 @@ english-start/
 
 ### 2. 配置小程序
 
-编辑 `config/index.js`：
+本地开发地址统一在 `config/index.js` 中配置：
 
 ```js
-module.exports = {
-  apiBaseUrl: "http://192.168.0.191:3000",
-  useDevLogin: true
+const localApiConfig = {
+  mode: "auto",
+  officeBaseUrl: "http://192.168.0.191:3000",
+  homeBaseUrl: "http://192.168.110.16:3000",
+  officeHours: {
+    weekdays: [1, 2, 3, 4, 5],
+    startHour: 9,
+    endHour: 18
+  }
 };
 ```
 
-- `apiBaseUrl`：后端 API 根地址。当前仓库配置为
-  `http://192.168.0.191:3000`，请按本机网络环境修改。
+- `mode: "auto"`：周一至周五 `09:00–18:00` 自动使用公司地址
+  `http://192.168.0.191:3000`，其余时间使用家庭地址
+  `http://192.168.110.16:3000`。
+- 遇到节假日、加班或临时换网络时，可将 `mode` 暂时改为 `"office"` 或
+  `"home"`；恢复 `"auto"` 后继续按时间自动选择。
 - 在开发者工具模拟器中运行且后端在同一台电脑时，可使用
   `http://localhost:3000`。
 - 使用真机预览时不能用 `localhost`，应使用手机可访问的局域网地址；电脑和手机需在

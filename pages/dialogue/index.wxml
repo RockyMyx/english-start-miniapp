@@ -1,7 +1,9 @@
 <view class="page">
   <view wx:if="{{error}}" class="error-banner">{{error}}</view>
   <view wx:if="{{loading}}" class="loading">正在进入对话场景…</view>
-  <view wx:elif="{{!current}}" class="empty">导入启蒙 50 词后，模拟对话会自动开放。</view>
+  <view wx:elif="{{!current}}" class="empty">
+    {{scope === 'weak' ? '暂时没有需要复习的对话题。' : '导入启蒙 50 词后，模拟对话会自动开放。'}}
+  </view>
 
   <view wx:elif="{{finished}}" class="card round-result-card">
     <text class="round-result-emoji">{{correctCount === prompts.length ? '🎉' : '👏'}}</text>
@@ -36,15 +38,17 @@
     </view>
 
     <view class="card answer-card">
-      <text class="answer-title">语音回答</text>
-      <view class="voice-pad {{recording ? 'voice-pad-active' : ''}} {{recordingCanceling ? 'voice-pad-cancel' : ''}}">
-        <text class="voice-icon">{{recordingCanceling ? '↑' : '🎙️'}}</text>
-        <text class="voice-main">
-          {{recording ? (recordingCanceling ? '松手取消' : '正在录音') : (evaluating ? '正在评测' : '按住说')}}
-        </text>
-        <text class="voice-sub">
-          {{recording ? (recordingCanceling ? '松开后不会上传' : '上滑取消，松开发送') : '像微信语音一样按住回答'}}
-        </text>
+      <text class="answer-title">请用英语回答</text>
+      <text class="answer-guide">按住下方按钮说话，松开发送，上滑取消</text>
+      <view
+        wx:if="{{recording}}"
+        class="recording-status {{recordingCanceling ? 'recording-status-cancel' : ''}}"
+      >
+        <text class="recording-status-icon">{{recordingCanceling ? '↑' : '●'}}</text>
+        <view>
+          <text class="recording-status-title">{{recordingCanceling ? '松手取消' : '正在录音'}}</text>
+          <text class="recording-status-note">{{recordingCanceling ? '松开后不会上传' : '上滑可以取消本次录音'}}</text>
+        </view>
       </view>
       <button
         class="wechat-voice-button {{recording ? 'wechat-voice-button-active' : ''}} {{recordingCanceling ? 'wechat-voice-button-cancel' : ''}} {{answered ? 'nav-disabled' : ''}}"
@@ -53,7 +57,7 @@
         catchtouchmove="moveRecording"
         catchtouchend="stopRecording"
         catchtouchcancel="cancelRecording"
-      >{{recording ? (recordingCanceling ? '松手取消' : '松开发送') : '按住说'}}</button>
+      >{{recording ? (recordingCanceling ? '松手取消' : '松开发送') : (evaluating ? '正在评测…' : '按住说')}}</button>
     </view>
 
     <view wx:if="{{voiceResult}}" class="card result-panel">

@@ -3,6 +3,7 @@ const { clearSession, ensureSession } = require("./session");
 
 async function uploadFile(options, canRetry = true) {
   const token = await ensureSession();
+  const actionName = options.actionName || "语音";
   return new Promise((resolve, reject) => {
     wx.uploadFile({
       url: `${apiBaseUrl}${options.url}`,
@@ -14,7 +15,7 @@ async function uploadFile(options, canRetry = true) {
         try {
           data = JSON.parse(response.data || "{}");
         } catch (_error) {
-          reject(new Error("语音评测返回了无法解析的数据"));
+          reject(new Error(`${actionName}上传返回了无法解析的数据`));
           return;
         }
         if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -26,12 +27,12 @@ async function uploadFile(options, canRetry = true) {
           uploadFile(options, false).then(resolve).catch(reject);
           return;
         }
-        const error = new Error(data.message || "语音评测失败");
+        const error = new Error(data.message || `${actionName}上传失败`);
         error.statusCode = response.statusCode;
         reject(error);
       },
       fail() {
-        reject(new Error("录音上传失败，请检查后端服务"));
+        reject(new Error(`${actionName}上传失败，请检查后端服务`));
       }
     });
   });

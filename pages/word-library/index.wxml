@@ -4,17 +4,38 @@
       <text class="page-title">我的词库</text>
       <text class="muted">自己录词，所有练习都从这里取题。</text>
     </view>
-    <button class="ghost-button import-button" bindtap="importStarterPack">查看启蒙词库</button>
+    <button class="import-button" bindtap="importStarterPack">查看启蒙词库</button>
   </view>
 
   <view wx:if="{{error}}" class="error-banner">{{error}}</view>
 
+  <view class="photo-entry" bindtap="takeWordPhoto">
+    <view class="photo-entry-icon">⌁</view>
+    <view class="photo-entry-copy">
+      <text class="photo-entry-title">拍照识别单词</text>
+      <text class="photo-entry-subtitle">拍下课本或单词表即可批量录入</text>
+    </view>
+    <text class="photo-entry-arrow">›</text>
+  </view>
+
   <view class="card form-card">
     <text class="form-title">录入新词</text>
     <text class="field-label">英文或常用短语</text>
-    <input class="field-input" value="{{english}}" data-field="english" bindinput="onInput" placeholder="例如：apple" />
+    <input
+      class="field-input {{fieldErrors.english ? 'field-input-error' : ''}}"
+      value="{{english}}"
+      data-field="english"
+      bindinput="onInput"
+      placeholder="例如：apple"
+    />
     <text class="field-label">中文意思</text>
-    <input class="field-input" value="{{chinese}}" data-field="chinese" bindinput="onInput" placeholder="例如：苹果" />
+    <input
+      class="field-input {{fieldErrors.chinese ? 'field-input-error' : ''}}"
+      value="{{chinese}}"
+      data-field="chinese"
+      bindinput="onInput"
+      placeholder="例如：苹果"
+    />
     <button class="primary-button save-button" loading="{{saving}}" bindtap="addWord">加入我的词库</button>
   </view>
 

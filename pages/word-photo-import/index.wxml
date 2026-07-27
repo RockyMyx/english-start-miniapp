@@ -1,0 +1,74 @@
+<view class="page photo-page">
+  <view class="photo-card">
+    <image wx:if="{{photoPath}}" class="photo-preview" src="{{photoPath}}" mode="aspectFill" />
+    <view wx:else class="photo-placeholder">暂无照片</view>
+    <view class="photo-mask">
+      <text>{{recognizing ? 'AI 正在识别…' : '拍照识词'}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{recognizing}}" class="recognizing-card">
+    <view class="recognizing-dot"></view>
+    <view>
+      <text class="recognizing-title">正在读取照片中的英文</text>
+      <text class="muted">通常需要几秒钟，请稍候</text>
+    </view>
+  </view>
+
+  <block wx:elif="{{recognized}}">
+    <view class="result-head">
+      <view>
+        <text class="result-title">识别结果 · {{words.length}}</text>
+        <text class="result-tip">AI 可能识别有误，请确认后再加入词库</text>
+      </view>
+      <button class="retake-small" bindtap="retakePhoto">重新拍摄</button>
+    </view>
+
+    <view wx:if="{{!words.length}}" class="card empty-result">
+      <text class="empty-result-icon">⌁</text>
+      <text class="empty-result-title">没有识别到单词</text>
+      <text class="muted">请让单词处于画面中央，并保持光线清晰</text>
+      <button class="primary-button retake-button" bindtap="retakePhoto">重新拍照</button>
+    </view>
+
+    <view wx:else class="recognized-list">
+      <view wx:for="{{words}}" wx:key="index" class="card recognized-word">
+        <view class="recognized-word-head">
+          <text class="recognized-number">{{index + 1}}</text>
+          <text class="recognized-label">识别到的单词</text>
+          <button class="delete-result" data-index="{{index}}" bindtap="removeWord">删除</button>
+        </view>
+        <text class="field-label">英文或短语</text>
+        <input
+          class="field-input"
+          value="{{item.english}}"
+          data-index="{{index}}"
+          data-field="english"
+          bindinput="editWord"
+          maxlength="80"
+          placeholder="请输入英文"
+        />
+        <text class="field-label">中文意思</text>
+        <input
+          class="field-input"
+          value="{{item.chinese}}"
+          data-index="{{index}}"
+          data-field="chinese"
+          bindinput="editWord"
+          maxlength="120"
+          placeholder="请输入中文意思"
+        />
+      </view>
+      <button class="add-row-button" bindtap="addEmptyWord">＋ 补充一个单词</button>
+      <button
+        class="confirm-import-button"
+        loading="{{saving}}"
+        disabled="{{saving}}"
+        bindtap="confirmImport"
+      >确认加入 {{words.length}} 个单词</button>
+    </view>
+  </block>
+
+  <button wx:else class="retake-only-button" bindtap="retakePhoto">重新拍照</button>
+</view>

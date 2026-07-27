@@ -10,16 +10,12 @@
 
   <block wx:elif="{{dashboard}}">
     <view class="stats">
-      <button class="stat word-stat" bindtap="goWordLibrary" hover-class="stat-hover">
-        <text class="stat-number">{{dashboard.wordCount}}</text>
-        <text class="stat-label">我的词库 ›</text>
-      </button>
-      <button class="stat score-stat" bindtap="editDailyGoal" hover-class="stat-hover">
+      <view class="stat score-stat">
         <text class="goal-setting">目标{{dashboard.dailyScoreGoal}}</text>
         <text wx:if="{{goalAchieved}}" class="goal-badge">已达标</text>
         <text class="stat-number">{{dashboard.todayScore}}</text>
         <text class="stat-label">今日得分</text>
-      </button>
+      </view>
       <view class="stat">
         <text class="stat-number time-number">{{studyTimeText}}</text>
         <text class="stat-label">今日已学习</text>
@@ -55,7 +51,6 @@
         <view class="module-icon"><image src="{{item.icon}}" mode="aspectFit" /></view>
         <text class="module-title">{{item.title}}</text>
         <text class="module-subtitle">{{item.enabled ? item.subtitle : item.lockText}}</text>
-        <text wx:if="{{item.enabled}}" class="module-tag">● {{item.tag}}</text>
       </view>
     </view>
 
@@ -80,8 +75,19 @@
         <view class="module-icon"><image src="{{item.icon}}" mode="aspectFit" /></view>
         <text class="module-title">{{item.title}}</text>
         <text class="module-subtitle">{{item.enabled ? item.subtitle : item.lockText}}</text>
-        <text wx:if="{{item.enabled}}" class="module-tag">● {{item.tag}}</text>
       </view>
     </view>
+
   </block>
+
+  <view wx:if="{{checkInPopupVisible}}" class="popup-mask" bindtap="dismissCheckInPopup">
+    <view class="checkin-popup" catchtap="noop">
+      <view class="checkin-popup-mark">✓</view>
+      <text class="checkin-popup-title">今日签到成功</text>
+      <text class="checkin-popup-streak">连续学习 {{checkInSummary.currentStreak}} 天</text>
+      <text class="checkin-popup-copy">今天也向英语目标迈进了一小步</text>
+      <button class="checkin-poster-button" bindtap="openCheckInPoster">查看签到海报</button>
+      <button class="checkin-later-button" bindtap="dismissCheckInPopup">继续学习</button>
+    </view>
+  </view>
 </view>

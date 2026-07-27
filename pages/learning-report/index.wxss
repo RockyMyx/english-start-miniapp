@@ -1,0 +1,148 @@
+.report-page {
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 28rpx 24rpx 64rpx;
+  background: linear-gradient(180deg, #eef5ff 0%, #f8fafc 55%);
+}
+
+.report-canvas {
+  display: block;
+  overflow: hidden;
+  margin: 0 auto;
+  border-radius: 32rpx;
+  box-shadow: 0 26rpx 64rpx rgba(30, 58, 138, 0.22);
+}
+
+.share-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 26rpx;
+}
+
+.share-actions button {
+  flex: 1;
+  min-height: 90rpx;
+  padding: 0 18rpx;
+  font-size: 24rpx;
+}
+
+.friend-share {
+  color: #ffffff;
+  background: #07c160;
+}
+
+.moment-share {
+  color: #ffffff;
+  background: #2563eb;
+}
+
+.detail-card {
+  margin-top: 24rpx;
+}
+
+.detail-heading,
+.mode-row,
+.weak-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detail-title {
+  display: block;
+  color: #17233d;
+  font-size: 31rpx;
+  font-weight: 850;
+}
+
+.week-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 230rpx;
+  margin-top: 24rpx;
+}
+
+.day-column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+}
+
+.day-score,
+.day-label {
+  color: #8290a8;
+  font-size: 18rpx;
+}
+
+.bar-track {
+  display: flex;
+  align-items: flex-end;
+  width: 24rpx;
+  height: 120rpx;
+  margin: 8rpx 0;
+  border-radius: 999rpx;
+  background: #e2e8f0;
+}
+
+.bar-fill {
+  width: 100%;
+  max-height: 108rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(180deg, #60a5fa, #2563eb);
+}
+
+.review-button {
+  width: auto;
+  min-height: 64rpx;
+  padding: 0 22rpx;
+  color: #ffffff;
+  background: #2563eb;
+  font-size: 22rpx;
+}
+
+.detail-empty {
+  padding: 42rpx 0 18rpx;
+  color: #8791a5;
+  font-size: 24rpx;
+  text-align: center;
+}
+
+.weak-list,
+.mode-list {
+  margin-top: 18rpx;
+}
+
+.weak-row,
+.mode-row {
+  min-height: 82rpx;
+  border-bottom: 2rpx solid #f1f5f9;
+}
+
+.weak-word,
+.weak-meaning {
+  display: block;
+}
+
+.weak-word {
+  color: #17233d;
+  font-size: 28rpx;
+  font-weight: 750;
+}
+
+.weak-meaning,
+.weak-accuracy,
+.mode-row text:last-child {
+  color: #8791a5;
+  font-size: 21rpx;
+}
+
+.weak-meaning {
+  margin-top: 3rpx;
+}
+
+.mode-row {
+  color: #334155;
+  font-size: 24rpx;
+}

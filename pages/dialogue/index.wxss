@@ -74,63 +74,62 @@
 
 .answer-title {
   display: block;
-  margin-bottom: 16rpx;
   font-size: 30rpx;
   font-weight: 750;
 }
 
-.voice-pad {
+.answer-guide {
+  display: block;
+  margin-top: 10rpx;
+  color: #64748b;
+  font-size: 24rpx;
+  line-height: 1.55;
+}
+
+.recording-status {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 220rpx;
-  margin-bottom: 22rpx;
-  border: 2rpx dashed #bfdbfe;
-  border-radius: 28rpx;
+  gap: 18rpx;
+  margin-top: 20rpx;
+  padding: 20rpx 22rpx;
+  border-radius: 20rpx;
+  color: #1d4ed8;
   background: #eff6ff;
 }
 
-.voice-pad-active {
-  border-color: #60a5fa;
-  background: #dbeafe;
-}
-
-.voice-pad-cancel {
-  border-color: #fecaca;
+.recording-status-cancel {
+  color: #dc2626;
   background: #fef2f2;
 }
 
-.voice-icon,
-.voice-main,
-.voice-sub {
+.recording-status-icon,
+.recording-status-title,
+.recording-status-note {
   display: block;
 }
 
-.voice-icon {
-  font-size: 54rpx;
+.recording-status-icon {
+  width: 42rpx;
+  font-size: 31rpx;
+  font-weight: 900;
+  text-align: center;
 }
 
-.voice-main {
-  margin-top: 12rpx;
-  color: #1d4ed8;
-  font-size: 34rpx;
+.recording-status-title {
+  font-size: 27rpx;
   font-weight: 800;
 }
 
-.voice-pad-cancel .voice-main {
-  color: #dc2626;
-}
-
-.voice-sub {
-  margin-top: 8rpx;
+.recording-status-note {
+  margin-top: 4rpx;
   color: #64748b;
-  font-size: 23rpx;
+  font-size: 21rpx;
 }
 
 .wechat-voice-button {
   width: 100%;
   min-height: 106rpx;
+  margin-top: 22rpx;
   color: #1d4ed8;
   border: 2rpx solid #93c5fd;
   background: #ffffff;

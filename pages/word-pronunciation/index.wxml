@@ -1,0 +1,74 @@
+<view class="page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在准备跟读单词…</view>
+  <view wx:elif="{{!current}}" class="empty">先在词库中加入单词，就可以开始跟读。</view>
+
+  <view wx:elif="{{finished}}" class="card round-result-card">
+    <text class="round-result-emoji">🎙️</text>
+    <text class="round-result-title">本轮跟读完成</text>
+    <text class="round-result-detail">发音通过 {{passedCount}} / {{words.length}} 个</text>
+    <text class="round-result-goal">没有通过的单词会进入薄弱词复习</text>
+    <view class="result-actions">
+      <button class="nav-previous" bindtap="goHome">返回首页</button>
+      <button class="nav-next" bindtap="restart">再练一组</button>
+    </view>
+  </view>
+
+  <block wx:else>
+    <view class="progress-line">
+      <text>听标准发音，再按住跟读</text>
+      <text>{{index + 1}} / {{words.length}}</text>
+    </view>
+
+    <view class="pronunciation-card">
+      <text class="pronunciation-index">{{index + 1}}</text>
+      <text class="pronunciation-word">{{current.english}}</text>
+      <text wx:if="{{current.phonetic}}" class="pronunciation-phonetic">{{current.phonetic}}</text>
+      <text class="pronunciation-meaning">{{current.chinese}}</text>
+      <button class="standard-audio" loading="{{speaking}}" bindtap="playCurrent">🔊 听标准发音</button>
+    </view>
+
+    <view class="card record-card {{recordingCanceling ? 'record-card-cancel' : ''}}">
+      <text class="record-title">
+        {{recording ? (recordingCanceling ? '松手取消' : '正在听你跟读') : (evaluating ? '正在评测发音' : '轮到你来读')}}
+      </text>
+      <text class="record-hint">
+        {{recording ? (recordingCanceling ? '松开后不会上传' : '上滑取消，松开发送') : '可以反复录音，发音分达到 60 即通过'}}
+      </text>
+      <button
+        class="hold-button {{recording ? 'hold-button-active' : ''}} {{recordingCanceling ? 'hold-button-cancel' : ''}}"
+        disabled="{{evaluating}}"
+        catchtouchstart="startRecording"
+        catchtouchmove="moveRecording"
+        catchtouchend="stopRecording"
+        catchtouchcancel="cancelRecording"
+      >{{recording ? (recordingCanceling ? '松手取消' : '松开发送') : '按住跟读'}}</button>
+    </view>
+
+    <view wx:if="{{voiceResult}}" class="card pronunciation-result">
+      <text class="{{voiceResult.correct ? 'result-pass' : 'result-retry'}}">
+        {{voiceResult.correct ? '发音通过' : '再试一次'}}
+      </text>
+      <text class="recognized-text">识别结果：{{voiceResult.voice.recognizedText}}</text>
+      <view class="score-row">
+        <view><text>{{voiceResult.voice.pronunciationScore}}</text><text>发音</text></view>
+        <view><text>{{voiceResult.voice.accuracyScore}}</text><text>准确</text></view>
+        <view><text>{{voiceResult.voice.fluencyScore}}</text><text>流利</text></view>
+      </view>
+      <text class="result-feedback">{{voiceResult.feedback}}</text>
+    </view>
+
+    <view class="practice-nav">
+      <button
+        class="nav-previous {{index === 0 ? 'nav-disabled' : ''}}"
+        disabled="{{index === 0 || recording || evaluating}}"
+        bindtap="previous"
+      >上一词</button>
+      <button
+        class="nav-next {{!answered ? 'nav-disabled' : ''}}"
+        disabled="{{!answered || recording || evaluating}}"
+        bindtap="next"
+      >{{index + 1 === words.length ? '完成跟读' : '下一词'}}</button>
+    </view>
+  </block>
+</view>

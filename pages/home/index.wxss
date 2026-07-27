@@ -197,7 +197,7 @@
 .module-card {
   box-sizing: border-box;
   position: relative;
-  min-height: 230rpx;
+  min-height: 218rpx;
   padding: 26rpx;
   border: 1rpx solid #edf0f6;
   border-radius: 28rpx;
@@ -242,15 +242,6 @@
   display: block;
 }
 
-.module-tag {
-  display: block;
-  margin-top: 14rpx;
-  color: #3b82f6;
-  font-size: 20rpx;
-  line-height: 1.35;
-  font-weight: 650;
-}
-
 .module-title {
   margin-top: 22rpx;
   font-size: 29rpx;
@@ -262,4 +253,137 @@
   color: #7f899d;
   font-size: 23rpx;
   line-height: 1.45;
+}
+
+.weak-review-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-top: 28rpx;
+  padding: 24rpx 28rpx;
+  border: 2rpx solid #dbeafe;
+  border-radius: 26rpx;
+  background: linear-gradient(135deg, #eff6ff, #ffffff);
+}
+
+.weak-review-icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 18rpx;
+  color: #ffffff;
+  background: #2563eb;
+  font-size: 36rpx;
+  font-weight: 850;
+}
+
+.weak-review-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.weak-review-title,
+.weak-review-subtitle {
+  display: block;
+}
+
+.weak-review-title {
+  color: #17233d;
+  font-size: 28rpx;
+  font-weight: 800;
+}
+
+.weak-review-subtitle {
+  margin-top: 6rpx;
+  color: #64748b;
+  font-size: 22rpx;
+}
+
+.weak-review-arrow {
+  color: #60a5fa;
+  font-size: 44rpx;
+}
+
+.popup-mask {
+  display: flex;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 42rpx;
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.checkin-popup {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 46rpx 38rpx 28rpx;
+  border-radius: 36rpx;
+  text-align: center;
+  background: #ffffff;
+  box-shadow: 0 30rpx 80rpx rgba(15, 23, 42, 0.24);
+}
+
+.checkin-popup-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 104rpx;
+  height: 104rpx;
+  margin: 0 auto;
+  border-radius: 50%;
+  color: #ffffff;
+  background: linear-gradient(135deg, #2563eb, #38bdf8);
+  font-size: 56rpx;
+  font-weight: 850;
+  box-shadow: 0 14rpx 30rpx rgba(37, 99, 235, 0.23);
+}
+
+.checkin-popup-title,
+.checkin-popup-streak,
+.checkin-popup-copy {
+  display: block;
+}
+
+.checkin-popup-title {
+  margin-top: 26rpx;
+  font-size: 38rpx;
+  font-weight: 850;
+}
+
+.checkin-popup-streak {
+  margin-top: 12rpx;
+  color: #2563eb;
+  font-size: 29rpx;
+  font-weight: 750;
+}
+
+.checkin-popup-copy {
+  margin-top: 10rpx;
+  color: #7c879b;
+  font-size: 23rpx;
+}
+
+.checkin-poster-button {
+  margin-top: 30rpx;
+  color: #ffffff;
+  background: #2563eb;
+}
+
+.checkin-later-button {
+  min-height: 68rpx;
+  margin-top: 8rpx;
+  color: #64748b;
+  background: transparent;
+  font-size: 24rpx;
+}
+.page {
+  padding-bottom: 160rpx;
 }

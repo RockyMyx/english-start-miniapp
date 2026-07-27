@@ -30,9 +30,12 @@ Page({
     correctCount: 0,
     finished: false,
     summary: null
+    ,
+    scope: "all"
   },
 
-  onLoad() {
+  onLoad(options) {
+    this.setData({ scope: options && options.scope === "weak" ? "weak" : "all" });
     this.handleRecorderStop = (result) => {
       this.recordingStopping = false;
       this.setData({ recording: false, recordingCanceling: false });
@@ -73,7 +76,9 @@ Page({
   async loadPrompts() {
     this.setData({ loading: true, error: "" });
     try {
-      const result = await request({ url: "/dialogues" });
+      const result = await request({
+        url: `/dialogues${this.data.scope === "weak" ? "?scope=weak" : ""}`
+      });
       const prompts = (result.prompts || []).map((prompt) => ({
         ...prompt,
         showTranslation: false,
@@ -302,7 +307,7 @@ Page({
   },
 
   goHome() {
-    wx.reLaunch({ url: "/pages/home/index" });
+    wx.switchTab({ url: "/pages/home/index" });
   },
 
   restart() {

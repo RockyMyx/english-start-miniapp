@@ -1,0 +1,26 @@
+<view class="share-page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在生成今天的签到海报…</view>
+
+  <block wx:elif="{{summary}}">
+    <canvas
+      class="share-canvas"
+      canvas-id="checkInPoster"
+      width="{{posterWidth}}"
+      height="{{posterHeight}}"
+      style="width: {{posterWidth}}px; height: {{posterHeight}}px;"
+    ></canvas>
+
+    <view class="share-actions">
+      <button class="friend-share" open-type="share">分享给微信好友</button>
+      <button
+        class="moment-share"
+        loading="{{saving}}"
+        disabled="{{!posterPath || saving}}"
+        bindtap="saveForMoments"
+      >保存海报发朋友圈</button>
+    </view>
+    <text class="share-tip">右上角菜单也可以直接分享小程序到朋友圈</text>
+    <button class="back-home" bindtap="goHome">返回首页</button>
+  </block>
+</view>

@@ -1,0 +1,55 @@
+<view class="page me-page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在加载你的成长档案…</view>
+
+  <block wx:elif="{{dashboard}}">
+    <view
+      class="profile-card"
+      hover-class="profile-card-active"
+      hover-stay-time="80"
+      bindtap="openProfileEditor"
+    >
+      <view class="avatar-shell">
+        <image wx:if="{{avatarUrl}}" class="avatar" src="{{avatarUrl}}" mode="aspectFill" />
+        <view wx:else class="avatar avatar-placeholder">我</view>
+      </view>
+      <view class="profile-copy">
+        <block wx:if="{{hasProfile}}">
+          <text class="profile-name">{{nickname || '微信用户'}}</text>
+        </block>
+        <text wx:else class="use-wechat-entry">使用微信信息</text>
+      </view>
+      <view wx:if="{{hasProfile}}" class="profile-entry">
+        <text class="profile-arrow">›</text>
+      </view>
+    </view>
+
+    <text class="section-title">学习记录</text>
+    <view class="menu-card">
+      <view class="menu-row" data-url="/pages/check-in/index" bindtap="openPage">
+        <view class="menu-icon checkin-icon">签</view>
+        <view class="menu-copy"><text>每日签到</text><text>连续 {{dashboard.currentStreak}} 天</text></view>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-row" data-url="/pages/learning-report/index" bindtap="openPage">
+        <view class="menu-icon report-icon">报</view>
+        <view class="menu-copy"><text>学习报告</text><text>查看成长趋势和分享海报</text></view>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+
+    <text class="section-title">学习设置</text>
+    <view class="menu-card">
+      <view class="menu-row" data-url="/pages/word-library/index" bindtap="openPage">
+        <view class="menu-icon word-icon">词</view>
+        <view class="menu-copy"><text>我的词库</text><text>{{dashboard.wordCount}} 个单词</text></view>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-row" bindtap="editDailyGoal">
+        <view class="menu-icon goal-icon">目</view>
+        <view class="menu-copy"><text>每日达标分数</text><text>当前 {{dashboard.dailyScoreGoal}} 分</text></view>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+  </block>
+</view>

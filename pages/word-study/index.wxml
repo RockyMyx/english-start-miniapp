@@ -1,0 +1,65 @@
+<view class="page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在准备本轮单词…</view>
+  <view wx:elif="{{!current}}" class="empty">先在词库中加入单词，就可以开始学习。</view>
+
+  <view wx:elif="{{finished}}" class="card round-result-card">
+    <text class="round-result-emoji">🌱</text>
+    <text class="round-result-title">本轮学习完成</text>
+    <text class="round-result-detail">认识 {{knownCount}} 个 · 需要复习 {{learningCount}} 个</text>
+    <text class="round-result-goal">标记为不熟的单词会进入错题复习</text>
+    <view class="result-actions">
+      <button class="nav-previous" bindtap="goHome">返回首页</button>
+      <button class="nav-next" bindtap="restart">再学一组</button>
+    </view>
+  </view>
+
+  <block wx:else>
+    <view class="progress-line">
+      <text>先听、再看、最后判断是否认识</text>
+      <text>{{index + 1}} / {{words.length}}</text>
+    </view>
+
+    <view class="study-card {{revealed ? 'study-card-revealed' : ''}}" bindtap="reveal">
+      <text class="study-index">{{index + 1}}</text>
+      <text class="study-word">{{current.english}}</text>
+      <text wx:if="{{current.phonetic}}" class="study-phonetic">{{current.phonetic}}</text>
+      <view class="study-audio" catchtap="playCurrent">{{speaking ? '···' : '🔊'}}</view>
+      <view class="meaning-area">
+        <text wx:if="{{revealed}}" class="study-meaning">{{current.chinese}}</text>
+        <text wx:else class="reveal-hint">轻点卡片查看中文</text>
+      </view>
+    </view>
+
+    <view wx:if="{{!current.learningResult}}" class="learning-actions">
+      <button
+        class="learning-button unsure-button"
+        loading="{{saving}}"
+        data-result="INCORRECT"
+        bindtap="markWord"
+      >还不熟</button>
+      <button
+        class="learning-button known-button"
+        loading="{{saving}}"
+        data-result="CORRECT"
+        bindtap="markWord"
+      >认识了</button>
+    </view>
+    <view wx:else class="{{current.learningResult === 'CORRECT' ? 'success-banner' : 'feedback-banner'}}">
+      {{current.learningResult === 'CORRECT' ? '已标记为认识' : '已加入薄弱词，之后会重点复习'}}
+    </view>
+
+    <view class="practice-nav">
+      <button
+        class="nav-previous {{index === 0 ? 'nav-disabled' : ''}}"
+        disabled="{{index === 0 || saving}}"
+        bindtap="previous"
+      >上一词</button>
+      <button
+        class="nav-next {{!current.learningResult ? 'nav-disabled' : ''}}"
+        disabled="{{!current.learningResult || saving}}"
+        bindtap="next"
+      >{{index + 1 === words.length ? '完成学习' : '下一词'}}</button>
+    </view>
+  </block>
+</view>

@@ -2,8 +2,9 @@ const { apiBaseUrl } = require("../config/index");
 
 function rawRequest(options) {
   return new Promise((resolve, reject) => {
+    const method = String(options.method || "GET").toUpperCase();
     const requestOptions =
-      String(options.method || "GET").toUpperCase() === "DELETE" && options.data === undefined
+      ["POST", "PUT", "PATCH", "DELETE"].includes(method) && options.data === undefined
         ? { ...options, data: {} }
         : options;
 

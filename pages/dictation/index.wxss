@@ -4,9 +4,7 @@
 }
 
 .setup-heading,
-.setup-row,
-.selector-header,
-.selector-actions {
+.setup-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -14,10 +12,8 @@
 
 .setup-title,
 .setup-subtitle,
-.selector-title,
-.selector-count,
-.selector-english,
-.selector-chinese {
+.selected-summary-title,
+.selected-summary-note {
   display: block;
 }
 
@@ -33,17 +29,6 @@
   font-size: 22rpx;
 }
 
-.refresh-round-button {
-  width: auto;
-  min-height: 66rpx;
-  margin: 0;
-  padding: 0 24rpx;
-  color: #2563eb;
-  border: 2rpx solid #bfdbfe;
-  background: #eff6ff;
-  font-size: 23rpx;
-}
-
 .range-tabs {
   display: flex;
   gap: 14rpx;
@@ -52,11 +37,14 @@
 
 .range-tab {
   flex: 1;
-  min-height: 82rpx;
+  height: 88rpx;
+  min-height: 88rpx;
+  padding: 0 18rpx;
   color: #64748b;
   border: 2rpx solid #e2e8f0;
   background: #f8fafc;
   font-size: 25rpx;
+  white-space: nowrap;
 }
 
 .range-tab-active {
@@ -92,19 +80,72 @@
 }
 
 .choose-words-button {
-  width: auto;
-  min-height: 66rpx;
+  flex-shrink: 0;
+  width: 210rpx;
+  height: 88rpx;
+  min-height: 88rpx;
   margin: 0;
-  padding: 0 22rpx;
+  padding: 0 16rpx;
   color: #2563eb;
   border: 2rpx solid #93c5fd;
   background: #ffffff;
-  font-size: 22rpx;
+  font-size: 25rpx;
+  white-space: nowrap;
 }
 
 .range-summary {
   color: #64748b;
   font-size: 23rpx;
+}
+
+.selected-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+  margin-top: 22rpx;
+  padding: 20rpx;
+  border-radius: 20rpx;
+  background: #eff6ff;
+}
+
+.selected-summary-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.selected-summary-title {
+  color: #17233d;
+  font-size: 25rpx;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.selected-summary-note {
+  margin-top: 5rpx;
+  color: #64748b;
+  font-size: 20rpx;
+  white-space: nowrap;
+}
+
+.start-button-row {
+  display: flex;
+  width: 100%;
+}
+
+.start-dictation-button {
+  flex: 1;
+  box-sizing: border-box;
+  width: 100%;
+  height: 88rpx;
+  min-height: 88rpx;
+  margin: 0;
+  padding: 0 18rpx;
+  color: #ffffff;
+  background: #2563eb;
+  font-size: 27rpx;
+  white-space: nowrap;
+  box-shadow: 0 12rpx 24rpx rgba(37, 99, 235, 0.18);
 }
 
 .dictation-question-card {

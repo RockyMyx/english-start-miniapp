@@ -1,13 +1,42 @@
 {
   "pages": [
     "pages/home/index",
+    "pages/review/index",
+    "pages/me/index",
+    "pages/profile-edit/index",
     "pages/word-library/index",
+    "pages/word-photo-import/index",
     "pages/starter-pack/index",
+    "pages/word-study/index",
     "pages/practice-choice/index",
     "pages/dictation/index",
+    "pages/dictation-word-selector/index",
+    "pages/word-pronunciation/index",
     "pages/sentence/index",
-    "pages/dialogue/index"
+    "pages/dialogue/index",
+    "pages/check-in/index",
+    "pages/learning-report/index"
   ],
+  "tabBar": {
+    "custom": true,
+    "color": "#94a3b8",
+    "selectedColor": "#2563eb",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "学习"
+      },
+      {
+        "pagePath": "pages/review/index",
+        "text": "复习"
+      },
+      {
+        "pagePath": "pages/me/index",
+        "text": "我的"
+      }
+    ]
+  },
   "window": {
     "navigationBarTitleText": "English Start",
     "navigationBarBackgroundColor": "#f8fafc",
@@ -16,6 +45,9 @@
     "backgroundTextStyle": "light"
   },
   "permission": {
+    "scope.camera": {
+      "desc": "用于拍摄课本或单词表并识别其中的英文单词"
+    },
     "scope.record": {
       "desc": "用于练习英语发音和语音回答"
     }

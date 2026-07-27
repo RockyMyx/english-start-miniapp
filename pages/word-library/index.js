@@ -31,6 +31,10 @@ Page({
     wordGroups: [],
     english: "",
     chinese: "",
+    fieldErrors: {
+      english: false,
+      chinese: false
+    },
     error: ""
   },
 
@@ -52,22 +56,47 @@ Page({
   },
 
   onInput(event) {
-    this.setData({ [event.currentTarget.dataset.field]: event.detail.value });
+    const field = event.currentTarget.dataset.field;
+    const value = event.detail.value;
+    const patch = { [field]: value };
+    if (value.trim()) patch[`fieldErrors.${field}`] = false;
+    this.setData(patch);
   },
 
   async addWord() {
     if (this.data.saving) return;
+    const english = this.data.english.trim();
+    const chinese = this.data.chinese.trim();
+    const fieldErrors = {
+      english: !english,
+      chinese: !chinese
+    };
+    if (fieldErrors.english || fieldErrors.chinese) {
+      this.setData({ fieldErrors });
+      wx.showToast({
+        title: fieldErrors.english
+          ? "请输入英文或常用短语"
+          : "请输入中文意思",
+        icon: "none"
+      });
+      return;
+    }
+
     this.setData({ saving: true, error: "" });
     try {
       await request({
         url: "/words",
         method: "POST",
         data: {
-          english: this.data.english,
-          chinese: this.data.chinese
+          english,
+          chinese
         }
       });
-      this.setData({ english: "", chinese: "" });
+      this.setData({
+        english: "",
+        chinese: "",
+        fieldErrors: { english: false, chinese: false }
+      });
       await this.loadWords();
       wx.showToast({ title: "已加入词库", icon: "success" });
     } catch (error) {
@@ -79,6 +108,36 @@ Page({
 
   importStarterPack() {
     wx.navigateTo({ url: "/pages/starter-pack/index" });
+  },
+
+  takeWordPhoto() {
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ["image"],
+      sourceType: ["camera"],
+      sizeType: ["compressed"],
+      success: async (result) => {
+        const file = result.tempFiles && result.tempFiles[0];
+        if (!file || !file.tempFilePath) return;
+        let filePath = file.tempFilePath;
+        if (typeof wx.compressImage === "function") {
+          try {
+            filePath = await new Promise((resolve, reject) => {
+              wx.compressImage({
+                src: file.tempFilePath,
+                quality: 72,
+                success: (compressed) => resolve(compressed.tempFilePath),
+                fail: reject
+              });
+            });
+          } catch (_error) {
+            filePath = file.tempFilePath;
+          }
+        }
+        wx.setStorageSync("englishStartPendingWordPhoto", filePath);
+        wx.navigateTo({ url: "/pages/word-photo-import/index" });
+      }
+    });
   },
 
   removeWord(event) {

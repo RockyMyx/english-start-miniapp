@@ -21,8 +21,7 @@ Page({
     dictationCountInput: "10",
     selectedWordIds: [],
     selectedCount: 0,
-    selectorVisible: false,
-    selectorWords: [],
+    setupComplete: false,
     index: 0,
     current: null,
     answer: "",
@@ -37,6 +36,17 @@ Page({
     this.loadWords();
   },
 
+  onShow() {
+    const selection = wx.getStorageSync("englishStartDictationSelectionResult");
+    if (!selection || !Array.isArray(selection.selectedWordIds)) return;
+    wx.removeStorageSync("englishStartDictationSelectionResult");
+    this.setData({
+      rangeMode: "selected",
+      selectedWordIds: selection.selectedWordIds.map(String),
+      selectedCount: selection.selectedWordIds.length
+    });
+  },
+
   onUnload() {
     stopSpeech();
   },
@@ -46,7 +56,7 @@ Page({
     try {
       const result = await request({ url: "/words" });
       const allWords = result.words || [];
-      this.setData({ allWords }, () => this.prepareRound());
+      this.setData({ allWords });
     } catch (error) {
       this.setData({ error: error.message });
     } finally {
@@ -81,10 +91,13 @@ Page({
     }
 
     const requestedCount = Number.parseInt(this.data.dictationCountInput, 10);
-    const dictationCount = Math.min(
-      source.length,
-      Math.max(1, Number.isFinite(requestedCount) ? requestedCount : 10)
-    );
+    const dictationCount =
+      this.data.rangeMode === "selected"
+        ? source.length
+        : Math.min(
+            source.length,
+            Math.max(1, Number.isFinite(requestedCount) ? requestedCount : 10)
+          );
     const words = shuffled(source)
       .slice(0, dictationCount)
       .map((word) => ({ ...word, answerState: null }));
@@ -99,14 +112,23 @@ Page({
       correctCount: 0,
       finished: false,
       summary: null,
+      setupComplete: true,
       error: ""
     });
+  },
+
+  startDictation() {
+    if (this.data.rangeMode === "selected" && !this.data.selectedWordIds.length) {
+      wx.showToast({ title: "请先选择听写词汇", icon: "none" });
+      return;
+    }
+    this.prepareRound();
   },
 
   setRangeMode(event) {
     const mode = event.currentTarget.dataset.mode;
     if (mode === "all") {
-      this.setData({ rangeMode: "all" }, () => this.prepareRound());
+      this.setData({ rangeMode: "all" });
       return;
     }
     this.openWordSelector();
@@ -116,78 +138,11 @@ Page({
     this.setData({ dictationCountInput: event.detail.value });
   },
 
-  applyDictationCount() {
-    this.prepareRound();
-  },
-
   openWordSelector() {
-    const selectedIds = this.data.selectedWordIds;
-    const selectorWords = this.data.allWords.map((word) => ({
-      ...word,
-      selected: selectedIds.includes(String(word.id))
-    }));
-    this.setData({
-      selectorWords,
-      selectedCount: selectorWords.filter((word) => word.selected).length,
-      selectorVisible: true
+    wx.setStorageSync("englishStartDictationSelection", {
+      selectedWordIds: this.data.selectedWordIds
     });
-  },
-
-  closeWordSelector() {
-    this.setData({ selectorVisible: false });
-  },
-
-  keepSelectorOpen() {},
-
-  toggleSelectorWord(event) {
-    const index = Number(event.currentTarget.dataset.index);
-    const selectorWords = [...this.data.selectorWords];
-    selectorWords[index] = {
-      ...selectorWords[index],
-      selected: !selectorWords[index].selected
-    };
-    this.setData({
-      selectorWords,
-      selectedCount: selectorWords.filter((word) => word.selected).length
-    });
-  },
-
-  selectAllSelectorWords() {
-    const selectorWords = this.data.selectorWords.map((word) => ({
-      ...word,
-      selected: true
-    }));
-    this.setData({
-      selectorWords,
-      selectedCount: selectorWords.length
-    });
-  },
-
-  clearSelectorWords() {
-    const selectorWords = this.data.selectorWords.map((word) => ({
-      ...word,
-      selected: false
-    }));
-    this.setData({ selectorWords, selectedCount: 0 });
-  },
-
-  confirmWordSelector() {
-    const selectedWordIds = this.data.selectorWords
-      .filter((word) => word.selected)
-      .map((word) => String(word.id));
-    if (!selectedWordIds.length) {
-      wx.showToast({ title: "请至少选择一个单词", icon: "none" });
-      return;
-    }
-    this.setData(
-      {
-        rangeMode: "selected",
-        selectedWordIds,
-        selectedCount: selectedWordIds.length,
-        selectorVisible: false
-      },
-      () => this.prepareRound()
-    );
+    wx.navigateTo({ url: "/pages/dictation-word-selector/index" });
   },
 
   onAnswerInput(event) {
@@ -296,10 +251,20 @@ Page({
   },
 
   goHome() {
-    wx.reLaunch({ url: "/pages/home/index" });
+    wx.switchTab({ url: "/pages/home/index" });
   },
 
   restart() {
-    this.prepareRound();
+    this.setData({
+      setupComplete: false,
+      words: [],
+      current: null,
+      index: 0,
+      answer: "",
+      result: null,
+      correctCount: 0,
+      finished: false,
+      summary: null
+    });
   }
 });

@@ -1,0 +1,53 @@
+.share-page {
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 28rpx 24rpx 54rpx;
+  background: linear-gradient(180deg, #eaf3ff 0%, #f8fafc 64%);
+}
+
+.share-canvas {
+  display: block;
+  overflow: hidden;
+  margin: 0 auto;
+  border-radius: 32rpx;
+  box-shadow: 0 26rpx 64rpx rgba(37, 99, 235, 0.24);
+}
+
+.share-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 28rpx;
+}
+
+.share-actions button {
+  flex: 1;
+  min-height: 92rpx;
+  padding: 0 20rpx;
+  font-size: 25rpx;
+}
+
+.friend-share {
+  color: #ffffff;
+  background: #07c160;
+}
+
+.moment-share {
+  color: #ffffff;
+  background: #2563eb;
+}
+
+.share-tip {
+  display: block;
+  margin-top: 18rpx;
+  color: #7c879b;
+  font-size: 22rpx;
+  text-align: center;
+}
+
+.back-home {
+  min-height: 74rpx;
+  margin: 22rpx auto 0;
+  color: #64748b;
+  background: transparent;
+  font-size: 24rpx;
+}

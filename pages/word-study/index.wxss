@@ -1,0 +1,102 @@
+.study-card {
+  box-sizing: border-box;
+  position: relative;
+  min-height: 600rpx;
+  padding: 90rpx 40rpx 52rpx;
+  border: 2rpx solid #dbeafe;
+  border-radius: 40rpx;
+  background: linear-gradient(150deg, #ffffff 0%, #eff6ff 100%);
+  box-shadow: 0 24rpx 60rpx rgba(37, 99, 235, 0.13);
+  text-align: center;
+}
+
+.study-card-revealed {
+  border-color: #93c5fd;
+}
+
+.study-index {
+  position: absolute;
+  top: 28rpx;
+  left: 30rpx;
+  color: #60a5fa;
+  font-size: 23rpx;
+  font-weight: 800;
+}
+
+.study-word,
+.study-phonetic,
+.study-meaning,
+.reveal-hint {
+  display: block;
+}
+
+.study-word {
+  margin-top: 50rpx;
+  color: #17233d;
+  font-size: 76rpx;
+  line-height: 1.25;
+  font-weight: 850;
+}
+
+.study-phonetic {
+  margin-top: 18rpx;
+  color: #64748b;
+  font-size: 28rpx;
+}
+
+.study-audio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88rpx;
+  height: 88rpx;
+  margin: 34rpx auto 0;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #2563eb;
+  font-size: 32rpx;
+  box-shadow: 0 12rpx 24rpx rgba(37, 99, 235, 0.24);
+}
+
+.meaning-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 150rpx;
+  margin-top: 42rpx;
+  border-top: 2rpx dashed #bfdbfe;
+}
+
+.study-meaning {
+  color: #1d4ed8;
+  font-size: 46rpx;
+  font-weight: 800;
+}
+
+.reveal-hint {
+  color: #94a3b8;
+  font-size: 25rpx;
+}
+
+.learning-actions {
+  display: flex;
+  gap: 18rpx;
+  margin-top: 26rpx;
+}
+
+.learning-button {
+  flex: 1;
+  min-height: 100rpx;
+}
+
+.unsure-button {
+  color: #b45309;
+  border: 2rpx solid #fcd34d;
+  background: #fffbeb;
+}
+
+.known-button {
+  color: #ffffff;
+  background: #22c55e;
+  box-shadow: 0 12rpx 24rpx rgba(34, 197, 94, 0.2);
+}

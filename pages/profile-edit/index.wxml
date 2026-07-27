@@ -1,0 +1,39 @@
+<view class="page profile-edit-page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在读取用户资料…</view>
+
+  <form wx:else bindsubmit="saveProfile">
+    <view class="card profile-form-card">
+      <text class="field-title">头像</text>
+      <button
+        class="avatar-picker"
+        open-type="chooseAvatar"
+        disabled="{{saving}}"
+        bindchooseavatar="chooseWechatAvatar"
+      >
+        <image wx:if="{{avatarUrl}}" class="avatar-preview" src="{{avatarUrl}}" mode="aspectFill" />
+        <view wx:else class="avatar-preview avatar-placeholder">我</view>
+        <text class="avatar-action">点击更换头像</text>
+      </button>
+
+      <text class="field-title nickname-title">昵称</text>
+      <input
+        class="nickname-input"
+        type="nickname"
+        name="nickname"
+        value="{{nickname}}"
+        maxlength="40"
+        placeholder="点击后可快捷使用微信昵称"
+        bindinput="onNicknameInput"
+        bindnicknamereview="onNicknameReview"
+      />
+
+      <button
+        class="save-profile-button"
+        form-type="submit"
+        loading="{{saving}}"
+        disabled="{{saving}}"
+      >保存资料</button>
+    </view>
+  </form>
+</view>
