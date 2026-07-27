@@ -1,0 +1,86 @@
+<view class="page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在进入对话场景…</view>
+  <view wx:elif="{{!current}}" class="empty">导入启蒙 50 词后，模拟对话会自动开放。</view>
+
+  <view wx:elif="{{finished}}" class="card round-result-card">
+    <text class="round-result-emoji">{{correctCount === prompts.length ? '🎉' : '👏'}}</text>
+    <text class="round-result-title">模拟对话完成</text>
+    <text class="round-result-score">+{{summary.roundScore}} 分</text>
+    <text class="round-result-detail">通过 {{correctCount}} / {{prompts.length}} 题 · 正确率 {{summary.correctRate}}%</text>
+    <text class="round-result-goal">{{summary.goalText}}</text>
+    <view class="result-actions">
+      <button class="nav-previous" bindtap="goHome">返回首页</button>
+      <button class="nav-next" bindtap="restart">再练一次</button>
+    </view>
+  </view>
+
+  <block wx:else>
+    <view class="progress-line">
+      <text>像真实聊天一样回答</text>
+      <text>第 {{index + 1}} 题 · 共 {{prompts.length}} 题</text>
+    </view>
+
+    <view class="dialogue-bubble">
+      <text class="question-number">{{index + 1}}</text>
+      <view class="dialogue-content">
+        <text class="question">{{current.question}}</text>
+        <text wx:if="{{showTranslation}}" class="question-cn">{{current.questionChinese}}</text>
+        <view class="question-tools">
+          <button class="play-question" loading="{{speaking}}" bindtap="playQuestion">🔊 听问题</button>
+          <button class="translation-button" bindtap="toggleTranslation">
+            {{showTranslation ? '隐藏中文' : '显示中文'}}
+          </button>
+        </view>
+      </view>
+    </view>
+
+    <view class="card answer-card">
+      <text class="answer-title">语音回答</text>
+      <view class="voice-pad {{recording ? 'voice-pad-active' : ''}} {{recordingCanceling ? 'voice-pad-cancel' : ''}}">
+        <text class="voice-icon">{{recordingCanceling ? '↑' : '🎙️'}}</text>
+        <text class="voice-main">
+          {{recording ? (recordingCanceling ? '松手取消' : '正在录音') : (evaluating ? '正在评测' : '按住说')}}
+        </text>
+        <text class="voice-sub">
+          {{recording ? (recordingCanceling ? '松开后不会上传' : '上滑取消，松开发送') : '像微信语音一样按住回答'}}
+        </text>
+      </view>
+      <button
+        class="wechat-voice-button {{recording ? 'wechat-voice-button-active' : ''}} {{recordingCanceling ? 'wechat-voice-button-cancel' : ''}} {{answered ? 'nav-disabled' : ''}}"
+        disabled="{{evaluating || answered}}"
+        catchtouchstart="startRecording"
+        catchtouchmove="moveRecording"
+        catchtouchend="stopRecording"
+        catchtouchcancel="cancelRecording"
+      >{{recording ? (recordingCanceling ? '松手取消' : '松开发送') : '按住说'}}</button>
+    </view>
+
+    <view wx:if="{{voiceResult}}" class="card result-panel">
+      <text class="{{voiceResult.correct ? 'result-good' : 'result-try'}}">
+        {{voiceResult.correct ? '回答和发音都通过' : '继续练习'}}
+      </text>
+      <text class="recognized">识别结果：{{voiceResult.voice.recognizedText}}</text>
+      <view class="score-grid">
+        <view><text class="score-number">{{voiceResult.semantic.score}}</text><text class="score-label">语义</text></view>
+        <view><text class="score-number">{{voiceResult.voice.pronunciationScore}}</text><text class="score-label">发音</text></view>
+        <view><text class="score-number">{{voiceResult.voice.fluencyScore}}</text><text class="score-label">流利度</text></view>
+      </view>
+      <text class="muted">{{voiceResult.semantic.feedback}}</text>
+      <text class="reference">推荐回答：{{voiceResult.semantic.improvedAnswer}}</text>
+    </view>
+
+    <view class="practice-nav">
+      <button
+        class="nav-previous {{index === 0 ? 'nav-disabled' : ''}}"
+        disabled="{{index === 0 || recording || evaluating}}"
+        bindtap="previous"
+      >上一题</button>
+      <button
+        class="nav-next {{!answered ? 'nav-disabled' : ''}}"
+        disabled="{{!answered || recording || evaluating}}"
+        bindtap="next"
+      >{{index + 1 === prompts.length ? '完成练习' : '下一题'}}</button>
+    </view>
+  </block>
+</view>

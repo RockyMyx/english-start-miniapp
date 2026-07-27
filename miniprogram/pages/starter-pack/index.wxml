@@ -1,0 +1,39 @@
+<view class="page preview-page">
+  <view class="preview-hero">
+    <text class="preview-kicker">STARTER PACK</text>
+    <text class="preview-title">{{name}}</text>
+    <text class="preview-subtitle">8 个主题，开启你的单词练习</text>
+  </view>
+
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在准备词包内容…</view>
+
+  <block wx:else>
+    <view wx:for="{{groups}}" wx:key="key" class="category-card">
+      <view class="category-head">
+        <view class="category-copy">
+          <view class="category-title-line">
+            <view class="category-dot {{item.color}}"></view>
+            <text class="category-title">{{item.title}}</text>
+          </view>
+          <text class="category-description">{{item.description}}</text>
+        </view>
+        <text class="category-count">{{item.count}} 词</text>
+      </view>
+
+      <view class="word-grid">
+        <view wx:for="{{item.words}}" wx:for-item="word" wx:key="key" class="preview-word">
+          <text class="preview-english">{{word.english}}</text>
+          <text class="preview-chinese">{{word.chinese}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="import-panel">
+      <view wx:if="{{done}}" class="success-banner">启蒙词包已加入你的个人词库，所有模块均可开始练习。</view>
+      <button wx:if="{{!done}}" class="primary-button import-confirm" loading="{{importing}}" bindtap="confirmImport">确认导入 {{count}} 词</button>
+      <button wx:else class="secondary-button import-confirm" bindtap="goBack">返回继续学习</button>
+      <text class="import-note">不会覆盖你自己录入的单词，重复操作也不会产生重复项。</text>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,87 @@
+<view class="page">
+  <view class="hero">
+    <text class="hero-kicker">ENGLISH START</text>
+    <text class="hero-title">开始你的<text class="hero-highlight">英语学习</text>之旅</text>
+    <text class="hero-subtitle">从基础单词和句型开始，通过多种互动练习轻松掌握英语。</text>
+  </view>
+
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在准备你的学习空间…</view>
+
+  <block wx:elif="{{dashboard}}">
+    <view class="stats">
+      <button class="stat word-stat" bindtap="goWordLibrary" hover-class="stat-hover">
+        <text class="stat-number">{{dashboard.wordCount}}</text>
+        <text class="stat-label">我的词库 ›</text>
+      </button>
+      <button class="stat score-stat" bindtap="editDailyGoal" hover-class="stat-hover">
+        <text class="goal-setting">目标{{dashboard.dailyScoreGoal}}</text>
+        <text wx:if="{{goalAchieved}}" class="goal-badge">已达标</text>
+        <text class="stat-number">{{dashboard.todayScore}}</text>
+        <text class="stat-label">今日得分</text>
+      </button>
+      <view class="stat">
+        <text class="stat-number time-number">{{studyTimeText}}</text>
+        <text class="stat-label">今日已学习</text>
+      </view>
+    </view>
+
+    <view wx:if="{{dashboard.starterWordCount < 12}}" class="starter-card">
+      <view class="starter-copy">
+        <text class="starter-title">启蒙 50 词</text>
+        <text class="muted">导入后即可开启学习哦~</text>
+      </view>
+      <button class="starter-button" bindtap="importStarterPack">导入示例词库</button>
+    </view>
+
+    <view class="level-header beginner-header">
+      <view class="level-icon">01</view>
+      <view>
+        <text class="level-title">基础入门</text>
+        <text class="level-subtitle">从听、读和词义开始，打好英语根基</text>
+      </view>
+    </view>
+    <view class="module-grid">
+      <view
+        wx:for="{{beginnerModules}}"
+        wx:key="key"
+        class="module-card {{item.enabled ? '' : 'locked'}}"
+        data-url="{{item.url}}"
+        data-enabled="{{item.enabled}}"
+        data-lock="{{item.lockText}}"
+        bindtap="openModule"
+      >
+        <text class="points-badge">{{item.points}}</text>
+        <view class="module-icon"><image src="{{item.icon}}" mode="aspectFit" /></view>
+        <text class="module-title">{{item.title}}</text>
+        <text class="module-subtitle">{{item.enabled ? item.subtitle : item.lockText}}</text>
+        <text wx:if="{{item.enabled}}" class="module-tag">● {{item.tag}}</text>
+      </view>
+    </view>
+
+    <view class="level-header advanced-header">
+      <view class="level-icon">02</view>
+      <view>
+        <text class="level-title">能力提升</text>
+        <text class="level-subtitle">把认识的单词真正写出来、说出来</text>
+      </view>
+    </view>
+    <view class="module-grid">
+      <view
+        wx:for="{{advancedModules}}"
+        wx:key="key"
+        class="module-card {{item.enabled ? '' : 'locked'}}"
+        data-url="{{item.url}}"
+        data-enabled="{{item.enabled}}"
+        data-lock="{{item.lockText}}"
+        bindtap="openModule"
+      >
+        <text class="points-badge">{{item.points}}</text>
+        <view class="module-icon"><image src="{{item.icon}}" mode="aspectFit" /></view>
+        <text class="module-title">{{item.title}}</text>
+        <text class="module-subtitle">{{item.enabled ? item.subtitle : item.lockText}}</text>
+        <text wx:if="{{item.enabled}}" class="module-tag">● {{item.tag}}</text>
+      </view>
+    </view>
+  </block>
+</view>

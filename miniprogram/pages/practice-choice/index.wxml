@@ -1,0 +1,87 @@
+<view class="page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在生成本轮题目…</view>
+  <view wx:elif="{{!questions.length}}" class="empty">当前词库还不能组成选择题，请先补充词汇。</view>
+
+  <view wx:elif="{{finished}}" class="card round-result-card">
+    <text class="round-result-emoji">{{correctCount === questions.length ? '🎉' : '👏'}}</text>
+    <text class="round-result-title">本轮练习完成</text>
+    <text class="round-result-score">+{{summary.roundScore}} 分</text>
+    <text class="round-result-detail">答对 {{correctCount}} / {{questions.length}} 题 · 正确率 {{summary.correctRate}}%</text>
+    <text class="round-result-goal">{{summary.goalText}}</text>
+    <view class="result-actions">
+      <button class="nav-previous" bindtap="goHome">返回首页</button>
+      <button class="nav-next" bindtap="restart">再练一次</button>
+    </view>
+  </view>
+
+  <block wx:else>
+    <view class="progress-line">
+      <text>{{instruction}}</text>
+      <text>第 {{index + 1}} 题 · 共 {{questions.length}} 题</text>
+    </view>
+
+    <view class="card question-card">
+      <text class="question-number">{{index + 1}}</text>
+      <button
+        wx:if="{{current.audioText}}"
+        class="audio-button"
+        loading="{{speaking}}"
+        bindtap="playCurrent"
+      >🔊 播放发音</button>
+      <view wx:else class="question-text-row">
+        <text class="practice-question">{{current.prompt}}</text>
+        <view
+          wx:if="{{current.questionAudioText}}"
+          class="question-audio-button {{speaking ? 'audio-playing' : ''}}"
+          bindtap="playCurrent"
+          aria-role="button"
+          aria-label="播放题目发音"
+        >{{speaking ? '···' : '🔊'}}</view>
+      </view>
+    </view>
+
+    <view class="option-list">
+      <view
+        wx:for="{{current.options}}"
+        wx:key="id"
+        class="option {{item.state}} {{answered ? 'option-disabled' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="selectOption"
+        hover-class="option-hover"
+        aria-role="button"
+        aria-disabled="{{answered || answering}}"
+      >
+        <text class="option-letter">{{item.letter}}</text>
+        <text class="option-text">{{item.text}}</text>
+        <text wx:if="{{item.state === 'correct'}}" class="option-status correct-status">✓</text>
+        <text wx:elif="{{item.state === 'wrong'}}" class="option-status wrong-status">✕</text>
+        <view
+          wx:if="{{item.audioText}}"
+          class="option-audio-button"
+          data-id="{{item.id}}"
+          data-text="{{item.audioText}}"
+          catchtap="playOption"
+          aria-role="button"
+          aria-label="播放选项发音"
+        >{{speakingText === item.id ? '···' : '🔊'}}</view>
+      </view>
+    </view>
+
+    <view wx:if="{{result && !result.correct}}" class="error-banner">
+      {{result.feedback}}
+    </view>
+    <view class="practice-nav">
+      <button
+        class="nav-previous {{index === 0 ? 'nav-disabled' : ''}}"
+        disabled="{{index === 0 || answering}}"
+        bindtap="previous"
+      >上一题</button>
+      <button
+        class="nav-next {{!answered || answering ? 'nav-disabled' : ''}}"
+        disabled="{{!answered || answering}}"
+        bindtap="next"
+      >{{index + 1 === questions.length ? '完成练习' : '下一题'}}</button>
+    </view>
+  </block>
+</view>

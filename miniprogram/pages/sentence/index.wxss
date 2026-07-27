@@ -1,0 +1,164 @@
+.prompt-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  color: #ffffff;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 18rpx 42rpx rgba(37, 99, 235, 0.18);
+}
+
+.question-number {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 58rpx;
+  height: 58rpx;
+  border-radius: 14rpx;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 27rpx;
+  font-weight: 800;
+}
+
+.prompt-content {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.chinese-prompt {
+  display: block;
+  margin: 8rpx 0 12rpx;
+  color: #ffffff;
+  font-size: 42rpx;
+  font-weight: 800;
+}
+
+.prompt-card .practice-hint {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.sentence-input {
+  margin: 22rpx 0;
+}
+
+.action-button {
+  width: 100%;
+  color: #ffffff;
+  background: #2563eb;
+  box-shadow: 0 12rpx 24rpx rgba(37, 99, 235, 0.18);
+}
+
+.response-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.response-actions button {
+  flex: 1;
+  min-width: 0;
+  min-height: 96rpx;
+  padding: 0 16rpx;
+  font-size: 27rpx;
+}
+
+.voice-button,
+.recording-button {
+  color: #1d4ed8;
+  border: 2rpx solid #93c5fd;
+  background: #eff6ff;
+}
+
+.recording-button {
+  color: #ffffff;
+  border-color: #e45c6b;
+  background: #e45c6b;
+}
+
+.voice-hint {
+  display: block;
+  margin-top: 12rpx;
+  color: #9aa2b2;
+  font-size: 21rpx;
+  text-align: center;
+}
+
+.evaluation-card {
+  margin-top: 24rpx;
+}
+
+.evaluation-good,
+.evaluation-try,
+.evaluation-score,
+.reference-label,
+.reference-answer {
+  display: block;
+}
+
+.evaluation-good {
+  color: #217a54;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.evaluation-try {
+  color: #b36b20;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.evaluation-score {
+  margin: 10rpx 0 18rpx;
+  color: #2563eb;
+  font-size: 25rpx;
+}
+
+.reference-label {
+  margin-top: 24rpx;
+  color: #8a93a5;
+  font-size: 23rpx;
+}
+
+.reference-answer {
+  margin-top: 8rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.recognized {
+  display: block;
+  margin: 16rpx 0;
+  font-size: 28rpx;
+  font-weight: 650;
+}
+
+.score-grid {
+  display: flex;
+  gap: 12rpx;
+  margin: 20rpx 0;
+}
+
+.score-grid view {
+  flex: 1;
+  padding: 18rpx 8rpx;
+  border-radius: 18rpx;
+  background: #f4f6fb;
+  text-align: center;
+}
+
+.score-number,
+.score-label {
+  display: block;
+}
+
+.score-number {
+  color: #2563eb;
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+.score-label {
+  margin-top: 4rpx;
+  color: #8791a5;
+  font-size: 20rpx;
+}

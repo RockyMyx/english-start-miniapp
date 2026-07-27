@@ -1,0 +1,71 @@
+<view class="page">
+  <view class="library-head">
+    <view>
+      <text class="page-title">我的词库</text>
+      <text class="muted">自己录词，所有练习都从这里取题。</text>
+    </view>
+    <button class="ghost-button import-button" bindtap="importStarterPack">查看启蒙词库</button>
+  </view>
+
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+
+  <view class="card form-card">
+    <text class="form-title">录入新词</text>
+    <text class="field-label">英文或常用短语</text>
+    <input class="field-input" value="{{english}}" data-field="english" bindinput="onInput" placeholder="例如：apple" />
+    <text class="field-label">中文意思</text>
+    <input class="field-input" value="{{chinese}}" data-field="chinese" bindinput="onInput" placeholder="例如：苹果" />
+    <button class="primary-button save-button" loading="{{saving}}" bindtap="addWord">加入我的词库</button>
+  </view>
+
+  <view class="word-section-head">
+    <text class="section-title word-section-title">当前词汇 · {{words.length}}</text>
+    <button
+      wx:if="{{words.length}}"
+      class="clear-button"
+      loading="{{clearing}}"
+      disabled="{{clearing}}"
+      bindtap="clearWords"
+    >清空词库</button>
+  </view>
+  <view wx:if="{{loading}}" class="loading">正在读取词库…</view>
+  <view wx:elif="{{!words.length}}" class="empty">词库还是空的。可以录入自己的词，或者导入启蒙 50 词。</view>
+  <view wx:else class="word-groups">
+    <view
+      wx:for="{{wordGroups}}"
+      wx:for-item="group"
+      wx:key="letter"
+      class="word-group"
+    >
+      <view class="letter-banner">
+        <text class="letter-title">{{group.letter}}</text>
+        <text class="letter-count">{{group.words.length}} 个</text>
+      </view>
+      <view class="word-list">
+        <view
+          wx:for="{{group.words}}"
+          wx:for-item="word"
+          wx:key="id"
+          class="word-row"
+        >
+          <view class="word-copy">
+            <view class="word-title-line">
+              <text class="word-english">{{word.english}}</text>
+              <text wx:if="{{word.source === 'STARTER'}}" class="source-tag">启蒙</text>
+            </view>
+            <text wx:if="{{word.phonetic}}" class="word-phonetic">{{word.phonetic}}</text>
+            <text class="word-chinese">{{word.chinese}}</text>
+            <text wx:if="{{word.attemptCount}}" class="word-progress">练习 {{word.attemptCount}} 次 · 答对 {{word.correctCount}} 次</text>
+          </view>
+          <button
+            class="remove-button"
+            size="mini"
+            data-id="{{word.id}}"
+            data-english="{{word.english}}"
+            bindtap="removeWord"
+          >移除</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

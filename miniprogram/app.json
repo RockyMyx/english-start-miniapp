@@ -1,0 +1,26 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/word-library/index",
+    "pages/starter-pack/index",
+    "pages/practice-choice/index",
+    "pages/dictation/index",
+    "pages/sentence/index",
+    "pages/dialogue/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "English Start",
+    "navigationBarBackgroundColor": "#f8fafc",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f8fafc",
+    "backgroundTextStyle": "light"
+  },
+  "permission": {
+    "scope.record": {
+      "desc": "用于练习英语发音和语音回答"
+    }
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

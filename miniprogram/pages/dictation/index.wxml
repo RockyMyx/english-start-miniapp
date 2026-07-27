@@ -1,0 +1,144 @@
+<view class="page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在准备听写词汇…</view>
+  <view wx:elif="{{!allWords.length}}" class="empty">先在词库中录入至少一个词，就可以开始听写。</view>
+
+  <block wx:else>
+    <view class="card dictation-setup-card">
+      <view class="setup-heading">
+        <view>
+          <text class="setup-title">听写设置</text>
+          <text class="setup-subtitle">选择本轮的词汇范围和题目数量</text>
+        </view>
+        <button class="refresh-round-button" bindtap="prepareRound">重新抽题</button>
+      </view>
+
+      <view class="range-tabs">
+        <button
+          class="range-tab {{rangeMode === 'all' ? 'range-tab-active' : ''}}"
+          data-mode="all"
+          bindtap="setRangeMode"
+        >所有单词随机</button>
+        <button
+          class="range-tab {{rangeMode === 'selected' ? 'range-tab-active' : ''}}"
+          data-mode="selected"
+          bindtap="setRangeMode"
+        >指定词汇</button>
+      </view>
+
+      <view class="setup-row">
+        <view class="count-setting">
+          <text>每次听写</text>
+          <input
+            class="count-input"
+            type="number"
+            value="{{dictationCountInput}}"
+            bindinput="onDictationCountInput"
+            bindblur="applyDictationCount"
+            bindconfirm="applyDictationCount"
+            confirm-type="done"
+          />
+          <text>个</text>
+        </view>
+        <button wx:if="{{rangeMode === 'selected'}}" class="choose-words-button" bindtap="openWordSelector">
+          已选 {{selectedCount}} 个 · 修改
+        </button>
+        <text wx:else class="range-summary">词库共 {{allWords.length}} 个</text>
+      </view>
+    </view>
+
+    <view wx:if="{{finished}}" class="card round-result-card">
+      <text class="round-result-emoji">{{correctCount === words.length ? '🎉' : '👏'}}</text>
+      <text class="round-result-title">听写练习完成</text>
+      <text class="round-result-score">+{{summary.roundScore}} 分</text>
+      <text class="round-result-detail">答对 {{correctCount}} / {{words.length}} 题 · 正确率 {{summary.correctRate}}%</text>
+      <text class="round-result-goal">{{summary.goalText}}</text>
+      <view class="result-actions">
+        <button class="nav-previous" bindtap="goHome">返回首页</button>
+        <button class="nav-next" bindtap="restart">再练一次</button>
+      </view>
+    </view>
+
+    <block wx:elif="{{current}}">
+      <view class="progress-line">
+        <text>听发音，输入英文</text>
+        <text>第 {{index + 1}} 题 · 共 {{words.length}} 题</text>
+      </view>
+
+      <view class="card dictation-question-card">
+        <text class="question-number">{{index + 1}}</text>
+        <button class="listen-button" loading="{{speaking}}" bindtap="playCurrent">🔊 点击听词</button>
+      </view>
+
+      <view class="card dictation-answer-card">
+        <input
+          class="spelling-input"
+          value="{{answer}}"
+          bindinput="onAnswerInput"
+          disabled="{{result}}"
+          placeholder="在这里拼写英文"
+          confirm-type="done"
+          bindconfirm="submit"
+        />
+        <text class="practice-hint">可以重复播放，不区分大小写</text>
+      </view>
+
+      <button wx:if="{{!result}}" class="action-button submit-button {{!answer ? 'nav-disabled' : ''}}" disabled="{{!answer}}" bindtap="submit">提交答案</button>
+      <view wx:if="{{result}}" class="{{result.correct ? 'success-banner' : 'error-banner'}}">{{result.feedback}}</view>
+      <view class="practice-nav">
+        <button
+          class="nav-previous {{index === 0 ? 'nav-disabled' : ''}}"
+          disabled="{{index === 0}}"
+          bindtap="previous"
+        >上一题</button>
+        <button
+          class="nav-next {{!result ? 'nav-disabled' : ''}}"
+          disabled="{{!result}}"
+          bindtap="next"
+        >{{index + 1 === words.length ? '完成练习' : '下一题'}}</button>
+      </view>
+    </block>
+
+    <view wx:else class="empty">点击“指定词汇”，选择至少一个要听写的单词。</view>
+  </block>
+</view>
+
+<view wx:if="{{selectorVisible}}" class="selector-mask" bindtap="closeWordSelector">
+  <view class="selector-panel" catchtap="keepSelectorOpen">
+    <view class="selector-header">
+      <view>
+        <text class="selector-title">选择听写词汇</text>
+        <text class="selector-count">已选择 {{selectedCount}} 个</text>
+      </view>
+      <view class="selector-tools">
+        <text bindtap="selectAllSelectorWords">全选</text>
+        <text bindtap="clearSelectorWords">清空</text>
+      </view>
+    </view>
+
+    <scroll-view class="selector-list" scroll-y>
+      <view
+        wx:for="{{selectorWords}}"
+        wx:key="id"
+        class="selector-word {{item.selected ? 'selector-word-selected' : ''}}"
+        data-index="{{index}}"
+        bindtap="toggleSelectorWord"
+      >
+        <view class="selector-word-text">
+          <text class="selector-english">{{item.english}}</text>
+          <text class="selector-chinese">{{item.chinese}}</text>
+        </view>
+        <text class="selector-check">{{item.selected ? '✓' : ''}}</text>
+      </view>
+    </scroll-view>
+
+    <view class="selector-actions">
+      <button class="selector-cancel" bindtap="closeWordSelector">取消</button>
+      <button
+        class="selector-confirm {{!selectedCount ? 'nav-disabled' : ''}}"
+        disabled="{{!selectedCount}}"
+        bindtap="confirmWordSelector"
+      >确认选择</button>
+    </view>
+  </view>
+</view>

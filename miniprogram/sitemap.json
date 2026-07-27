@@ -1,0 +1,9 @@
+{
+  "desc": "English Start 小程序页面",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}

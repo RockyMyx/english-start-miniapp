@@ -1,0 +1,93 @@
+<view class="page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在准备造句题…</view>
+  <view wx:elif="{{!current}}" class="empty">导入启蒙 50 词后，造句模块会自动开放。</view>
+
+  <view wx:elif="{{finished}}" class="card round-result-card">
+    <text class="round-result-emoji">{{correctCount === prompts.length ? '🎉' : '👏'}}</text>
+    <text class="round-result-title">造句练习完成</text>
+    <text class="round-result-score">+{{summary.roundScore}} 分</text>
+    <text class="round-result-detail">通过 {{correctCount}} / {{prompts.length}} 题 · 正确率 {{summary.correctRate}}%</text>
+    <text class="round-result-goal">{{summary.goalText}}</text>
+    <view class="result-actions">
+      <button class="nav-previous" bindtap="goHome">返回首页</button>
+      <button class="nav-next" bindtap="restart">再练一次</button>
+    </view>
+  </view>
+
+  <block wx:else>
+    <view class="progress-line">
+      <text>把下面的中文表达成英文</text>
+      <text>第 {{index + 1}} 题 · 共 {{prompts.length}} 题</text>
+    </view>
+    <view class="card prompt-card">
+      <text class="question-number">{{index + 1}}</text>
+      <view class="prompt-content">
+        <text class="chinese-prompt">{{current.promptChinese}}</text>
+        <text class="practice-hint">答案不要求逐字一致，意思正确即可</text>
+      </view>
+    </view>
+    <textarea
+      class="answer-input sentence-input"
+      value="{{answer}}"
+      bindinput="onInput"
+      disabled="{{answered}}"
+      maxlength="240"
+      placeholder="输入你的英文句子"
+    />
+    <view class="response-actions">
+      <button
+        class="action-button {{!answer || answered ? 'nav-disabled' : ''}}"
+        loading="{{evaluating && !recording}}"
+        disabled="{{!answer || answered || evaluating}}"
+        bindtap="submit"
+      >检查句子</button>
+      <button
+        class="{{recording ? 'recording-button' : 'voice-button'}} {{answered ? 'nav-disabled' : ''}}"
+        disabled="{{evaluating || answered}}"
+        catchtouchstart="startRecording"
+        catchtouchend="stopRecording"
+        catchtouchcancel="stopRecording"
+      >{{recording ? '松开发送' : (evaluating ? '正在评测' : '🎙️ 按住说')}}</button>
+    </view>
+    <text class="voice-hint">最长 20 秒，松开后自动识别并评分</text>
+
+    <view wx:if="{{evaluation}}" class="card evaluation-card">
+      <text class="{{evaluation.correct ? 'evaluation-good' : 'evaluation-try'}}">
+        {{evaluation.correct ? '表达正确' : '再调整一下'}}
+      </text>
+      <text class="evaluation-score">语义得分 {{evaluation.score}}</text>
+      <text class="muted">{{evaluation.feedback}}</text>
+      <text class="reference-label">推荐表达</text>
+      <text class="reference-answer">{{evaluation.improvedAnswer}}</text>
+    </view>
+
+    <view wx:if="{{voiceResult}}" class="card evaluation-card">
+      <text class="{{voiceResult.correct ? 'evaluation-good' : 'evaluation-try'}}">
+        {{voiceResult.correct ? '表达和发音都通过' : '再练习一下'}}
+      </text>
+      <text class="recognized">识别结果：{{voiceResult.voice.recognizedText}}</text>
+      <view class="score-grid">
+        <view><text class="score-number">{{voiceResult.semantic.score}}</text><text class="score-label">语义</text></view>
+        <view><text class="score-number">{{voiceResult.voice.pronunciationScore}}</text><text class="score-label">发音</text></view>
+        <view><text class="score-number">{{voiceResult.voice.fluencyScore}}</text><text class="score-label">流利度</text></view>
+      </view>
+      <text class="muted">{{voiceResult.semantic.feedback}}</text>
+      <text class="reference-label">推荐表达</text>
+      <text class="reference-answer">{{voiceResult.semantic.improvedAnswer}}</text>
+    </view>
+
+    <view class="practice-nav">
+      <button
+        class="nav-previous {{index === 0 ? 'nav-disabled' : ''}}"
+        disabled="{{index === 0 || recording || evaluating}}"
+        bindtap="previous"
+      >上一题</button>
+      <button
+        class="nav-next {{!answered ? 'nav-disabled' : ''}}"
+        disabled="{{!answered || recording || evaluating}}"
+        bindtap="next"
+      >{{index + 1 === prompts.length ? '完成练习' : '下一题'}}</button>
+    </view>
+  </block>
+</view>

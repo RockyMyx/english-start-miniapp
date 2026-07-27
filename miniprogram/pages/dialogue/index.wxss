@@ -1,0 +1,217 @@
+.dialogue-bubble {
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  gap: 20rpx;
+  padding: 34rpx;
+  border-radius: 10rpx 30rpx 30rpx 30rpx;
+  color: #ffffff;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: 0 18rpx 42rpx rgba(37, 99, 235, 0.18);
+}
+
+.question,
+.question-cn {
+  display: block;
+}
+
+.question-number {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 58rpx;
+  height: 58rpx;
+  border-radius: 14rpx;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 27rpx;
+  font-weight: 800;
+}
+
+.dialogue-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.question {
+  margin-top: 2rpx;
+  font-size: 40rpx;
+  line-height: 1.4;
+  font-weight: 800;
+}
+
+.question-cn {
+  margin-top: 12rpx;
+  font-size: 25rpx;
+  opacity: 0.75;
+}
+
+.question-tools {
+  display: flex;
+  gap: 14rpx;
+  margin-top: 24rpx;
+}
+
+.play-question,
+.translation-button {
+  flex: 1;
+  min-height: 76rpx;
+  color: #2563eb;
+  background: #ffffff;
+  font-size: 24rpx;
+}
+
+.translation-button {
+  color: #ffffff;
+  border: 2rpx solid rgba(255, 255, 255, 0.45);
+  background: transparent;
+}
+
+.answer-card,
+.result-panel {
+  margin-top: 22rpx;
+}
+
+.answer-title {
+  display: block;
+  margin-bottom: 16rpx;
+  font-size: 30rpx;
+  font-weight: 750;
+}
+
+.voice-pad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 220rpx;
+  margin-bottom: 22rpx;
+  border: 2rpx dashed #bfdbfe;
+  border-radius: 28rpx;
+  background: #eff6ff;
+}
+
+.voice-pad-active {
+  border-color: #60a5fa;
+  background: #dbeafe;
+}
+
+.voice-pad-cancel {
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.voice-icon,
+.voice-main,
+.voice-sub {
+  display: block;
+}
+
+.voice-icon {
+  font-size: 54rpx;
+}
+
+.voice-main {
+  margin-top: 12rpx;
+  color: #1d4ed8;
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+.voice-pad-cancel .voice-main {
+  color: #dc2626;
+}
+
+.voice-sub {
+  margin-top: 8rpx;
+  color: #64748b;
+  font-size: 23rpx;
+}
+
+.wechat-voice-button {
+  width: 100%;
+  min-height: 106rpx;
+  color: #1d4ed8;
+  border: 2rpx solid #93c5fd;
+  background: #ffffff;
+  box-shadow: 0 10rpx 22rpx rgba(37, 99, 235, 0.12);
+}
+
+.wechat-voice-button-active {
+  color: #ffffff;
+  border-color: #2563eb;
+  background: #2563eb;
+}
+
+.wechat-voice-button-cancel {
+  border-color: #ef4444;
+  background: #ef4444;
+}
+
+.result-good,
+.result-try,
+.score,
+.recognized,
+.reference {
+  display: block;
+}
+
+.result-good {
+  color: #217a54;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.result-try {
+  color: #b36b20;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.score {
+  margin: 10rpx 0 16rpx;
+  color: #2563eb;
+}
+
+.recognized {
+  margin: 16rpx 0;
+  font-size: 28rpx;
+  font-weight: 650;
+}
+
+.reference {
+  margin-top: 20rpx;
+  font-size: 27rpx;
+  font-weight: 650;
+}
+
+.score-grid {
+  display: flex;
+  gap: 12rpx;
+  margin: 20rpx 0;
+}
+
+.score-grid view {
+  flex: 1;
+  padding: 18rpx 8rpx;
+  border-radius: 18rpx;
+  background: #f4f6fb;
+  text-align: center;
+}
+
+.score-number,
+.score-label {
+  display: block;
+}
+
+.score-number {
+  color: #2563eb;
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+.score-label {
+  margin-top: 4rpx;
+  color: #8791a5;
+  font-size: 20rpx;
+}

@@ -1,0 +1,158 @@
+.library-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28rpx;
+}
+
+.page-title {
+  display: block;
+  margin-bottom: 8rpx;
+  font-size: 46rpx;
+  font-weight: 800;
+}
+
+.import-button {
+  flex-shrink: 0;
+  min-height: 76rpx;
+  padding: 0 22rpx;
+  font-size: 25rpx;
+}
+
+.form-title {
+  display: block;
+  margin-bottom: 6rpx;
+  font-size: 31rpx;
+  font-weight: 750;
+}
+
+.save-button {
+  margin-top: 28rpx;
+}
+
+.word-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 42rpx 4rpx 20rpx;
+}
+
+.word-section-title {
+  margin: 0;
+}
+
+.clear-button {
+  min-height: 68rpx;
+  padding: 0 22rpx;
+  color: #c5505d;
+  border: 2rpx solid #f3c8cd;
+  background: #fff7f7;
+  font-size: 23rpx;
+}
+
+.word-groups,
+.word-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.word-groups {
+  gap: 28rpx;
+}
+
+.word-group {
+  gap: 14rpx;
+}
+
+.letter-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 22rpx;
+  border-left: 8rpx solid #2563eb;
+  border-radius: 8rpx 18rpx 18rpx 8rpx;
+  background: linear-gradient(90deg, #e9edff 0%, #f6f7ff 100%);
+}
+
+.letter-title {
+  color: #3f4fd0;
+  font-size: 32rpx;
+  font-weight: 850;
+}
+
+.letter-count {
+  color: #7b85ae;
+  font-size: 22rpx;
+}
+
+.word-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.word-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 24rpx 26rpx;
+  border-radius: 24rpx;
+  background: #ffffff;
+}
+
+.word-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.word-title-line {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.word-english,
+.word-phonetic,
+.word-chinese,
+.word-progress {
+  display: block;
+}
+
+.word-english {
+  font-size: 32rpx;
+  font-weight: 750;
+}
+
+.word-chinese {
+  margin-top: 7rpx;
+  color: #6d778d;
+  font-size: 25rpx;
+}
+
+.word-phonetic {
+  margin-top: 5rpx;
+  color: #2563eb;
+  font-size: 23rpx;
+}
+
+.word-progress {
+  margin-top: 7rpx;
+  color: #9aa2b2;
+  font-size: 21rpx;
+}
+
+.source-tag {
+  padding: 4rpx 10rpx;
+  border-radius: 10rpx;
+  color: #2563eb;
+  background: #eff6ff;
+  font-size: 19rpx;
+}
+
+.remove-button {
+  min-height: 64rpx;
+  padding: 0 22rpx;
+  color: #c5505d;
+  background: #fff0f1;
+  font-size: 22rpx;
+}
