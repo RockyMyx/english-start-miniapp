@@ -1,10 +1,10 @@
 {
   "description": "单词练练微信小程序",
-  "appid": "touristappid",
+  "appid": "wxae51972fe48d5cfb",
   "projectname": "english-start",
   "compileType": "miniprogram",
-  "miniprogramRoot": "miniprogram/",
-  "srcMiniprogramRoot": "miniprogram/",
+  "miniprogramRoot": "./",
+  "srcMiniprogramRoot": "./",
   "libVersion": "latest",
   "setting": {
     "urlCheck": false,

@@ -36,14 +36,13 @@
 
 ```text
 english-start/
-├─ miniprogram/
-│  ├─ assets/            # 图标资源
-│  ├─ config/index.js    # API 地址与登录模式
-│  ├─ pages/             # 首页、词库及各练习页面
-│  ├─ utils/             # 请求、登录、录音、语音和学习进度工具
-│  ├─ app.js
-│  ├─ app.json
-│  └─ app.wxss
+├─ assets/               # 图标资源
+├─ config/index.js       # API 地址与登录模式
+├─ pages/                # 首页、词库及各练习页面
+├─ utils/                # 请求、登录、录音、语音和学习进度工具
+├─ app.js
+├─ app.json
+├─ app.wxss
 ├─ project.config.json   # 微信开发者工具项目配置
 └─ README.md
 ```
@@ -57,7 +56,7 @@ english-start/
 
 ### 2. 配置小程序
 
-编辑 `miniprogram/config/index.js`：
+编辑 `config/index.js`：
 
 ```js
 module.exports = {
@@ -82,8 +81,8 @@ module.exports = {
 3. 本地 HTTP 调试时，在开发者工具中关闭合法域名校验。
 4. 编译后，小程序会自动获取开发会话并加载首页数据。
 
-根目录 `project.config.json` 已将 `miniprogram/` 配置为小程序源码目录，当前 AppID
-为游客测试用的 `touristappid`。
+根目录 `project.config.json` 已将仓库根目录配置为小程序源码目录，并包含当前项目的
+微信 AppID。
 
 ## 登录、录音与音频
 
