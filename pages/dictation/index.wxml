@@ -4,7 +4,7 @@
   <view wx:elif="{{!allWords.length}}" class="empty">先在词库中录入至少一个词，就可以开始听写。</view>
 
   <block wx:else>
-    <block wx:if="{{!setupComplete}}">
+    <block wx:if="{{!setupComplete && !dailyPlanId}}">
       <view class="card dictation-setup-card">
         <view class="setup-heading">
           <view>
@@ -66,8 +66,8 @@
       <text class="round-result-detail">答对 {{correctCount}} / {{words.length}} 题 · 正确率 {{summary.correctRate}}%</text>
       <text class="round-result-goal">{{summary.goalText}}</text>
       <view class="result-actions">
-        <button class="nav-previous" bindtap="goHome">返回首页</button>
-        <button class="nav-next" bindtap="restart">再练一次</button>
+        <button class="nav-previous" bindtap="goHome">{{dailyPlanId ? '返回今日学习' : '返回首页'}}</button>
+        <button wx:if="{{!dailyPlanId}}" class="nav-next" bindtap="restart">再练一次</button>
       </view>
     </view>
 

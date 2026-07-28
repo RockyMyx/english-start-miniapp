@@ -7,10 +7,10 @@
     <text class="round-result-emoji">🌱</text>
     <text class="round-result-title">本轮学习完成</text>
     <text class="round-result-detail">认识 {{knownCount}} 个 · 需要复习 {{learningCount}} 个</text>
-    <text class="round-result-goal">标记为不熟的单词会进入错题复习</text>
+    <text class="round-result-goal">系统会根据记忆情况，在合适的时间再次安排复习</text>
     <view class="result-actions">
-      <button class="nav-previous" bindtap="goHome">返回首页</button>
-      <button class="nav-next" bindtap="restart">再学一组</button>
+      <button class="nav-previous" bindtap="goHome">{{dailyPlanId ? '返回今日学习' : '返回首页'}}</button>
+      <button wx:if="{{!dailyPlanId}}" class="nav-next" bindtap="restart">再学一组</button>
     </view>
   </view>
 

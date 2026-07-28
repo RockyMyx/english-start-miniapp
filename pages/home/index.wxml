@@ -22,6 +22,28 @@
       </view>
     </view>
 
+    <view wx:if="{{dailyPlan}}" class="daily-plan-card">
+      <view class="daily-plan-heading">
+        <view>
+          <text class="daily-plan-kicker">TODAY</text>
+          <text class="daily-plan-title">{{dailyPlan.completed ? '今日学习已完成' : '今天学什么，已经帮你排好'}}</text>
+        </view>
+        <text class="daily-plan-time">约 {{dailyPlan.estimatedMinutes}} 分钟</text>
+      </view>
+      <text class="daily-plan-summary">
+        {{dailyPlan.totalCount ? dailyPlan.completedCount + ' / ' + dailyPlan.totalCount + ' 项' : '先导入词库，生成你的学习计划'}}
+      </text>
+      <view class="daily-progress-track">
+        <view class="daily-progress-fill" style="width: {{planProgressPercent}}%;"></view>
+      </view>
+      <view wx:if="{{dailyPlan.tasks.length}}" class="daily-task-preview">
+        <text wx:for="{{dailyPlan.tasks}}" wx:key="key">{{index ? ' → ' : ''}}{{item.title}} {{item.targetCount}}</text>
+      </view>
+      <button class="daily-plan-button" bindtap="openDailyPlan">
+        {{dailyPlan.completed ? '查看今日成果' : dailyPlan.completedCount ? '继续今日学习' : '开始今日学习'}}
+      </button>
+    </view>
+
     <view wx:if="{{dashboard.starterWordCount < 12}}" class="starter-card">
       <view class="starter-copy">
         <text class="starter-title">启蒙 50 词</text>
@@ -30,6 +52,7 @@
       <button class="starter-button" bindtap="importStarterPack">导入示例词库</button>
     </view>
 
+    <text class="free-practice-title">自由练习</text>
     <view class="level-header beginner-header">
       <view class="level-icon">01</view>
       <view>
@@ -77,17 +100,5 @@
         <text class="module-subtitle">{{item.enabled ? item.subtitle : item.lockText}}</text>
       </view>
     </view>
-
   </block>
-
-  <view wx:if="{{checkInPopupVisible}}" class="popup-mask" bindtap="dismissCheckInPopup">
-    <view class="checkin-popup" catchtap="noop">
-      <view class="checkin-popup-mark">✓</view>
-      <text class="checkin-popup-title">今日签到成功</text>
-      <text class="checkin-popup-streak">连续学习 {{checkInSummary.currentStreak}} 天</text>
-      <text class="checkin-popup-copy">今天也向英语目标迈进了一小步</text>
-      <button class="checkin-poster-button" bindtap="openCheckInPoster">查看签到海报</button>
-      <button class="checkin-later-button" bindtap="dismissCheckInPopup">继续学习</button>
-    </view>
-  </view>
 </view>

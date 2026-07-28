@@ -18,11 +18,17 @@ Page({
     finished: false,
     knownCount: 0,
     learningCount: 0,
-    scope: "all"
+    scope: "all",
+    dailyPlanId: "",
+    dailyTaskKey: ""
   },
 
   onLoad(options) {
-    this.setData({ scope: options && options.scope === "weak" ? "weak" : "all" });
+    this.setData({
+      scope: options && options.scope === "weak" ? "weak" : "all",
+      dailyPlanId: (options && options.dailyPlanId) || "",
+      dailyTaskKey: (options && options.dailyTaskKey) || ""
+    });
     this.loadWords();
   },
 
@@ -33,8 +39,11 @@ Page({
   async loadWords() {
     this.setData({ loading: true, error: "" });
     try {
+      const wordsUrl = this.data.dailyPlanId
+        ? `/daily-plans/${this.data.dailyPlanId}/tasks/${this.data.dailyTaskKey}/words`
+        : "/words";
       const [result, review] = await Promise.all([
-        request({ url: "/words" }),
+        request({ url: wordsUrl }),
         this.data.scope === "weak" ? request({ url: "/review" }) : Promise.resolve(null)
       ]);
       const pendingIds = review
@@ -44,9 +53,10 @@ Page({
               .map((item) => item.vocabularyItemId)
           )
         : null;
-      const words = shuffled(
-        (result.words || []).filter((word) => !pendingIds || pendingIds.has(word.id))
-      )
+      const sourceWords = (result.words || []).filter(
+        (word) => !pendingIds || pendingIds.has(word.id)
+      );
+      const words = (this.data.dailyPlanId ? sourceWords : shuffled(sourceWords))
         .sort((left, right) => (right.incorrectCount || 0) - (left.incorrectCount || 0))
         .slice(0, 10)
         .map((word) => ({ ...word, learningResult: "" }));
@@ -90,7 +100,11 @@ Page({
       await request({
         url: `/words/${this.data.current.id}/reading`,
         method: "POST",
-        data: { result }
+        data: {
+          result,
+          dailyPlanId: this.data.dailyPlanId || undefined,
+          dailyTaskKey: this.data.dailyTaskKey || undefined
+        }
       });
       const current = { ...this.data.current, learningResult: result };
       const words = [...this.data.words];
@@ -135,6 +149,10 @@ Page({
   },
 
   goHome() {
+    if (this.data.dailyPlanId) {
+      wx.navigateBack();
+      return;
+    }
     wx.switchTab({ url: "/pages/home/index" });
   },
 

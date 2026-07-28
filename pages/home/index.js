@@ -99,10 +99,10 @@ Page({
     dashboard: null,
     beginnerModules: [],
     advancedModules: [],
+    dailyPlan: null,
+    planProgressPercent: 0,
     studyTimeText: "00:00",
-    goalAchieved: false,
-    checkInPopupVisible: false,
-    checkInSummary: null
+    goalAchieved: false
   },
 
   onShow() {
@@ -135,7 +135,10 @@ Page({
   async loadDashboard() {
     this.setData({ loading: true, error: "" });
     try {
-      const dashboard = await request({ url: "/me" });
+      const [dashboard, dailyPlan] = await Promise.all([
+        request({ url: "/me" }),
+        request({ url: "/daily-plans/today" })
+      ]);
       const dailyScoreGoal = Number(dashboard.dailyScoreGoal) || getDailyGoal();
       setDailyGoal(dailyScoreGoal);
       const displayDashboard = { ...dashboard, dailyScoreGoal };
@@ -167,11 +170,14 @@ Page({
           decoratedModules[6],
           decoratedModules[7]
         ],
-        goalAchieved: dashboard.todayScore >= dailyScoreGoal
+        goalAchieved: dashboard.todayScore >= dailyScoreGoal,
+        dailyPlan,
+        planProgressPercent: dailyPlan.totalCount
+          ? Math.round((dailyPlan.completedCount / dailyPlan.totalCount) * 100)
+          : 0
       });
       syncTabBar(this, 0, dashboard.pendingReviewCount);
       checkDailyGoal(dashboard.todayScore, dailyScoreGoal);
-      this.maybeShowDailyCheckIn();
     } catch (error) {
       this.setData({ error: error.message });
     } finally {
@@ -179,40 +185,13 @@ Page({
     }
   },
 
-  localDateKey() {
-    const now = new Date();
-    const pad = (value) => String(value).padStart(2, "0");
-    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-  },
-
-  async maybeShowDailyCheckIn() {
-    const dateKey = this.localDateKey();
-    if (wx.getStorageSync("englishStartCheckInShownDate") === dateKey) return;
-    try {
-      const summary = await request({ url: "/check-ins/today", method: "POST" });
-      wx.setStorageSync("englishStartCheckInShownDate", dateKey);
-      this.setData({
-        checkInSummary: summary,
-        checkInPopupVisible: true,
-        "dashboard.checkedInToday": true,
-        "dashboard.checkInDays": summary.totalDays,
-        "dashboard.currentStreak": summary.currentStreak
-      });
-    } catch (_error) {
-      // 签到失败不打断首页学习流程，用户仍可在“我的”里重试。
+  openDailyPlan() {
+    if (!this.data.dashboard || this.data.dashboard.wordCount === 0) {
+      wx.navigateTo({ url: "/pages/starter-pack/index" });
+      return;
     }
+    wx.navigateTo({ url: "/pages/daily-plan/index" });
   },
-
-  dismissCheckInPopup() {
-    this.setData({ checkInPopupVisible: false });
-  },
-
-  openCheckInPoster() {
-    this.setData({ checkInPopupVisible: false });
-    wx.navigateTo({ url: "/pages/check-in/index" });
-  },
-
-  noop() {},
 
   editDailyGoal() {
     const currentGoal = getDailyGoal();

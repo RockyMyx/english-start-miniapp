@@ -9,6 +9,7 @@ const {
 
 const modeLabels = {
   WORD_READING: "单词学习与跟读",
+  WORD_PRONUNCIATION: "单词发音",
   LISTEN_CHOOSE_MEANING: "听读音选中文",
   MEANING_CHOOSE_WORD: "看中文选英文",
   WORD_CHOOSE_MEANING: "看英文选中文",

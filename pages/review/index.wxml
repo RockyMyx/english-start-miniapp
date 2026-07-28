@@ -4,8 +4,11 @@
 
   <block wx:elif="{{overview}}">
     <button class="smart-button" bindtap="startSmartReview">
-      开始智能复习{{overview.pendingCount ? ' · ' + overview.pendingCount + ' 项' : ''}}
+      {{overview.dueCount ? '复习今日到期 · ' + overview.dueCount + ' 项' : '今天没有到期内容'}}
     </button>
+    <view wx:if="{{overview.upcomingCount}}" class="schedule-tip">
+      另有 {{overview.upcomingCount}} 项尚未到复习时间，系统会在快要遗忘前提醒你。
+    </view>
 
     <view class="category-tabs">
       <view
@@ -16,7 +19,7 @@
         bindtap="selectCategory"
       >
         <text class="category-name">{{item.label}}</text>
-        <text class="category-count">{{item.pendingCount}} 待复习</text>
+        <text class="category-count">{{item.pendingCount}} 今日到期</text>
       </view>
     </view>
 
@@ -25,7 +28,7 @@
         class="{{status === 'PENDING' ? 'status-active' : ''}}"
         data-status="PENDING"
         bindtap="selectStatus"
-      >待复习</view>
+      >今日到期</view>
       <view
         class="{{status === 'MASTERED' ? 'status-active' : ''}}"
         data-status="MASTERED"
@@ -35,8 +38,8 @@
 
     <view wx:if="{{!visibleItems.length}}" class="card review-empty">
       <text class="empty-icon">{{status === 'PENDING' ? '✓' : '☆'}}</text>
-      <text class="empty-title">{{status === 'PENDING' ? '这一类已经复习完啦' : '还没有已掌握的内容'}}</text>
-      <text class="muted">{{status === 'PENDING' ? '继续学习，新错题会自动来到这里' : '完成连续正确或手动标记后会显示在这里'}}</text>
+      <text class="empty-title">{{status === 'PENDING' ? '这一类今天复习完啦' : '还没有已掌握的内容'}}</text>
+      <text class="muted">{{status === 'PENDING' ? '未到时间的内容先不打扰你，到期后会自动出现' : '完成多轮间隔复习或手动标记后会显示在这里'}}</text>
     </view>
 
     <view wx:else class="review-list">

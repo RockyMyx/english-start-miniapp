@@ -36,7 +36,9 @@ Page({
         profile,
         dashboard: { ...dashboard, dailyScoreGoal },
         nickname: profile.nickname || "",
-        avatarUrl: profile.avatarPath ? `${apiBaseUrl}${profile.avatarPath}` : "",
+        avatarUrl: profile.avatarPath
+          ? `${apiBaseUrl}${profile.avatarPath}?v=${Date.now()}`
+          : "",
         hasProfile: Boolean(profile.nickname || profile.avatarPath)
       });
       syncTabBar(this, 2, dashboard.pendingReviewCount);

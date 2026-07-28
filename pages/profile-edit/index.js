@@ -48,7 +48,9 @@ Page({
         nickname: profile.nickname || "",
         avatarUrl:
           this.data.pendingAvatarPath ||
-          (profile.avatarPath ? `${apiBaseUrl}${profile.avatarPath}` : "")
+          (profile.avatarPath
+            ? `${apiBaseUrl}${profile.avatarPath}?v=${Date.now()}`
+            : "")
       });
     } catch (error) {
       this.setData({ error: error.message });
@@ -125,7 +127,7 @@ Page({
         profile,
         nickname: profile.nickname || nickname,
         avatarUrl: profile.avatarPath
-          ? `${apiBaseUrl}${profile.avatarPath}`
+          ? `${apiBaseUrl}${profile.avatarPath}?v=${Date.now()}`
           : this.data.avatarUrl,
         pendingAvatarPath: ""
       });

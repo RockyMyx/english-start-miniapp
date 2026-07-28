@@ -48,7 +48,9 @@ Page({
     finished: false,
     summary: null,
     speaking: false,
-    speakingText: ""
+    speakingText: "",
+    dailyPlanId: "",
+    dailyTaskKey: ""
   },
 
   onLoad(options) {
@@ -58,7 +60,13 @@ Page({
       scope === "weak"
         ? { title: "错题复习", instruction: "集中复习做错或标记为不熟的单词" }
         : baseInfo;
-    this.setData({ mode: options.mode || "WORD_CHOOSE_MEANING", scope, ...info });
+    this.setData({
+      mode: options.mode || "WORD_CHOOSE_MEANING",
+      scope,
+      dailyPlanId: options.dailyPlanId || "",
+      dailyTaskKey: options.dailyTaskKey || "",
+      ...info
+    });
     wx.setNavigationBarTitle({ title: info.title });
     this.loadQuestions();
   },
@@ -70,8 +78,14 @@ Page({
   async loadQuestions() {
     this.setData({ loading: true, error: "" });
     try {
+      const planQuery = this.data.dailyPlanId
+        ? `&dailyPlanId=${encodeURIComponent(this.data.dailyPlanId)}` +
+          `&dailyTaskKey=${encodeURIComponent(this.data.dailyTaskKey)}`
+        : "";
       const result = await request({
-        url: `/practice/questions?mode=${this.data.mode}&limit=10&scope=${this.data.scope}`
+        url:
+          `/practice/questions?mode=${this.data.mode}&limit=10&scope=${this.data.scope}` +
+          planQuery
       });
       const questions = (result.questions || []).map(decorateQuestion);
       this.setData({
@@ -133,7 +147,9 @@ Page({
         data: {
           mode: this.data.mode,
           wordId: this.data.current.wordId,
-          selectedWordId: selectedId
+          selectedWordId: selectedId,
+          dailyPlanId: this.data.dailyPlanId || undefined,
+          dailyTaskKey: this.data.dailyTaskKey || undefined
         }
       });
       const options = this.data.current.options.map((option) => {
@@ -233,6 +249,10 @@ Page({
   },
 
   goHome() {
+    if (this.data.dailyPlanId) {
+      wx.navigateBack();
+      return;
+    }
     wx.switchTab({ url: "/pages/home/index" });
   },
 

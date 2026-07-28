@@ -29,10 +29,16 @@ Page({
     correctCount: 0,
     finished: false,
     summary: null,
-    speaking: false
+    speaking: false,
+    dailyPlanId: "",
+    dailyTaskKey: ""
   },
 
-  onLoad() {
+  onLoad(options) {
+    this.setData({
+      dailyPlanId: (options && options.dailyPlanId) || "",
+      dailyTaskKey: (options && options.dailyTaskKey) || ""
+    });
     this.loadWords();
   },
 
@@ -54,9 +60,23 @@ Page({
   async loadWords() {
     this.setData({ loading: true, error: "" });
     try {
-      const result = await request({ url: "/words" });
+      const wordsUrl = this.data.dailyPlanId
+        ? `/daily-plans/${this.data.dailyPlanId}/tasks/${this.data.dailyTaskKey}/words`
+        : "/words";
+      const result = await request({ url: wordsUrl });
       const allWords = result.words || [];
-      this.setData({ allWords });
+      this.setData(
+        {
+          allWords,
+          rangeMode: this.data.dailyPlanId ? "all" : this.data.rangeMode,
+          dictationCountInput: this.data.dailyPlanId
+            ? String(allWords.length)
+            : this.data.dictationCountInput
+        },
+        () => {
+          if (this.data.dailyPlanId) this.prepareRound();
+        }
+      );
     } catch (error) {
       this.setData({ error: error.message });
     } finally {
@@ -171,7 +191,9 @@ Page({
         data: {
           mode: "DICTATION",
           wordId: this.data.current.id,
-          answerText: this.data.answer
+          answerText: this.data.answer,
+          dailyPlanId: this.data.dailyPlanId || undefined,
+          dailyTaskKey: this.data.dailyTaskKey || undefined
         }
       });
       const answeredWord = {
@@ -251,6 +273,10 @@ Page({
   },
 
   goHome() {
+    if (this.data.dailyPlanId) {
+      wx.navigateBack();
+      return;
+    }
     wx.switchTab({ url: "/pages/home/index" });
   },
 

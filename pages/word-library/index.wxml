@@ -77,6 +77,17 @@
             <text wx:if="{{word.phonetic}}" class="word-phonetic">{{word.phonetic}}</text>
             <text class="word-chinese">{{word.chinese}}</text>
             <text wx:if="{{word.attemptCount}}" class="word-progress">练习 {{word.attemptCount}} 次 · 答对 {{word.correctCount}} 次</text>
+            <view wx:if="{{word.mastery}}" class="mastery-row">
+              <view
+                wx:for="{{word.mastery.steps}}"
+                wx:for-item="masteryStep"
+                wx:key="key"
+                class="mastery-step {{masteryStep.completed ? 'mastery-step-done' : ''}}"
+              >
+                <text class="mastery-dot">{{masteryStep.completed ? '✓' : ''}}</text>
+                <text>{{masteryStep.label}}</text>
+              </view>
+            </view>
           </view>
           <button
             class="remove-button"

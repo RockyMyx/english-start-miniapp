@@ -1,0 +1,54 @@
+<view class="page daily-page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在整理今天的学习内容…</view>
+
+  <block wx:elif="{{plan}}">
+    <view class="daily-hero">
+      <text class="daily-kicker">TODAY'S PLAN</text>
+      <text class="daily-title">{{plan.completed ? '今天的计划完成啦' : '每天一小步，记得更牢'}}</text>
+      <text class="daily-subtitle">约 {{plan.estimatedMinutes}} 分钟 · {{plan.completedCount}} / {{plan.totalCount}} 项</text>
+      <view class="daily-track">
+        <view class="daily-fill" style="width: {{progressPercent}}%;"></view>
+      </view>
+    </view>
+
+    <view wx:if="{{checkInSummary}}" class="success-banner checkin-banner">
+      <text>今日有效学习已完成，连续 {{checkInSummary.currentStreak}} 天</text>
+      <button class="poster-link" bindtap="openCheckInPoster">查看签到海报</button>
+    </view>
+
+    <view wx:if="{{!plan.tasks.length}}" class="card empty-card">
+      <text class="empty-title">还没有可以安排的学习内容</text>
+      <text class="muted">先导入启蒙词库，系统就能为你生成今日计划。</text>
+      <button class="primary-button" bindtap="openStarterPack">导入启蒙词库</button>
+    </view>
+
+    <view wx:else class="task-list">
+      <view
+        wx:for="{{plan.tasks}}"
+        wx:key="key"
+        class="task-card {{item.completed ? 'task-completed' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="startTask"
+      >
+        <view class="task-mark">{{item.completed ? '✓' : index + 1}}</view>
+        <view class="task-copy">
+          <text class="task-title">{{item.title}}</text>
+          <text class="task-description">{{item.description}}</text>
+          <text class="task-progress">{{item.completedCount}} / {{item.targetCount}} 项</text>
+        </view>
+        <text class="task-arrow">{{item.completed ? '完成' : '›'}}</text>
+      </view>
+      <button
+        wx:if="{{!plan.completed}}"
+        class="primary-button continue-button"
+        bindtap="startNext"
+      >{{plan.completedCount ? '继续下一项' : '开始第一项'}}</button>
+      <view wx:else class="complete-card">
+        <text class="complete-icon">🎉</text>
+        <text class="complete-title">今日计划全部完成</text>
+        <text class="muted">明天会根据记忆情况，为你安排新的复习内容。</text>
+      </view>
+    </view>
+  </block>
+</view>
