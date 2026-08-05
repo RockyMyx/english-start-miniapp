@@ -56,30 +56,17 @@ english-start/
 
 ### 2. 配置小程序
 
-本地开发地址统一在 `config/index.js` 中配置：
+开发环境 API 地址统一在 `config/index.js` 中配置：
 
 ```js
-const localApiConfig = {
-  mode: "auto",
-  officeBaseUrl: "http://192.168.0.191:3000",
-  homeBaseUrl: "http://192.168.110.16:3000",
-  officeHours: {
-    weekdays: [1, 2, 3, 4, 5],
-    startHour: 9,
-    endHour: 18
-  }
+module.exports = {
+  apiBaseUrl: "http://122.51.131.175:3000",
+  useDevLogin: true
 };
 ```
 
-- `mode: "auto"`：周一至周五 `09:00–18:00` 自动使用公司地址
-  `http://192.168.0.191:3000`，其余时间使用家庭地址
-  `http://192.168.110.16:3000`。
-- 遇到节假日、加班或临时换网络时，可将 `mode` 暂时改为 `"office"` 或
-  `"home"`；恢复 `"auto"` 后继续按时间自动选择。
-- 在开发者工具模拟器中运行且后端在同一台电脑时，可使用
-  `http://localhost:3000`。
-- 使用真机预览时不能用 `localhost`，应使用手机可访问的局域网地址；电脑和手机需在
-  同一网络，且防火墙需要允许后端端口。
+- 开发者工具通过 `http://122.51.131.175:3000` 访问测试服务器。
+- 本地 HTTP 调试时，需要在开发者工具中关闭合法域名校验。
 - `useDevLogin: true` 会调用后端 `/auth/dev-login`，后端同时需要启用
   `DEV_LOGIN_ENABLED=true`。
 

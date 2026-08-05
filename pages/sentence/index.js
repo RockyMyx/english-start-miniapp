@@ -17,6 +17,7 @@ Page({
     loading: true,
     evaluating: false,
     recording: false,
+    recordingCanceling: false,
     error: "",
     prompts: [],
     index: 0,
@@ -35,7 +36,12 @@ Page({
   onLoad(options) {
     this.setData({ scope: options && options.scope === "weak" ? "weak" : "all" });
     this.handleRecorderStop = (result) => {
-      this.setData({ recording: false });
+      this.recordingStopping = false;
+      this.setData({ recording: false, recordingCanceling: false });
+      if (this.ignoreNextRecordStop) {
+        this.ignoreNextRecordStop = false;
+        return;
+      }
       if (!result.tempFilePath) {
         this.setData({ error: "没有录到声音，请按住按钮说完整句子" });
         return;
@@ -44,8 +50,10 @@ Page({
     };
     this.handleRecorderError = (error) => {
       this.recordingStarting = false;
+      this.recordingStopping = false;
       this.setData({
         recording: false,
+        recordingCanceling: false,
         error: error && error.errMsg ? `录音失败：${error.errMsg}` : "录音失败，请确认已经允许使用麦克风"
       });
     };
@@ -55,7 +63,10 @@ Page({
   },
 
   onUnload() {
-    if (this.data.recording) recorder.stop();
+    if (this.data.recording) {
+      this.ignoreNextRecordStop = true;
+      recorder.stop();
+    }
     if (typeof recorder.offStop === "function") recorder.offStop(this.handleRecorderStop);
     if (typeof recorder.offError === "function") recorder.offError(this.handleRecorderError);
   },
@@ -77,6 +88,7 @@ Page({
         answer: "",
         evaluation: null,
         voiceResult: null,
+        recordingCanceling: false,
         answered: false,
         correctCount: 0,
         finished: false,
@@ -118,14 +130,29 @@ Page({
     }
   },
 
-  async startRecording() {
-    if (this.recordingStarting || this.data.recording || this.data.evaluating || this.data.answered) return;
+  async startRecording(event) {
+    if (
+      this.recordingStarting ||
+      this.recordingStopping ||
+      this.data.recording ||
+      this.data.evaluating ||
+      this.data.answered
+    ) return;
     this.recordingStarting = true;
+    this.recordStartY =
+      event && event.touches && event.touches.length ? event.touches[0].clientY : 0;
+    this.recordStartAt = 0;
     prepareFeedbackSound();
-    this.setData({ error: "", evaluation: null, voiceResult: null });
+    this.setData({
+      error: "",
+      evaluation: null,
+      voiceResult: null,
+      recordingCanceling: false
+    });
     try {
       await ensureRecordPermission();
       if (!this.recordingStarting) return;
+      this.recordStartAt = Date.now();
       recorder.start(recorderStartOptions());
       this.setData({ recording: true });
     } catch (error) {
@@ -135,12 +162,45 @@ Page({
     }
   },
 
+  moveRecording(event) {
+    if (!this.data.recording || !event.touches || !event.touches.length) return;
+    if (!this.recordStartY) {
+      this.recordStartY = event.touches[0].clientY;
+      return;
+    }
+    const recordingCanceling = this.recordStartY - event.touches[0].clientY > 70;
+    if (recordingCanceling !== this.data.recordingCanceling) {
+      this.setData({ recordingCanceling });
+    }
+  },
+
   stopRecording() {
     if (this.data.recording) {
+      if (this.data.recordingCanceling) {
+        this.discardRecording("已取消");
+        return;
+      }
+      if (this.recordStartAt && Date.now() - this.recordStartAt < 500) {
+        this.discardRecording("说话时间太短");
+        return;
+      }
       recorder.stop();
       return;
     }
     this.recordingStarting = false;
+  },
+
+  cancelRecording() {
+    this.recordingStarting = false;
+    if (this.data.recording) this.discardRecording("已取消");
+  },
+
+  discardRecording(message) {
+    this.ignoreNextRecordStop = true;
+    this.recordingStopping = true;
+    recorder.stop();
+    this.setData({ recording: false, recordingCanceling: false });
+    wx.showToast({ title: message, icon: "none" });
   },
 
   async submitVoice(filePath) {
@@ -175,6 +235,7 @@ Page({
       answer: answerState.answer,
       evaluation: answerState.evaluation,
       voiceResult: answerState.voiceResult,
+      recordingCanceling: false,
       answered: true,
       correctCount: this.data.correctCount + (answerState.correct ? 1 : 0)
     });
@@ -204,6 +265,7 @@ Page({
       answer: state ? state.answer : "",
       evaluation: state ? state.evaluation : null,
       voiceResult: state ? state.voiceResult : null,
+      recordingCanceling: false,
       answered: Boolean(state),
       error: ""
     });

@@ -1,0 +1,23 @@
+<view wx:if="{{visible}}" class="voice-recording-layer">
+  <view class="voice-recording-panel {{canceling ? 'voice-recording-panel-cancel' : ''}}">
+    <view wx:if="{{canceling}}" class="voice-cancel-icon">
+      <view class="voice-cancel-arrow">↑</view>
+    </view>
+    <view wx:else class="voice-recording-visual">
+      <view class="voice-microphone">
+        <view class="voice-microphone-head"></view>
+        <view class="voice-microphone-arc"></view>
+        <view class="voice-microphone-stem"></view>
+      </view>
+      <view class="voice-levels">
+        <view class="voice-level voice-level-1"></view>
+        <view class="voice-level voice-level-2"></view>
+        <view class="voice-level voice-level-3"></view>
+        <view class="voice-level voice-level-4"></view>
+      </view>
+    </view>
+    <text class="voice-recording-tip">
+      {{canceling ? '松开手指，取消发送' : '手指上滑，取消发送'}}
+    </text>
+  </view>
+</view>

@@ -86,46 +86,6 @@
   line-height: 1.55;
 }
 
-.recording-status {
-  display: flex;
-  align-items: center;
-  gap: 18rpx;
-  margin-top: 20rpx;
-  padding: 20rpx 22rpx;
-  border-radius: 20rpx;
-  color: #1d4ed8;
-  background: #eff6ff;
-}
-
-.recording-status-cancel {
-  color: #dc2626;
-  background: #fef2f2;
-}
-
-.recording-status-icon,
-.recording-status-title,
-.recording-status-note {
-  display: block;
-}
-
-.recording-status-icon {
-  width: 42rpx;
-  font-size: 31rpx;
-  font-weight: 900;
-  text-align: center;
-}
-
-.recording-status-title {
-  font-size: 27rpx;
-  font-weight: 800;
-}
-
-.recording-status-note {
-  margin-top: 4rpx;
-  color: #64748b;
-  font-size: 21rpx;
-}
-
 .wechat-voice-button {
   width: 100%;
   min-height: 106rpx;

@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "模拟对话"
+  "navigationBarTitleText": "模拟对话",
+  "usingComponents": {
+    "voice-recording-overlay": "../../components/voice-recording-overlay/index"
+  }
 }

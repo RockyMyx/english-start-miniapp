@@ -45,14 +45,19 @@
         bindtap="submit"
       >检查句子</button>
       <button
-        class="{{recording ? 'recording-button' : 'voice-button'}} {{answered ? 'nav-disabled' : ''}}"
+        class="wechat-voice-button {{recording ? 'wechat-voice-button-active' : ''}} {{recordingCanceling ? 'wechat-voice-button-cancel' : ''}} {{answered ? 'nav-disabled' : ''}}"
         disabled="{{evaluating || answered}}"
         catchtouchstart="startRecording"
+        catchtouchmove="moveRecording"
         catchtouchend="stopRecording"
-        catchtouchcancel="stopRecording"
-      >{{recording ? '松开发送' : (evaluating ? '正在评测' : '🎙️ 按住说')}}</button>
+        catchtouchcancel="cancelRecording"
+      >{{recording ? (recordingCanceling ? '松手取消' : '松开发送') : (evaluating ? '正在评测…' : '按住说')}}</button>
     </view>
     <text class="voice-hint">最长 20 秒，松开后自动识别并评分</text>
+    <voice-recording-overlay
+      visible="{{recording}}"
+      canceling="{{recordingCanceling}}"
+    />
 
     <view wx:if="{{evaluation}}" class="card evaluation-card">
       <text class="{{evaluation.correct ? 'evaluation-good' : 'evaluation-try'}}">

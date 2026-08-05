@@ -40,16 +40,6 @@
     <view class="card answer-card">
       <text class="answer-title">请用英语回答</text>
       <text class="answer-guide">按住下方按钮说话，松开发送，上滑取消</text>
-      <view
-        wx:if="{{recording}}"
-        class="recording-status {{recordingCanceling ? 'recording-status-cancel' : ''}}"
-      >
-        <text class="recording-status-icon">{{recordingCanceling ? '↑' : '●'}}</text>
-        <view>
-          <text class="recording-status-title">{{recordingCanceling ? '松手取消' : '正在录音'}}</text>
-          <text class="recording-status-note">{{recordingCanceling ? '松开后不会上传' : '上滑可以取消本次录音'}}</text>
-        </view>
-      </view>
       <button
         class="wechat-voice-button {{recording ? 'wechat-voice-button-active' : ''}} {{recordingCanceling ? 'wechat-voice-button-cancel' : ''}} {{answered ? 'nav-disabled' : ''}}"
         disabled="{{evaluating || answered}}"
@@ -59,6 +49,10 @@
         catchtouchcancel="cancelRecording"
       >{{recording ? (recordingCanceling ? '松手取消' : '松开发送') : (evaluating ? '正在评测…' : '按住说')}}</button>
     </view>
+    <voice-recording-overlay
+      visible="{{recording}}"
+      canceling="{{recordingCanceling}}"
+    />
 
     <view wx:if="{{voiceResult}}" class="card result-panel">
       <text class="{{voiceResult.correct ? 'result-good' : 'result-try'}}">

@@ -62,17 +62,22 @@
   font-size: 27rpx;
 }
 
-.voice-button,
-.recording-button {
+.wechat-voice-button {
   color: #1d4ed8;
   border: 2rpx solid #93c5fd;
-  background: #eff6ff;
+  background: #ffffff;
+  box-shadow: 0 10rpx 22rpx rgba(37, 99, 235, 0.12);
 }
 
-.recording-button {
+.wechat-voice-button-active {
   color: #ffffff;
-  border-color: #e45c6b;
-  background: #e45c6b;
+  border-color: #2563eb;
+  background: #2563eb;
+}
+
+.wechat-voice-button-cancel {
+  border-color: #ef4444;
+  background: #ef4444;
 }
 
 .voice-hint {

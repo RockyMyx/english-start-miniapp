@@ -1,5 +1,5 @@
-const { apiBaseUrl } = require("../../config/index");
 const { request } = require("../../utils/request");
+const { getAvatarUrl } = require("../../utils/avatar");
 const {
   checkDailyGoal,
   getDailyGoal,
@@ -31,14 +31,13 @@ Page({
         request({ url: "/me" })
       ]);
       const dailyScoreGoal = Number(dashboard.dailyScoreGoal) || getDailyGoal();
+      const avatarUrl = await getAvatarUrl(profile.avatarPath);
       setDailyGoal(dailyScoreGoal);
       this.setData({
         profile,
         dashboard: { ...dashboard, dailyScoreGoal },
         nickname: profile.nickname || "",
-        avatarUrl: profile.avatarPath
-          ? `${apiBaseUrl}${profile.avatarPath}?v=${Date.now()}`
-          : "",
+        avatarUrl,
         hasProfile: Boolean(profile.nickname || profile.avatarPath)
       });
       syncTabBar(this, 2, dashboard.pendingReviewCount);

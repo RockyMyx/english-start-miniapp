@@ -1,6 +1,6 @@
-const { apiBaseUrl } = require("../../config/index");
 const { request } = require("../../utils/request");
 const { uploadFile } = require("../../utils/upload");
+const { getAvatarUrl } = require("../../utils/avatar");
 
 function compressAvatar(filePath) {
   return new Promise((resolve, reject) => {
@@ -43,14 +43,13 @@ Page({
     this.setData({ loading: true, error: "" });
     try {
       const profile = await request({ url: "/profile" });
+      const avatarUrl = this.data.pendingAvatarPath
+        ? this.data.pendingAvatarPath
+        : await getAvatarUrl(profile.avatarPath);
       this.setData({
         profile,
         nickname: profile.nickname || "",
-        avatarUrl:
-          this.data.pendingAvatarPath ||
-          (profile.avatarPath
-            ? `${apiBaseUrl}${profile.avatarPath}?v=${Date.now()}`
-            : "")
+        avatarUrl
       });
     } catch (error) {
       this.setData({ error: error.message });
@@ -123,12 +122,13 @@ Page({
       if (pendingAvatarPath && !profile.avatarPath) {
         throw new Error("头像未保存成功，请重试");
       }
+      const avatarUrl = profile.avatarPath
+        ? await getAvatarUrl(profile.avatarPath, true)
+        : this.data.avatarUrl;
       this.setData({
         profile,
         nickname: profile.nickname || nickname,
-        avatarUrl: profile.avatarPath
-          ? `${apiBaseUrl}${profile.avatarPath}?v=${Date.now()}`
-          : this.data.avatarUrl,
+        avatarUrl,
         pendingAvatarPath: ""
       });
       wx.showToast({ title: "资料已保存", icon: "success" });

@@ -1,0 +1,147 @@
+.voice-recording-layer {
+  display: flex;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.voice-recording-panel {
+  box-sizing: border-box;
+  width: 286rpx;
+  min-height: 286rpx;
+  padding: 46rpx 28rpx 28rpx;
+  border-radius: 28rpx;
+  color: #ffffff;
+  background: rgba(30, 41, 59, 0.86);
+  box-shadow: 0 20rpx 60rpx rgba(15, 23, 42, 0.22);
+  text-align: center;
+}
+
+.voice-recording-visual {
+  display: flex;
+  height: 116rpx;
+  align-items: center;
+  justify-content: center;
+  gap: 22rpx;
+}
+
+.voice-microphone {
+  position: relative;
+  width: 68rpx;
+  height: 98rpx;
+}
+
+.voice-microphone-head {
+  position: absolute;
+  top: 0;
+  left: 20rpx;
+  width: 28rpx;
+  height: 58rpx;
+  border: 6rpx solid #ffffff;
+  border-radius: 22rpx;
+}
+
+.voice-microphone-arc {
+  position: absolute;
+  top: 34rpx;
+  left: 8rpx;
+  width: 52rpx;
+  height: 42rpx;
+  border: 6rpx solid #ffffff;
+  border-top: 0;
+  border-radius: 0 0 32rpx 32rpx;
+}
+
+.voice-microphone-stem {
+  position: absolute;
+  bottom: 4rpx;
+  left: 31rpx;
+  width: 6rpx;
+  height: 24rpx;
+  border-radius: 6rpx;
+  background: #ffffff;
+}
+
+.voice-levels {
+  display: flex;
+  height: 76rpx;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.voice-level {
+  width: 8rpx;
+  border-radius: 8rpx;
+  background: #ffffff;
+  animation: voice-level-pulse 0.8s ease-in-out infinite alternate;
+}
+
+.voice-level-1 {
+  height: 28rpx;
+}
+
+.voice-level-2 {
+  height: 52rpx;
+  animation-delay: 0.15s;
+}
+
+.voice-level-3 {
+  height: 72rpx;
+  animation-delay: 0.3s;
+}
+
+.voice-level-4 {
+  height: 42rpx;
+  animation-delay: 0.45s;
+}
+
+.voice-cancel-icon {
+  display: flex;
+  height: 116rpx;
+  align-items: center;
+  justify-content: center;
+}
+
+.voice-cancel-arrow {
+  display: flex;
+  width: 92rpx;
+  height: 92rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #ef4444;
+  font-size: 54rpx;
+  font-weight: 800;
+}
+
+.voice-recording-tip {
+  display: inline-block;
+  margin-top: 24rpx;
+  padding: 9rpx 14rpx;
+  border-radius: 10rpx;
+  font-size: 23rpx;
+  line-height: 1.35;
+}
+
+.voice-recording-panel-cancel .voice-recording-tip {
+  background: #ef4444;
+}
+
+@keyframes voice-level-pulse {
+  from {
+    transform: scaleY(0.55);
+    opacity: 0.65;
+  }
+
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
