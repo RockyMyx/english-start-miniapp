@@ -1,0 +1,50 @@
+<view class="page goal-page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在读取学习目标…</view>
+
+  <block wx:else>
+    <view class="goal-intro">
+      <text class="goal-intro-title">设定适合自己的节奏</text>
+      <text class="goal-intro-copy">目标可以随时调整，稳定完成比一次学很多更重要。</text>
+    </view>
+
+    <view class="goal-card">
+      <text class="goal-title">每日达标分数</text>
+      <text class="goal-description">当天学习得分达到目标后，会提示你已达标。</text>
+      <view class="score-input-row">
+        <input
+          class="score-input"
+          type="number"
+          maxlength="3"
+          value="{{dailyScoreGoal}}"
+          bindinput="onDailyGoalInput"
+        />
+        <text class="score-unit">分</text>
+      </view>
+    </view>
+
+    <view class="goal-card weekly-card">
+      <text class="goal-title">每周达标天数</text>
+      <text class="goal-description">完成有效学习的当天记为 1 天，每周一重新开始统计。</text>
+      <view class="week-options">
+        <view
+          wx:for="{{weekOptions}}"
+          wx:key="*this"
+          class="week-option {{weeklyGoalDays === item ? 'week-option-active' : ''}}"
+          data-days="{{item}}"
+          bindtap="selectWeeklyGoal"
+        >
+          <text>{{item}}</text>
+          <text>天</text>
+        </view>
+      </view>
+    </view>
+
+    <button
+      class="primary-button save-goals"
+      loading="{{saving}}"
+      disabled="{{saving}}"
+      bindtap="saveGoals"
+    >保存目标</button>
+  </block>
+</view>

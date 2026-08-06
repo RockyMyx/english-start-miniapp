@@ -42,6 +42,32 @@
   box-shadow: 0 14rpx 30rpx rgba(37, 99, 235, 0.18);
 }
 
+.textbook-entry {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 22rpx;
+  padding: 26rpx 28rpx;
+  border-radius: 28rpx;
+  color: #ffffff;
+  background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+  box-shadow: 0 14rpx 30rpx rgba(124, 58, 237, 0.16);
+}
+
+.textbook-entry-icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 20rpx;
+  color: #7c3aed;
+  background: #ffffff;
+  font-size: 27rpx;
+  font-weight: 850;
+}
+
 .photo-entry-icon {
   display: flex;
   flex-shrink: 0;

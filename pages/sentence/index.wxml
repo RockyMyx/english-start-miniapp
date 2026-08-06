@@ -2,7 +2,7 @@
   <view wx:if="{{error}}" class="error-banner">{{error}}</view>
   <view wx:if="{{loading}}" class="loading">正在准备造句题…</view>
   <view wx:elif="{{!current}}" class="empty">
-    {{scope === 'weak' ? '暂时没有需要复习的造句题。' : '导入启蒙 50 词后，造句模块会自动开放。'}}
+    {{scope === 'weak' ? '暂时没有需要复习的造句题。' : '导入启蒙 70 词后，造句模块会自动开放。'}}
   </view>
 
   <view wx:elif="{{finished}}" class="card round-result-card">

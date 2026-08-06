@@ -1,0 +1,107 @@
+<view class="page assessment-page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在准备能力测评…</view>
+
+  <view wx:elif="{{stage === 'LOCKED'}}" class="card locked-card">
+    <text class="locked-mark">VIP</text>
+    <text class="locked-title">能力测评是会员权益</text>
+    <text class="locked-note">开通会员后，可从认读、拼写、发音和表达四个方面建立能力基线。</text>
+    <button class="primary-button" bindtap="openMembership">前往会员中心</button>
+  </view>
+
+  <block wx:elif="{{stage === 'PROFILE'}}">
+    <view class="page-heading">
+      <text class="eyebrow">LEARNER PROFILE</text>
+      <text class="page-title">先了解一下学习情况</text>
+      <text class="page-subtitle">只收集与学习推荐有关的信息，学习目标可以多选。</text>
+    </view>
+
+    <view class="card form-card">
+      <text class="field-title">年龄段</text>
+      <view class="option-grid compact-grid">
+        <view wx:for="{{ageOptions}}" wx:key="value" class="option-chip {{item.selected ? 'option-selected' : ''}}" data-field="ageBand" data-value="{{item.value}}" bindtap="selectSingle">{{item.label}}</view>
+      </view>
+
+      <text class="field-title field-gap">当前年级</text>
+      <view class="option-grid compact-grid">
+        <view wx:for="{{gradeOptions}}" wx:key="value" class="option-chip {{item.selected ? 'option-selected' : ''}}" data-field="gradeLevel" data-value="{{item.value}}" bindtap="selectSingle">{{item.label}}</view>
+      </view>
+
+      <text class="field-title field-gap">接触英语多久了</text>
+      <view class="option-grid compact-grid">
+        <view wx:for="{{experienceOptions}}" wx:key="value" class="option-chip {{item.selected ? 'option-selected' : ''}}" data-field="englishExperience" data-value="{{item.value}}" bindtap="selectSingle">{{item.label}}</view>
+      </view>
+
+      <view class="field-heading field-gap">
+        <text class="field-title">学习目标</text>
+        <text class="multi-tag">可多选</text>
+      </view>
+      <view class="goal-list">
+        <view wx:for="{{goalOptions}}" wx:key="value" class="goal-option {{item.selected ? 'goal-selected' : ''}}" data-value="{{item.value}}" bindtap="toggleGoal">
+          <view><text class="goal-label">{{item.label}}</text><text class="goal-note">{{item.note}}</text></view>
+          <text class="goal-check">{{item.selected ? '✓' : ''}}</text>
+        </view>
+      </view>
+    </view>
+    <button class="primary-button bottom-button" loading="{{saving}}" disabled="{{saving}}" bindtap="saveProfile">保存并继续</button>
+  </block>
+
+  <view wx:elif="{{stage === 'INTRO'}}" class="intro-wrap">
+    <view class="intro-hero">
+      <text class="intro-mark">4</text>
+      <text class="intro-title">四维能力测评</text>
+      <text class="difficulty-tag">已匹配：{{difficultyLabel}}</text>
+      <text class="intro-note">题目难度会根据英语接触时间匹配。大约6～8分钟，可随时退出并继续；发音题也可以跳过。</text>
+    </view>
+    <view class="card dimension-list">
+      <view class="dimension-row"><text class="dimension-icon">认</text><view><text>认读</text><text>基础单词与听辨</text></view></view>
+      <view class="dimension-row"><text class="dimension-icon">拼</text><view><text>拼写</text><text>听音写出单词</text></view></view>
+      <view class="dimension-row"><text class="dimension-icon">音</text><view><text>发音</text><text>跟读单词和短语</text></view></view>
+      <view class="dimension-row"><text class="dimension-icon">说</text><view><text>表达</text><text>完成简单英文句子</text></view></view>
+    </view>
+    <button class="primary-button bottom-button" loading="{{saving}}" bindtap="startAssessment">开始测评</button>
+    <button class="text-button" bindtap="editProfile">修改学习资料</button>
+  </view>
+
+  <block wx:elif="{{stage === 'QUESTIONS' && current}}">
+    <view class="question-top">
+      <view class="progress-row"><text>{{dimensionLabel}}</text><text>{{progressText}}</text></view>
+      <view class="progress-track"><view class="progress-fill" style="width: {{progressPercent}}%;"></view></view>
+    </view>
+    <view class="card question-card">
+      <text class="question-instruction">{{current.instruction}}</text>
+      <text class="question-prompt">{{current.prompt}}</text>
+      <button wx:if="{{current.audioText}}" class="speech-button" loading="{{speaking}}" bindtap="playCurrent">🔊 播放发音</button>
+
+      <view wx:if="{{current.type === 'CHOICE'}}" class="answer-options">
+        <button wx:for="{{current.options}}" wx:key="id" class="answer-option" data-id="{{item.id}}" disabled="{{evaluating}}" bindtap="chooseAnswer">{{item.text}}</button>
+      </view>
+
+      <view wx:elif="{{current.type === 'TEXT'}}" class="text-answer">
+        <input class="answer-input" value="{{answerText}}" maxlength="100" placeholder="{{answerPlaceholder}}" bindinput="onAnswerInput" />
+        <button class="primary-button" loading="{{evaluating}}" disabled="{{evaluating}}" bindtap="submitInputAnswer">提交答案</button>
+      </view>
+
+      <view wx:else class="voice-answer">
+        <button class="record-button {{recording ? 'recording' : ''}} {{recordingCanceling ? 'canceling' : ''}}" loading="{{evaluating}}" disabled="{{evaluating}}" bindtouchstart="startRecording" catchtouchmove="moveRecording" bindtouchend="stopRecording" bindtouchcancel="cancelRecording">{{recordingCanceling ? '松开取消' : recording ? '松开完成' : '按住跟读'}}</button>
+      </view>
+      <button class="skip-button" disabled="{{evaluating || recording}}" bindtap="skipQuestion">不会，跳过这题</button>
+    </view>
+  </block>
+
+  <block wx:elif="{{stage === 'RESULT'}}">
+    <view class="result-hero">
+      <text class="result-label">最近一次能力测评 · 共 {{assessmentCount}} 次</text>
+      <text class="result-level">{{assessment.level}}</text>
+      <text class="result-difficulty">{{difficultyLabel}}</text>
+      <text class="result-summary">{{assessment.summary}}</text>
+    </view>
+    <view class="score-grid">
+      <view wx:for="{{resultScores}}" wx:key="key" class="score-card"><text class="score-value">{{item.value}}</text><text class="score-label">{{item.label}}</text><text class="score-change {{item.changeClass}}">{{item.changeText}}</text></view>
+    </view>
+    <button class="primary-button bottom-button" bindtap="openReport">查看个性化学习报告</button>
+    <button class="repeat-button" loading="{{saving}}" disabled="{{saving}}" bindtap="repeatAssessment">再次测评</button>
+    <button class="text-button" bindtap="editProfile">修改学习资料和目标</button>
+    <button wx:if="{{isDebug}}" class="debug-reset" loading="{{resetting}}" bindtap="resetAssessment">Debug：清空全部测评记录</button>
+  </block>
+</view>

@@ -3,7 +3,6 @@ const {
   centeredText,
   exportCanvas,
   fillRoundedRect,
-  leftText,
   posterSize,
   savePoster
 } = require("../../utils/poster");
@@ -55,7 +54,7 @@ Page({
   },
 
   onLoad() {
-    const size = posterSize(1.2);
+    const size = posterSize(1.16);
     this.setData({ posterWidth: size.width, posterHeight: size.height });
     wx.showShareMenu({
       menus: ["shareAppMessage", "shareTimeline"]
@@ -66,7 +65,13 @@ Page({
   async loadCheckIn() {
     this.setData({ loading: true, error: "" });
     try {
-      const summary = await request({ url: "/check-ins/today", method: "POST" });
+      const response = await request({ url: "/check-ins/today", method: "POST" });
+      const summary = {
+        ...response,
+        totalStudyDays: Number(response.totalStudyDays || response.totalDays) || 0,
+        weekCompletedDays: Number(response.weekCompletedDays) || 1,
+        weeklyGoalDays: Number(response.weeklyGoalDays) || 5
+      };
       const motto = dailyMotto(summary.dateKey);
       this.setData(
         {
@@ -102,14 +107,65 @@ Page({
     context.arc(24, height - 36, 66, 0, Math.PI * 2);
     context.fill();
 
-    centeredText(context, "今日签到", width / 2, 62, 26, "#ffffff", true);
-    centeredText(context, this.data.displayDate, width / 2, 92, 13, "rgba(255,255,255,0.78)");
+    centeredText(context, "学习打卡", width / 2, 43, 25, "#ffffff");
+    centeredText(context, this.data.displayDate, width / 2, 74, 13, "rgba(255,255,255,0.84)");
 
-    fillRoundedRect(context, 28, 138, width - 56, 126, 24, "#ffffff");
-    centeredText(context, `连续 ${summary.currentStreak} 天`, width / 2, 181, 34, "#1d4ed8", true);
-    centeredText(context, `累计签到 ${summary.totalDays} 天`, width / 2, 226, 14, "#64748b");
+    fillRoundedRect(context, 22, 101, width - 44, 157, 23, "#ffffff");
+    centeredText(context, "本周学习进度", width / 2, 124, 12, "#64748b");
 
-    centeredText(context, `“${motto}”`, width / 2, 306, 13, "#ffffff", true);
+    centeredText(
+      context,
+      `${summary.weekCompletedDays} 天`,
+      width * 0.31,
+      160,
+      30,
+      "#1d4ed8"
+    );
+    centeredText(
+      context,
+      `本周完成 · 目标 ${summary.weeklyGoalDays} 天`,
+      width * 0.31,
+      190,
+      10,
+      "#64748b"
+    );
+    centeredText(context, `${summary.totalStudyDays} 天`, width * 0.69, 160, 30, "#0f766e");
+    centeredText(context, "累计学习", width * 0.69, 190, 12, "#64748b");
+
+    context.setStrokeStyle("#e2e8f0");
+    context.setLineWidth(1);
+    context.beginPath();
+    context.moveTo(width / 2, 143);
+    context.lineTo(width / 2, 199);
+    context.stroke();
+
+    const progressWidth = width - 84;
+    const completedRatio = Math.min(
+      1,
+      summary.weekCompletedDays / Math.max(1, summary.weeklyGoalDays)
+    );
+    fillRoundedRect(context, 42, 217, progressWidth, 9, 5, "#dbeafe");
+    fillRoundedRect(
+      context,
+      42,
+      217,
+      Math.max(9, progressWidth * completedRatio),
+      9,
+      5,
+      "#2563eb"
+    );
+    centeredText(
+      context,
+      summary.weekCompletedDays >= summary.weeklyGoalDays
+        ? "本周目标已完成"
+        : "继续保持，一点点接近目标",
+      width / 2,
+      242,
+      10,
+      "#64748b"
+    );
+
+    centeredText(context, `“${motto}”`, width / 2, 294, 12, "#ffffff");
 
     fillRoundedRect(context, 20, height - 52, width - 40, 34, 17, "rgba(3, 24, 67, 0.25)");
     centeredText(
@@ -157,7 +213,7 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: `我已连续学习英语 ${this.data.summary ? this.data.summary.currentStreak : 1} 天`,
+      title: `我本周已完成英语学习 ${this.data.summary ? this.data.summary.weekCompletedDays : 1} 天`,
       path: "/pages/home/index",
       imageUrl: this.data.posterPath || undefined
     };
@@ -165,7 +221,7 @@ Page({
 
   onShareTimeline() {
     return {
-      title: `今天也完成英语签到，坚持让进步看得见`,
+      title: "本周学习进度，一起坚持学英语",
       query: "",
       imageUrl: this.data.posterPath || undefined
     };

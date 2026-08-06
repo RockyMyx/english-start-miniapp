@@ -46,7 +46,7 @@
 
     <view wx:if="{{dashboard.starterWordCount < 12}}" class="starter-card">
       <view class="starter-copy">
-        <text class="starter-title">启蒙 50 词</text>
+        <text class="starter-title">启蒙 70 词</text>
         <text class="muted">导入后即可开启学习哦~</text>
       </view>
       <button class="starter-button" bindtap="importStarterPack">导入示例词库</button>

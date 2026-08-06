@@ -34,6 +34,53 @@
       </view>
     </view>
 
+    <view wx:if="{{report.personalizedLocked}}" class="card personalized-lock">
+      <view class="lock-mark">VIP</view>
+      <text class="lock-title">解锁个性化学习报告</text>
+      <text class="lock-note">查看认读、拼写、发音和表达能力变化，以及真实学习证据和下一步建议。</text>
+      <button class="unlock-button" bindtap="openMembership">开通会员解锁</button>
+    </view>
+
+    <block wx:elif="{{report.personalized}}">
+      <view class="card personalized-summary">
+        <text class="layer-label">一句话结论</text>
+        <text class="summary-text">{{report.personalized.summary}}</text>
+      </view>
+
+      <view wx:if="{{report.personalized.baseline}}" class="baseline-card">
+        <view class="baseline-heading"><text>最近能力测评</text><text>{{report.personalized.baseline.level}}</text></view>
+        <view class="baseline-scores">
+          <view wx:for="{{report.personalized.baseline.scoreItems}}" wx:key="label"><text>{{item.value}}</text><text>{{item.label}}</text></view>
+        </view>
+      </view>
+
+      <view class="card detail-card">
+        <text class="detail-title">能力变化</text>
+        <view class="capability-list">
+          <view wx:for="{{report.personalized.capabilities}}" wx:key="key" class="capability-row">
+            <view class="capability-top">
+              <text class="capability-name">{{item.label}}</text>
+              <text class="trend-pill {{item.trendClass}}">{{item.trendLabel}}</text>
+            </view>
+            <text class="capability-performance">{{item.performance}}</text>
+            <text class="capability-basis">判断依据：{{item.basis}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="card detail-card evidence-card">
+        <text class="detail-title">具体证据</text>
+        <view wx:for="{{report.personalized.evidenceRows}}" wx:key="label" class="evidence-row"><text>{{item.label}}</text><text>{{item.text}}</text></view>
+        <text wx:if="{{!report.personalized.evidenceRows.length}}" class="detail-empty">继续完成练习后，这里会展示具体学习证据。</text>
+      </view>
+
+      <view class="next-step-card">
+        <text class="layer-label">下一步建议</text>
+        <text class="next-step-text">{{report.personalized.nextStep}}</text>
+        <button class="review-button next-step-button" bindtap="startReview">按建议开始复习</button>
+      </view>
+    </block>
+
     <view class="card detail-card">
       <view class="detail-heading">
         <text class="detail-title">薄弱词汇</text>

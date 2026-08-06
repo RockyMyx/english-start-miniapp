@@ -24,11 +24,34 @@
       </view>
     </view>
 
+    <view
+      class="membership-card {{dashboard.membership.active ? 'membership-card-active' : ''}}"
+      data-url="/pages/membership/index"
+      bindtap="openPage"
+    >
+      <view class="membership-mark">VIP</view>
+      <view class="membership-copy">
+        <text>{{dashboard.membership.active ? '年度会员' : '开通会员'}}</text>
+        <text wx:if="{{dashboard.membership.active}}">有效期至 {{membershipExpiryText}}</text>
+        <text wx:else>使用兑换码，解锁更多单词导入方式</text>
+      </view>
+      <text class="membership-arrow">›</text>
+    </view>
+
+    <text class="section-title">能力评估</text>
+    <view class="menu-card">
+      <view class="menu-row" data-url="/pages/initial-assessment/index" bindtap="openPage">
+        <view class="menu-icon assessment-icon">测</view>
+        <view class="menu-copy"><text>我的测评</text><text>{{assessmentNote}}</text></view>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+
     <text class="section-title">学习记录</text>
     <view class="menu-card">
       <view class="menu-row" data-url="/pages/check-in/index" bindtap="openPage">
         <view class="menu-icon checkin-icon">签</view>
-        <view class="menu-copy"><text>每日签到</text><text>连续 {{dashboard.currentStreak}} 天</text></view>
+        <view class="menu-copy"><text>学习打卡</text><text>本周 {{dashboard.weekCompletedDays}} / {{dashboard.weeklyGoalDays}} 天</text></view>
         <text class="menu-arrow">›</text>
       </view>
       <view class="menu-row" data-url="/pages/learning-report/index" bindtap="openPage">
@@ -45,9 +68,9 @@
         <view class="menu-copy"><text>我的词库</text><text>{{dashboard.wordCount}} 个单词</text></view>
         <text class="menu-arrow">›</text>
       </view>
-      <view class="menu-row" bindtap="editDailyGoal">
+      <view class="menu-row" data-url="/pages/goal-settings/index" bindtap="openPage">
         <view class="menu-icon goal-icon">目</view>
-        <view class="menu-copy"><text>每日达标分数</text><text>当前 {{dashboard.dailyScoreGoal}} 分</text></view>
+        <view class="menu-copy"><text>目标设置</text><text>每日 {{dashboard.dailyScoreGoal}} 分 · 每周 {{dashboard.weeklyGoalDays}} 天</text></view>
         <text class="menu-arrow">›</text>
       </view>
     </view>

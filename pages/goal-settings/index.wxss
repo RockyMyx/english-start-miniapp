@@ -1,0 +1,120 @@
+.goal-page {
+  padding-bottom: 80rpx;
+  background: linear-gradient(180deg, #eef6ff 0%, #f8fafc 34%);
+}
+
+.goal-intro {
+  padding: 34rpx 32rpx;
+  border-radius: 30rpx;
+  color: #ffffff;
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6 70%, #38bdf8);
+  box-shadow: 0 18rpx 42rpx rgba(37, 99, 235, 0.2);
+}
+
+.goal-intro-title,
+.goal-intro-copy,
+.goal-title,
+.goal-description {
+  display: block;
+}
+
+.goal-intro-title {
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.goal-intro-copy {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  line-height: 1.6;
+  opacity: 0.86;
+}
+
+.goal-card {
+  margin-top: 26rpx;
+  padding: 32rpx;
+  border: 1rpx solid #e5eaf3;
+  border-radius: 30rpx;
+  background: #ffffff;
+  box-shadow: 0 12rpx 32rpx rgba(31, 45, 74, 0.05);
+}
+
+.goal-title {
+  font-size: 31rpx;
+  font-weight: 800;
+}
+
+.goal-description {
+  margin-top: 10rpx;
+  color: #7c879b;
+  font-size: 23rpx;
+  line-height: 1.55;
+}
+
+.score-input-row {
+  display: flex;
+  align-items: center;
+  margin-top: 24rpx;
+  padding: 0 24rpx;
+  border: 2rpx solid #bfdbfe;
+  border-radius: 22rpx;
+  background: #f8fbff;
+}
+
+.score-input {
+  flex: 1;
+  height: 92rpx;
+  color: #1d4ed8;
+  font-size: 38rpx;
+  font-weight: 800;
+}
+
+.score-unit {
+  color: #64748b;
+  font-size: 27rpx;
+}
+
+.week-options {
+  display: flex;
+  justify-content: space-between;
+  gap: 10rpx;
+  margin-top: 26rpx;
+}
+
+.week-option {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 90rpx;
+  border: 2rpx solid #e2e8f0;
+  border-radius: 20rpx;
+  color: #64748b;
+  background: #f8fafc;
+}
+
+.week-option text:first-child {
+  font-size: 29rpx;
+  font-weight: 800;
+}
+
+.week-option text:last-child {
+  margin-top: 2rpx;
+  font-size: 18rpx;
+}
+
+.week-option-active {
+  color: #ffffff;
+  border-color: #2563eb;
+  background: #2563eb;
+  box-shadow: 0 10rpx 22rpx rgba(37, 99, 235, 0.22);
+}
+
+.save-goals {
+  width: 100%;
+  min-height: 104rpx;
+  margin-top: 30rpx;
+  box-shadow: 0 14rpx 30rpx rgba(37, 99, 235, 0.22);
+}

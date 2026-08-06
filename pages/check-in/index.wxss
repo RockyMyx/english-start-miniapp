@@ -5,12 +5,38 @@
   background: linear-gradient(180deg, #eaf3ff 0%, #f8fafc 64%);
 }
 
-.share-canvas {
+.poster-canvas-source {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.poster-stage {
   display: block;
   overflow: hidden;
+  width: 100%;
+  max-width: 700rpx;
+  min-height: 780rpx;
   margin: 0 auto;
   border-radius: 32rpx;
+  background: linear-gradient(135deg, #1d4ed8, #2563eb 58%, #0ea5e9);
   box-shadow: 0 26rpx 64rpx rgba(37, 99, 235, 0.24);
+}
+
+.poster-preview {
+  display: block;
+  width: 100%;
+}
+
+.poster-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 780rpx;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 25rpx;
 }
 
 .share-actions {
@@ -24,6 +50,7 @@
   min-height: 92rpx;
   padding: 0 20rpx;
   font-size: 25rpx;
+  white-space: nowrap;
 }
 
 .friend-share {

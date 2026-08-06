@@ -29,6 +29,7 @@ Page({
     clearing: false,
     words: [],
     wordGroups: [],
+    membership: { active: false, expiresAt: null },
     english: "",
     chinese: "",
     fieldErrors: {
@@ -45,9 +46,13 @@ Page({
   async loadWords() {
     this.setData({ loading: true, error: "" });
     try {
-      const result = await request({ url: "/words" });
+      const [result, dashboard] = await Promise.all([
+        request({ url: "/words" }),
+        request({ url: "/me" })
+      ]);
       const words = result.words || [];
-      this.setData({ words, wordGroups: groupWords(words) });
+      const membership = dashboard.membership || { active: false, expiresAt: null };
+      this.setData({ words, wordGroups: groupWords(words), membership });
     } catch (error) {
       this.setData({ error: error.message });
     } finally {
@@ -65,6 +70,10 @@ Page({
 
   async addWord() {
     if (this.data.saving) return;
+    if (!this.data.membership.active) {
+      this.openMembership();
+      return;
+    }
     const english = this.data.english.trim();
     const chinese = this.data.chinese.trim();
     const fieldErrors = {
@@ -111,6 +120,10 @@ Page({
   },
 
   takeWordPhoto() {
+    if (!this.data.membership.active) {
+      this.openMembership();
+      return;
+    }
     wx.chooseMedia({
       count: 1,
       mediaType: ["image"],
@@ -138,6 +151,18 @@ Page({
         wx.navigateTo({ url: "/pages/word-photo-import/index" });
       }
     });
+  },
+
+  openTextbookImport() {
+    if (!this.data.membership.active) {
+      this.openMembership();
+      return;
+    }
+    wx.showToast({ title: "按教材导入正在开发中", icon: "none" });
+  },
+
+  openMembership() {
+    wx.navigateTo({ url: "/pages/membership/index" });
   },
 
   removeWord(event) {

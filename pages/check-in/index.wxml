@@ -4,12 +4,23 @@
 
   <block wx:elif="{{summary}}">
     <canvas
-      class="share-canvas"
+      class="poster-canvas-source"
       canvas-id="checkInPoster"
       width="{{posterWidth}}"
       height="{{posterHeight}}"
       style="width: {{posterWidth}}px; height: {{posterHeight}}px;"
     ></canvas>
+
+    <view class="poster-stage">
+      <image
+        wx:if="{{posterPath}}"
+        class="poster-preview"
+        src="{{posterPath}}"
+        mode="widthFix"
+        show-menu-by-longpress
+      />
+      <view wx:else class="poster-loading">正在生成学习海报…</view>
+    </view>
 
     <view class="share-actions">
       <button class="friend-share" open-type="share">分享给微信好友</button>
@@ -21,6 +32,6 @@
       >保存海报发朋友圈</button>
     </view>
     <text class="share-tip">右上角菜单也可以直接分享小程序到朋友圈</text>
-    <button class="back-home" bindtap="goHome">返回首页</button>
+    <button class="back-home" bindtap="goHome">返回学习页</button>
   </block>
 </view>

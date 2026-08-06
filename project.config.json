@@ -1,11 +1,11 @@
 {
   "description": "单词练练微信小程序",
-  "appid": "wxae51972fe48d5cfb",
+  "appid": "wxae16ebf967e23b11",
   "projectname": "english-start",
   "compileType": "miniprogram",
   "miniprogramRoot": "./",
   "srcMiniprogramRoot": "./",
-  "libVersion": "latest",
+  "libVersion": "3.15.2",
   "setting": {
     "urlCheck": false,
     "es6": true,

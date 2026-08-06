@@ -89,6 +89,63 @@
   font-weight: 400;
 }
 
+.membership-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-top: 24rpx;
+  padding: 28rpx;
+  border: 1rpx solid #fde7bd;
+  border-radius: 28rpx;
+  color: #7c4a08;
+  background: linear-gradient(135deg, #fffaf0, #fff3d7);
+}
+
+.membership-card-active {
+  color: #fff7df;
+  border-color: #2f3544;
+  background: linear-gradient(135deg, #1f2937, #374151);
+}
+
+.membership-mark {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 22rpx;
+  color: #7c4a08;
+  background: #f8d87a;
+  font-size: 22rpx;
+  font-weight: 900;
+}
+
+.membership-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.membership-copy text {
+  display: block;
+}
+
+.membership-copy text:first-child {
+  font-size: 29rpx;
+  font-weight: 800;
+}
+
+.membership-copy text:last-child {
+  margin-top: 6rpx;
+  font-size: 21rpx;
+  opacity: 0.72;
+}
+
+.membership-arrow {
+  font-size: 42rpx;
+  opacity: 0.65;
+}
+
 .menu-card {
   overflow: hidden;
   border: 1rpx solid #edf0f6;
@@ -122,6 +179,7 @@
 }
 
 .checkin-icon { background: #f59e0b; }
+.assessment-icon { background: #0f766e; }
 .report-icon { background: #3b82f6; }
 .word-icon { background: #10b981; }
 .goal-icon { background: #8b5cf6; }

@@ -1,0 +1,48 @@
+<view class="page membership-page">
+  <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+  <view wx:if="{{loading}}" class="loading">正在读取会员信息…</view>
+
+  <block wx:elif="{{membership}}">
+    <view class="hero-card {{membership.active ? 'hero-card-active' : ''}}">
+      <text class="hero-label">MEMBER CODE</text>
+      <text class="hero-title">{{membership.active ? '会员已开通' : '兑换会员权益'}}</text>
+      <text wx:if="{{membership.active}}" class="hero-note">有效期至 {{expiryText}}</text>
+      <text wx:else class="hero-note">输入兑换码即可获得对应会员时长</text>
+    </view>
+
+    <view wx:if="{{isDebug}}" class="debug-card">
+      <view class="debug-copy">
+        <text class="debug-title">开发测试身份</text>
+        <text class="debug-note">当前：{{membership.active ? '会员用户' : '普通用户'}}</text>
+      </view>
+      <button
+        class="debug-switch"
+        loading="{{switching}}"
+        disabled="{{switching}}"
+        bindtap="switchTestMembership"
+      >切换为{{membership.active ? '普通用户' : '会员用户'}}</button>
+    </view>
+
+    <text class="section-title">会员权益</text>
+    <view class="benefit-card">
+      <view class="benefit-row"><text class="benefit-icon">测</text><text>能力测评，持续跟踪能力变化</text></view>
+      <view class="benefit-row"><text class="benefit-icon">报</text><text>四维个性化学习报告</text></view>
+      <view class="benefit-row"><text class="benefit-icon">+</text><text>新增单个单词</text></view>
+      <view class="benefit-row"><text class="benefit-icon">拍</text><text>拍照识别并批量加入单词</text></view>
+      <view class="benefit-row"><text class="benefit-icon">书</text><text>按教材导入单词（即将上线）</text></view>
+    </view>
+
+    <text class="section-title">兑换会员</text>
+    <view class="card redeem-card">
+      <text class="redeem-note">开发期间可使用兑换码领取会员时长</text>
+      <input
+        class="field-input code-input"
+        value="{{code}}"
+        bindinput="onCodeInput"
+        maxlength="64"
+        placeholder="请输入兑换码"
+      />
+      <button class="primary-button redeem-button" loading="{{redeeming}}" bindtap="redeem">立即兑换</button>
+    </view>
+  </block>
+</view>

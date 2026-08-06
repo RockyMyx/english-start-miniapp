@@ -19,6 +19,13 @@ const modeLabels = {
   DIALOGUE_VOICE: "模拟对话"
 };
 
+const trendLabels = {
+  UP: "较上周提升",
+  STABLE: "表现稳定",
+  DOWN: "仍需加强",
+  INSUFFICIENT: "数据积累中"
+};
+
 function shortDate(dateKey) {
   const parts = dateKey.split("-");
   return `${Number(parts[1])}/${Number(parts[2])}`;
@@ -61,6 +68,40 @@ Page({
         label: modeLabels[item.mode] || item.mode,
         accuracy: item.attempts ? Math.round((item.correct / item.attempts) * 100) : 0
       }));
+      if (report.personalized) {
+        const evidence = report.personalized.evidence || {};
+        const evidenceRows = [
+          ["新掌握", evidence.newlyMasteredWords, "、"],
+          ["能表达", evidence.expressions, "；"],
+          ["发音达标", evidence.pronunciationHighlights, "、"],
+          ["容易混淆", evidence.confusions, "、"]
+        ]
+          .filter((item) => Array.isArray(item[1]) && item[1].length)
+          .map(([label, values, separator]) => ({ label, text: values.join(separator) }));
+        report.personalized = {
+          ...report.personalized,
+          evidenceRows,
+          baseline: report.personalized.baseline
+            ? {
+                ...report.personalized.baseline,
+                scoreItems: [
+                  ["认读", report.personalized.baseline.scores.recognition],
+                  ["拼写", report.personalized.baseline.scores.spelling],
+                  ["发音", report.personalized.baseline.scores.pronunciation],
+                  ["表达", report.personalized.baseline.scores.expression]
+                ].map(([label, value]) => ({
+                  label,
+                  value: value === null || value === undefined ? "未测" : value
+                }))
+              }
+            : null,
+          capabilities: (report.personalized.capabilities || []).map((item) => ({
+            ...item,
+            trendLabel: trendLabels[item.trend] || "数据积累中",
+            trendClass: `trend-${String(item.trend || "INSUFFICIENT").toLowerCase()}`
+          }))
+        };
+      }
       this.setData(
         { report, recentDays, modeStats },
         () => wx.nextTick(() => this.drawPoster())
@@ -162,6 +203,10 @@ Page({
 
   startReview() {
     wx.switchTab({ url: "/pages/review/index" });
+  },
+
+  openMembership() {
+    wx.navigateTo({ url: "/pages/membership/index" });
   },
 
   onShareAppMessage() {

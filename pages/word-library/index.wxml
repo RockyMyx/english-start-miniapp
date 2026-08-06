@@ -9,7 +9,7 @@
 
   <view wx:if="{{error}}" class="error-banner">{{error}}</view>
 
-  <view class="photo-entry" bindtap="takeWordPhoto">
+  <view wx:if="{{membership.active}}" class="photo-entry" bindtap="takeWordPhoto">
     <view class="photo-entry-icon">⌁</view>
     <view class="photo-entry-copy">
       <text class="photo-entry-title">拍照识别单词</text>
@@ -18,7 +18,16 @@
     <text class="photo-entry-arrow">›</text>
   </view>
 
-  <view class="card form-card">
+  <view wx:if="{{membership.active}}" class="textbook-entry" bindtap="openTextbookImport">
+    <view class="textbook-entry-icon">书</view>
+    <view class="photo-entry-copy">
+      <text class="photo-entry-title">按教材导入</text>
+      <text class="photo-entry-subtitle">入口已预留，功能正在开发中</text>
+    </view>
+    <text class="photo-entry-arrow">›</text>
+  </view>
+
+  <view wx:if="{{membership.active}}" class="card form-card">
     <text class="form-title">录入新词</text>
     <text class="field-label">英文或常用短语</text>
     <input
@@ -50,7 +59,7 @@
     >清空词库</button>
   </view>
   <view wx:if="{{loading}}" class="loading">正在读取词库…</view>
-  <view wx:elif="{{!words.length}}" class="empty">词库还是空的。可以录入自己的词，或者导入启蒙 50 词。</view>
+  <view wx:elif="{{!words.length}}" class="empty">词库还是空的。可以录入自己的词，或者导入启蒙 70 词。</view>
   <view wx:else class="word-groups">
     <view
       wx:for="{{wordGroups}}"

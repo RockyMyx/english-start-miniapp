@@ -3,8 +3,8 @@ const { request } = require("../../utils/request");
 const categories = [
   {
     key: "greeting",
-    title: "问候与身份",
-    description: "打招呼、告别、感谢和介绍名字",
+    title: "问候与回应",
+    description: "打招呼、告别、感谢和日常回应",
     color: "orange"
   },
   {
@@ -22,7 +22,7 @@ const categories = [
   {
     key: "sentence",
     title: "句子小帮手",
-    description: "I、you 和 am、is、are 等核心词",
+    description: "人称、物主、冠词和句子核心词",
     color: "teal"
   },
   {
@@ -34,7 +34,7 @@ const categories = [
   {
     key: "school",
     title: "学校用品",
-    description: "日常接触的书本和文具",
+    description: "书本文具以及桌椅等常见物品",
     color: "green"
   },
   {
@@ -45,8 +45,8 @@ const categories = [
   },
   {
     key: "life",
-    title: "家庭、宠物与情绪",
-    description: "介绍家人、宠物和自己的感受",
+    title: "常见宠物",
+    description: "认识生活中常见的猫和狗",
     color: "purple"
   }
 ];
@@ -57,7 +57,7 @@ Page({
     importing: false,
     done: false,
     error: "",
-    name: "启蒙 50 词",
+    name: "启蒙 70 词",
     count: 0,
     groups: []
   },
@@ -77,7 +77,7 @@ Page({
         count: words.filter((word) => word.category === category.key).length
       }));
       this.setData({
-        name: result.name || "启蒙 50 词",
+        name: result.name || "启蒙 70 词",
         count: result.count || words.length,
         groups
       });
