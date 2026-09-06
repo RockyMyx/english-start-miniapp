@@ -33,7 +33,7 @@
       <view class="membership-copy">
         <text>{{dashboard.membership.active ? '年度会员' : '开通会员'}}</text>
         <text wx:if="{{dashboard.membership.active}}">有效期至 {{membershipExpiryText}}</text>
-        <text wx:else>使用兑换码，解锁更多单词导入方式</text>
+        <text wx:else>支付开通，解锁能力测评与更多词库功能</text>
       </view>
       <text class="membership-arrow">›</text>
     </view>

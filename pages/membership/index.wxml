@@ -4,10 +4,10 @@
 
   <block wx:elif="{{membership}}">
     <view class="hero-card {{membership.active ? 'hero-card-active' : ''}}">
-      <text class="hero-label">MEMBER CODE</text>
-      <text class="hero-title">{{membership.active ? '会员已开通' : '兑换会员权益'}}</text>
+      <text class="hero-label">ANNUAL MEMBER</text>
+      <text class="hero-title">{{membership.active ? '会员已开通' : '开通年度会员'}}</text>
       <text wx:if="{{membership.active}}" class="hero-note">有效期至 {{expiryText}}</text>
-      <text wx:else class="hero-note">输入兑换码即可获得对应会员时长</text>
+      <text wx:else class="hero-note">解锁能力测评、个性化报告和更多词库功能</text>
     </view>
 
     <view wx:if="{{isDebug}}" class="debug-card">
@@ -32,17 +32,23 @@
       <view class="benefit-row"><text class="benefit-icon">书</text><text>按教材导入单词（即将上线）</text></view>
     </view>
 
-    <text class="section-title">兑换会员</text>
-    <view class="card redeem-card">
-      <text class="redeem-note">开发期间可使用兑换码领取会员时长</text>
-      <input
-        class="field-input code-input"
-        value="{{code}}"
-        bindinput="onCodeInput"
-        maxlength="64"
-        placeholder="请输入兑换码"
-      />
-      <button class="primary-button redeem-button" loading="{{redeeming}}" bindtap="redeem">立即兑换</button>
+    <text class="section-title">会员方案</text>
+    <view class="card payment-card">
+      <view class="plan-row">
+        <view class="plan-copy">
+          <text class="plan-title">年度会员</text>
+          <text class="plan-note">购买后立即生效，有效期 {{product.durationDays || 365}} 天</text>
+        </view>
+        <view class="plan-price"><text class="price-symbol">¥</text><text class="price-number">{{priceText}}</text></view>
+      </view>
+      <button
+        class="primary-button payment-button"
+        loading="{{paying}}"
+        disabled="{{paying || !product.available}}"
+        bindtap="openMembership"
+      >{{membership.active ? '续费年度会员' : '开通会员'}}</button>
+      <text wx:if="{{!product.available}}" class="payment-note">支付配置完成后即可购买</text>
+      <text wx:else class="payment-note">点击即表示同意购买年度会员服务</text>
     </view>
   </block>
 </view>

@@ -62,4 +62,4 @@ async function ensureSession() {
   return loginPromise;
 }
 
-module.exports = { clearSession, ensureSession, getToken };
+module.exports = { clearSession, ensureSession, getToken, getWechatCode };

@@ -1,4 +1,5 @@
 const { request } = require("../../utils/request");
+const { getWechatCode } = require("../../utils/session");
 const config = require("../../config/index");
 
 function formatDate(value) {
@@ -10,15 +11,47 @@ function formatDate(value) {
   return `${year}-${month}-${day}`;
 }
 
+function formatPrice(priceFen) {
+  const value = Number(priceFen || 0) / 100;
+  return Number.isInteger(value) ? String(value) : value.toFixed(2);
+}
+
+function requestVirtualPayment(payment) {
+  return new Promise((resolve, reject) => {
+    if (typeof wx.requestVirtualPayment !== "function") {
+      reject(new Error("当前微信版本暂不支持虚拟支付，请升级微信后重试"));
+      return;
+    }
+    wx.requestVirtualPayment({
+      signData: payment.signData,
+      paySig: payment.paySig,
+      signature: payment.signature,
+      mode: payment.mode,
+      success: resolve,
+      fail(error) {
+        const canceled = error && error.errCode === -2;
+        const paymentError = new Error(canceled ? "已取消支付" : (error.errMsg || "支付失败，请稍后重试"));
+        paymentError.canceled = canceled;
+        reject(paymentError);
+      }
+    });
+  });
+}
+
+function delay(milliseconds) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+
 Page({
   data: {
     loading: true,
-    redeeming: false,
+    paying: false,
     switching: false,
     isDebug: config.envVersion === "develop",
     membership: null,
+    product: { available: false, durationDays: 365, priceFen: 9900 },
+    priceText: "99",
     expiryText: "",
-    code: "",
     error: ""
   },
 
@@ -29,9 +62,14 @@ Page({
   async loadMembership() {
     this.setData({ loading: true, error: "" });
     try {
-      const dashboard = await request({ url: "/me" });
-      const membership = dashboard.membership || { active: false, expiresAt: null };
+      const state = await request({ url: "/membership" });
+      const membership = { active: state.active, expiresAt: state.expiresAt };
+      const product = state.product || { available: false, durationDays: 365, priceFen: 9900 };
       this.applyMembership(membership);
+      this.setData({
+        product,
+        priceText: formatPrice(product.priceFen)
+      });
     } catch (error) {
       this.setData({ error: error.message });
     } finally {
@@ -50,43 +88,64 @@ Page({
     wx.navigateTo({ url: "/pages/initial-assessment/index" });
   },
 
-  onCodeInput(event) {
-    this.setData({ code: event.detail.value, error: "" });
-  },
-
-  async redeem() {
-    if (this.data.redeeming) return;
-    const code = this.data.code.trim();
-    if (!code) {
-      wx.showToast({ title: "请输入兑换码", icon: "none" });
+  async openMembership() {
+    if (this.data.paying) return;
+    if (!this.data.product || !this.data.product.available) {
+      wx.showToast({ title: "会员支付暂未开放", icon: "none" });
       return;
     }
-    this.setData({ redeeming: true, error: "" });
+    this.setData({ paying: true, error: "" });
     try {
-      const membership = await request({
-        url: "/membership/redeem",
+      const order = await request({
+        url: "/membership/payment/orders",
         method: "POST",
-        data: { code }
+        data: { code: await getWechatCode() }
       });
-      this.applyMembership(membership);
-      this.setData({ code: "" });
-      wx.showToast({ title: "兑换成功", icon: "success" });
-      setTimeout(() => {
+      await requestVirtualPayment(order.payment);
+      const membership = await this.confirmPayment(order.payment.outTradeNo);
+      if (!membership || !membership.active) {
         wx.showModal({
-          title: "会员已开通",
-          content: "现在完成能力测评，可以获得更匹配的学习建议。",
-          confirmText: "开始测评",
-          cancelText: "稍后再说",
-          success: (result) => {
-            if (result.confirm) this.openAssessment();
-          }
+          title: "支付已完成",
+          content: "会员权益正在到账，请稍后进入会员中心刷新查看。",
+          showCancel: false
         });
-      }, 500);
+        return;
+      }
+      this.applyMembership(membership);
+      wx.showToast({ title: "会员已开通", icon: "success" });
+      this.showAssessmentPrompt();
     } catch (error) {
-      this.setData({ error: error.message });
+      if (!error.canceled) this.setData({ error: error.message });
     } finally {
-      this.setData({ redeeming: false });
+      this.setData({ paying: false });
     }
+  },
+
+  async confirmPayment(outTradeNo) {
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      if (attempt > 0) await delay(1200);
+      const result = await request({
+        url: `/membership/payment/orders/${outTradeNo}/confirm`,
+        method: "POST"
+      });
+      if (result.status === "DELIVERED") return result.membership;
+      if (result.status === "CLOSED") throw new Error("支付订单未完成");
+    }
+    return null;
+  },
+
+  showAssessmentPrompt() {
+    setTimeout(() => {
+      wx.showModal({
+        title: "会员已开通",
+        content: "现在完成能力测评，可以获得更匹配的学习建议。",
+        confirmText: "开始测评",
+        cancelText: "稍后再说",
+        success: (result) => {
+          if (result.confirm) this.openAssessment();
+        }
+      });
+    }, 500);
   },
 
   async switchTestMembership() {
