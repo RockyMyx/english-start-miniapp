@@ -33,14 +33,17 @@ for (const version of ["develop", "trial", "release", undefined, "unknown"]) {
     assert.equal(config.useDevLogin, false);
     assert.equal(config.apiBaseUrl, "https://wx.rockyma.online");
 
-    for (const name of ["membership", "initial-assessment"]) {
+    for (const name of ["membership", "initial-assessment", "word-library"]) {
       const page = loadPage(`pages/${name}/index.js`, config);
       assert.equal(page.data.isDebug, expectedDebug);
       const template = readSource(`pages/${name}/index.wxml`);
-      assert.match(template, name === "membership"
+      assert.match(template, name === "word-library"
+        ? /wx:if="\{\{isDebug && membership.active\}\}" class="textbook-entry"/
+        : name === "membership"
         ? /<view wx:if="\{\{isDebug\}\}" class="debug-card">/
         : /<button wx:if="\{\{isDebug\}\}" class="debug-reset"/);
-      const action = name === "membership" ? page.switchTestMembership : page.resetAssessment;
+      if (name === "membership") assert.match(template, /wx:if="\{\{isDebug\}\}" class="benefit-row"[^\n]*按教材导入/);
+      const action = name === "word-library" ? page.openTextbookImport : name === "membership" ? page.switchTestMembership : page.resetAssessment;
       if (!expectedDebug) {
         // 非开发版即使直接触发处理函数，也不能调用开发身份或测评重置接口。
         const context = {

@@ -1,4 +1,7 @@
 const { request } = require("../../utils/request");
+const config = require("../../config/index");
+const { ensureLearnerConsent } = require("../../utils/privacy-consent");
+const { ensureSession } = require("../../utils/session");
 
 function groupWords(words) {
   const sortedWords = [...words].sort((left, right) =>
@@ -24,6 +27,7 @@ function groupWords(words) {
 
 Page({
   data: {
+    isDebug: config.envVersion === "develop",
     loading: true,
     saving: false,
     clearing: false,
@@ -119,9 +123,15 @@ Page({
     wx.navigateTo({ url: "/pages/starter-pack/index" });
   },
 
-  takeWordPhoto() {
+  async takeWordPhoto() {
     if (!this.data.membership.active) {
       this.openMembership();
+      return;
+    }
+    try {
+      await ensureLearnerConsent(await ensureSession());
+    } catch (error) {
+      wx.showToast({ title: error.message, icon: "none" });
       return;
     }
     wx.chooseMedia({
@@ -154,6 +164,7 @@ Page({
   },
 
   openTextbookImport() {
+    if (!this.data.isDebug) return;
     if (!this.data.membership.active) {
       this.openMembership();
       return;

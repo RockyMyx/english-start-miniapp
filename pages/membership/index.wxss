@@ -176,3 +176,5 @@
   font-size: 21rpx;
   text-align: center;
 }
+.agreement-row { display: flex; align-items: center; margin-top: 24rpx; font-size: 24rpx; color: #64748b; }
+.service-links { display: flex; justify-content: space-between; margin-top: 16rpx; color: #2563eb; font-size: 24rpx; }

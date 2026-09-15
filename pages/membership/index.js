@@ -1,6 +1,7 @@
 const { request } = require("../../utils/request");
 const { getWechatCode } = require("../../utils/session");
 const config = require("../../config/index");
+const { serviceReady } = require("../../config/service");
 
 function formatDate(value) {
   const date = new Date(value);
@@ -46,6 +47,8 @@ Page({
   data: {
     loading: true,
     paying: false,
+    agreementAccepted: false,
+    serviceReady,
     switching: false,
     isDebug: config.envVersion === "develop",
     membership: null,
@@ -90,6 +93,14 @@ Page({
 
   async openMembership() {
     if (this.data.paying) return;
+    if (!this.data.agreementAccepted) {
+      wx.showToast({ title: "请先阅读并同意会员服务协议", icon: "none" });
+      return;
+    }
+    if (!this.data.isDebug && !this.data.serviceReady) {
+      wx.showToast({ title: "服务信息尚未完善，暂不能购买", icon: "none" });
+      return;
+    }
     if (!this.data.product || !this.data.product.available) {
       wx.showToast({ title: "会员支付暂未开放", icon: "none" });
       return;
@@ -168,5 +179,17 @@ Page({
     } finally {
       this.setData({ switching: false });
     }
+  },
+
+  onAgreementChange(event) {
+    this.setData({ agreementAccepted: event.detail.value.includes("agree") });
+  },
+
+  openAgreement() {
+    wx.navigateTo({ url: "/pages/service-info/index?type=membership" });
+  },
+
+  openSupport() {
+    wx.navigateTo({ url: "/pages/service-info/index?type=support" });
   }
 });

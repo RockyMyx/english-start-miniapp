@@ -29,7 +29,7 @@
       <view class="benefit-row"><text class="benefit-icon">报</text><text>四维个性化学习报告</text></view>
       <view class="benefit-row"><text class="benefit-icon">+</text><text>新增单个单词</text></view>
       <view class="benefit-row"><text class="benefit-icon">拍</text><text>拍照识别并批量加入单词</text></view>
-      <view class="benefit-row"><text class="benefit-icon">书</text><text>按教材导入单词（即将上线）</text></view>
+      <view wx:if="{{isDebug}}" class="benefit-row"><text class="benefit-icon">书</text><text>按教材导入单词（开发中）</text></view>
     </view>
 
     <text class="section-title">会员方案</text>
@@ -44,11 +44,16 @@
       <button
         class="primary-button payment-button"
         loading="{{paying}}"
-        disabled="{{paying || !product.available}}"
+        disabled="{{paying || !product.available || (!isDebug && !serviceReady)}}"
         bindtap="openMembership"
       >{{membership.active ? '续费年度会员' : '开通会员'}}</button>
       <text wx:if="{{!product.available}}" class="payment-note">支付配置完成后即可购买</text>
-      <text wx:else class="payment-note">点击即表示同意购买年度会员服务</text>
+      <text wx:else class="payment-note">单次购买，不自动续费</text>
+      <checkbox-group bindchange="onAgreementChange">
+        <label class="agreement-row"><checkbox value="agree" checked="{{agreementAccepted}}" />我已阅读并同意</label>
+      </checkbox-group>
+      <view class="service-links"><text bindtap="openAgreement">《会员服务协议》</text><text bindtap="openSupport">联系客服与售后</text></view>
+      <text wx:if="{{!serviceReady}}" class="payment-note">运营与隐私信息尚未配置完整，提审前须补齐。</text>
     </view>
   </block>
 </view>

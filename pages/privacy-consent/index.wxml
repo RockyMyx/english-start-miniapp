@@ -1,0 +1,16 @@
+<view class="page">
+  <view class="card">
+    <text class="title">学习信息与儿童保护</text>
+    <text class="note">为了保存词库、练习与测评结果，并在主动使用时处理录音和照片，请先阅读信息处理规则。不满14周岁的学习用户须由监护人操作并同意。</text>
+    <text class="link" bindtap="openPrivacy">阅读《隐私保护指引》及儿童保护规则 ›</text>
+    <radio-group bindchange="onRoleChange">
+      <label wx:if="{{!requiredGuardian}}" class="option"><radio value="SELF_14_PLUS" checked="{{role === 'SELF_14_PLUS'}}" />本人使用，已满14周岁</label>
+      <label class="option"><radio value="GUARDIAN" checked="{{role === 'GUARDIAN'}}" />我是学习用户的父母或其他监护人</label>
+    </radio-group>
+    <checkbox-group bindchange="onAgreeChange"><label class="option"><checkbox value="agree" checked="{{agreed}}" />{{role === 'GUARDIAN' ? '我已阅读并同意处理被监护人的必要学习信息，以及主动启用的图片、录音；可通过客服撤回。' : '我已阅读并同意处理必要学习信息，以及主动启用的图片、录音；可通过客服撤回。'}}</label></checkbox-group>
+    <text wx:if="{{error}}" class="error-banner">{{error}}</text>
+    <text wx:if="{{!serviceReady}}" class="note">服务信息尚未完善，开发版仅用于验证流程；体验版和正式版须补齐配置。</text>
+    <button class="primary-button" loading="{{saving}}" disabled="{{saving}}" bindtap="confirm">同意并继续</button>
+    <button class="decline" disabled="{{saving}}" bindtap="decline">暂不同意，返回</button>
+  </view>
+</view>

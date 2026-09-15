@@ -4,6 +4,8 @@
     "pages/daily-plan/index",
     "pages/review/index",
     "pages/me/index",
+    "pages/service-info/index",
+    "pages/privacy-consent/index",
     "pages/membership/index",
     "pages/initial-assessment/index",
     "pages/profile-edit/index",

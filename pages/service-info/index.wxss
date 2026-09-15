@@ -1,0 +1,7 @@
+.page-title { display: block; font-size: 42rpx; font-weight: 700; }
+.meta { display: block; color: #64748b; font-size: 24rpx; margin: 16rpx 0 28rpx; }
+.service-page .card { margin-bottom: 24rpx; }
+.service-page .section-title { margin-top: 0; }
+.body { display: block; white-space: pre-wrap; font-size: 28rpx; color: #475569; line-height: 1.8; }
+.small { font-size: 24rpx; margin-top: 20rpx; }
+.email-button { margin-top: 20rpx; color: #2563eb; background: #eff6ff; }

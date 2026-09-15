@@ -11,7 +11,8 @@ const AGE_OPTIONS = [
   { value: "6-7", label: "6～7岁" },
   { value: "8-9", label: "8～9岁" },
   { value: "10-12", label: "10～12岁" },
-  { value: "13+", label: "13岁以上" }
+  { value: "13+", label: "13岁" },
+  { value: "14+", label: "14岁及以上" }
 ];
 const GRADE_OPTIONS = [
   { value: "PRESCHOOL", label: "学前" },

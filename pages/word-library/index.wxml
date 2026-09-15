@@ -18,7 +18,7 @@
     <text class="photo-entry-arrow">›</text>
   </view>
 
-  <view wx:if="{{membership.active}}" class="textbook-entry" bindtap="openTextbookImport">
+  <view wx:if="{{isDebug && membership.active}}" class="textbook-entry" bindtap="openTextbookImport">
     <view class="textbook-entry-icon">书</view>
     <view class="photo-entry-copy">
       <text class="photo-entry-title">按教材导入</text>

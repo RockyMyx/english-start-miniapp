@@ -1,3 +1,6 @@
+const { ensureSession } = require("./session");
+const { ensureLearnerConsent } = require("./privacy-consent");
+
 function openRecordSetting(resolve, reject) {
   wx.showModal({
     title: "需要麦克风权限",
@@ -28,7 +31,8 @@ function openRecordSetting(resolve, reject) {
   });
 }
 
-function ensureRecordPermission() {
+async function ensureRecordPermission() {
+  await ensureLearnerConsent(await ensureSession());
   return new Promise((resolve, reject) => {
     wx.getSetting({
       success(setting) {

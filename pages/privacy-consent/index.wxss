@@ -1,0 +1,5 @@
+.title { display: block; font-size: 36rpx; font-weight: 700; }
+.note { display: block; font-size: 27rpx; line-height: 1.8; color: #64748b; margin: 24rpx 0; }
+.link { display: block; color: #2563eb; font-size: 28rpx; margin: 28rpx 0; }
+.option { display: flex; align-items: flex-start; margin: 24rpx 0; font-size: 27rpx; line-height: 1.7; color: #475569; }
+.decline { background: transparent; color: #64748b; margin-top: 16rpx; }
