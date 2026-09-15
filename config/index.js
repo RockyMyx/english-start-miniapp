@@ -3,9 +3,10 @@ const serverApiBaseUrl = "https://wx.rockyma.online";
 function getEnvVersion() {
   try {
     const accountInfo = wx.getAccountInfoSync();
-    return accountInfo.miniProgram.envVersion || "develop";
+    const version = accountInfo.miniProgram.envVersion;
+    return ["develop", "trial", "release"].includes(version) ? version : "release";
   } catch (_error) {
-    return "develop";
+    return "release";
   }
 }
 

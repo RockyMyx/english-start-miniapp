@@ -56,26 +56,26 @@ english-start/
 
 ### 2. 配置小程序
 
-开发环境 API 地址统一在 `config/index.js` 中配置：
+API 地址统一在 `config/index.js` 中配置，当前开发版、体验版和正式版均使用服务器和真实微信登录：
 
 ```js
 module.exports = {
-  apiBaseUrl: "http://122.51.131.175:3000",
-  useDevLogin: true
+  apiBaseUrl: "https://wx.rockyma.online",
+  useDevLogin: false
 };
 ```
 
-- 开发者工具通过 `http://122.51.131.175:3000` 访问测试服务器。
-- 本地 HTTP 调试时，需要在开发者工具中关闭合法域名校验。
-- `useDevLogin: true` 会调用后端 `/auth/dev-login`，后端同时需要启用
-  `DEV_LOGIN_ENABLED=true`。
+- 服务器必须配置与本项目 AppID 匹配的微信 AppSecret，不要将密钥放入前端。
+- 会员中心的身份切换和测评记录清空仅在 `envVersion=develop` 显示，体验版 `trial` 和
+  正式版 `release` 均隐藏。无法读取环境或返回未知版本时，也隐藏开发入口。
+- `NODE_ENV=production` 的后端拒绝开发身份切换、模拟登录和测评重置，不受前端显示状态影响。
 
 ### 3. 导入项目
 
 1. 打开微信开发者工具。
 2. 选择“导入项目”，目录选择本仓库根目录。
-3. 本地 HTTP 调试时，在开发者工具中关闭合法域名校验。
-4. 编译后，小程序会自动获取开发会话并加载首页数据。
+3. 在微信公众平台配置服务器合法域名；提审前在开发者工具启用合法域名校验，勿以绕过校验的预览结果验收。
+4. 编译后，小程序会自动获取微信登录会话并加载首页数据。
 
 根目录 `project.config.json` 已将仓库根目录配置为小程序源码目录，并包含当前项目的
 微信 AppID。
@@ -83,8 +83,7 @@ module.exports = {
 ## 登录、录音与音频
 
 - 会话令牌保存在微信本地存储中；接口返回 401 后会清理旧令牌并自动重新登录一次。
-- 开发模式使用本地生成的模拟 OpenID；正式模式通过 `wx.login` 获取 code，再由后端
-  换取微信 OpenID。
+- 当前所有版本均通过 `wx.login` 获取 code，再由后端换取微信 OpenID。
 - 语音回答需要麦克风权限，录音格式为 16 kHz、单声道 WAV，单次最长 20 秒。
 - 单词发音、句子朗读和对话朗读均通过后端 `/speech/tts` 获取。
 - 小程序本地最多缓存 80 个语音文件，并按最近使用顺序自动清理。
@@ -92,11 +91,27 @@ module.exports = {
 
 ## 正式发布前
 
-1. 将 `useDevLogin` 改为 `false`。
-2. 在后端设置 `DEV_LOGIN_ENABLED=false`，并配置微信 AppID 和 AppSecret。
-3. 将 `apiBaseUrl` 改为已加入微信合法域名的 HTTPS 地址。
-4. 在微信公众平台配置 request 和 uploadFile 合法域名。
-5. 确认前端没有数据库、微信 AppSecret、AI 或语音服务密钥。
+1. 前端已使用 HTTPS 服务器和 `useDevLogin=false`。在后端设置 `NODE_ENV=production`、
+   `DEV_LOGIN_ENABLED=false`，并配置对应小程序的微信 AppID 和 AppSecret。
+2. 后端 `.env` 设置 `MEMBERSHIP_PAYMENT_MODE=live`、`MEMBERSHIP_LIVE_PRICE_FEN=9900`、
+   `MEMBERSHIP_LIVE_PRODUCT_ID=membership_year`、`WECHAT_VIRTUAL_PAYMENT_ENV=0`，使用现网 AppKey。
+   重建API容器使配置生效，并确认该正式商品在微信现网已发布。详细步骤见后端README。
+3. 在微信公众平台配置 `https://wx.rockyma.online` 的 request、uploadFile、downloadFile 合法域名，
+   在开发者工具启用域名校验，真机检查图片上传、录音上传、音频下载和播放。
+4. 上传为体验版后验收：无身份切换和清空测评按钮，会员价99元，真实微信登录正常；
+   免费用户看不到会员词库按钮，会员能完成录词、识别、测评和报告。
+5. 在平台按实际使用补齐隐私指引（昵称、头像、图片、录音、学习资料及记录的使用和第三方处理说明），
+   检查首次授权及拒绝授权时的流程。`app.json` 的权限说明不替代平台隐私指引。
+6. 提审前补齐真实客服联系方式、会员购买及退款说明；退款后自动回收会员权益当前尚未实现。
+   按提审页面要求填写服务类目、资质、备案状态、功能说明和审核体验方式；
+   按教材导入仅为预留入口，不要当作已提供的付费权益宣传。
+7. 确认前端没有数据库、微信 AppSecret、AI 或语音服务密钥。保持后端稳定，审核通过后再发布。
+
+本地发布配置检查（测试目录已排除出小程序上传包）：
+
+```powershell
+node --test tests/release-config.test.cjs
+```
 
 ## 相关项目
 
