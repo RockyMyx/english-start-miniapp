@@ -1,22 +1,5 @@
 const { service, serviceReady } = require("../../config/service");
-
-const privacySections = [
-  { title: "收集哪些信息、用于什么", text: "微信登录标识用于关联账号、会员及学习数据；你主动填写的昵称和头像用于资料展示；年龄段、年级、英语接触时间和多选学习目标用于测评与推荐；个人词库、答题内容、测评、分数和日期用于复习安排、能力变化及学习报告；支付订单用于到账核验与售后。无需提供真实姓名、完整生日、住址或手机号。" },
-  { title: "相机、麦克风和相册", text: "仅在你主动拍照或录音时使用对应权限。照片上传后用于识别单词；录音上传后用于转写和发音评分。拒绝授权只影响对应功能。保存报告海报时才请求写入相册，不读取整个相册。分享海报前请确认其中的昵称和学习数据；我们不会自动替你分享。" },
-  { title: "第三方处理", text: "微信提供登录、支付、客服和隐私授权能力。图片识别、语音评测及部分语义判断会由实际启用的 AI／语音服务商处理，后端转发必要的图片、音频或答题文本，不应转发与任务无关的账号资料。具体服务商、区域、用途及数据处理规则见下方运营配置。" },
-  { title: "保存与安全", text: "头像、词库、学习资料、练习与测评结果及订单在服务器保存。当前图片识别和录音评测接口不将原始照片、录音保存为服务器文件，但第三方处理规则须单独核实。清空词库采用归档，会保留历史学习记录，不等于删除个人数据。具体数据、备份和账务保存期限见下方运营配置。" },
-  { title: "查阅、更正、删除与撤回", text: "你可在个人资料、目标设置及词库页面查阅和修改对应信息；完整数据副本、学习数据删除、撤回同意或账号注销请通过客服或邮箱申请。经必要的身份核验后受理，不索取密码或支付密钥。学习数据删除不自动取消已购会员；依法须保留的账务信息会与学习用途分开处理。注销涉及未完成订单、剩余会员及备份处理，将由客服说明具体方案。可在微信设置中管理相机、麦克风及相册权限。" },
-  { title: "儿童个人信息保护规则", text: "不满14周岁的学习用户，应由父母或其他监护人阅读指引并同意后使用个人学习功能。监护人同意覆盖必要的学习资料、学习记录，以及主动启用的录音、图片处理；可随时通过客服申请查阅、更正、删除或撤回。首次使用须明确选择本人已满14周岁或监护人同意，后端保存指引版本、同意身份和时间，不要求上传身份证明。该声明不是实名认证；监护人应监督儿童使用与购买，不上传包含无关人员、人脸或联系方式的图片，不在答题中填写真实住址等隐私。" },
-  { title: "指引更新", text: "处理目的、种类或方式发生重要变化时，会更新指引并重新征求必要的同意。微信平台隐私授权与本指引的学习／监护人同意分别生效，不替代相机或麦克风授权。" }
-];
-
-const membershipSections = [
-  { title: "服务与价格", text: "会员价格和时长以会员购买页面展示及订单创建时记录为准；目前为年度会员，具体天数见购买页面。支付前请确认账号、金额和时长。" },
-  { title: "生效、续费与到期", text: "支付成功并经后端核验后开通；如仍为普通用户，请刷新会员中心或联系客服核验。未到期续费在现有有效期之后增加购买时长，已到期从开通时增加时长。单次购买，不自动续费，到期不会自动扣款。" },
-  { title: "已提供的权益", text: "能力测评、个性化学习报告、新增单个单词、拍照识别并加入词库。免费用户可导入已开放的启蒙词库并使用基础学习功能。开发中的功能不属于本次购买所承诺的权益。能力评分和 AI 建议仅供学习参考，不保证考试成绩或学习效果。" },
-  { title: "售后与争议", text: "本小程序暂不提供应用内自助退款入口。如遇支付异常、会员未到账或服务问题，请联系客服核实处理；依法应予退款或支付平台受理的情形，按相关法律及平台规则办理。若通过 Apple 购买，可按 Apple 的订单与退款流程申请，结果以其审核为准。没有退款按钮不代表排除法定权利。" },
-  { title: "未成年人购买", text: "未成年人请在监护人指导与同意下购买。我们不要求添加个人微信、进群或进行私下转账才能开通会员。请勿向任何人提供密码、支付验证码或支付密钥。" }
-];
+const { privacySections, membershipSections } = require("../../config/service-documents");
 
 const supportSections = [
   { title: "支付成功但会员未开通", text: "先回到会员中心刷新。仍未到账时，请联系客服，提供购买时间及微信／Apple 订单截图，并遮挡无关个人信息；我们核对支付结果与发货记录后处理。无需再次支付，也不要提供支付密码或验证码。" },
@@ -26,11 +9,12 @@ const supportSections = [
 ];
 
 Page({
-  data: { type: "privacy", title: "隐私保护指引", sections: [], service, serviceReady },
+  data: { type: "privacy", title: "隐私保护指引", sections: [], version: service.privacyVersion, service, serviceReady },
   onLoad(options) {
     const type = ["privacy", "membership", "support"].includes(options.type) ? options.type : "privacy";
     const title = { privacy: "隐私保护指引", membership: "会员服务协议", support: "联系客服与售后" }[type];
-    this.setData({ type, title, sections: { privacy: privacySections, membership: membershipSections, support: supportSections }[type] });
+    const version = type === "membership" ? service.membershipVersion : service.privacyVersion;
+    this.setData({ type, title, version, sections: { privacy: privacySections, membership: membershipSections, support: supportSections }[type] });
     wx.setNavigationBarTitle({ title });
   },
   copyEmail() {

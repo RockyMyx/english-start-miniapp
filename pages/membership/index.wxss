@@ -176,5 +176,39 @@
   font-size: 21rpx;
   text-align: center;
 }
-.agreement-row { display: flex; align-items: center; margin-top: 24rpx; font-size: 24rpx; color: #64748b; }
 .service-links { display: flex; justify-content: space-between; margin-top: 16rpx; color: #2563eb; font-size: 24rpx; }
+
+.agreement-mask {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx;
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.agreement-dialog {
+  width: 100%;
+  max-width: 700rpx;
+  padding: 28rpx;
+  border-radius: 28rpx;
+  background: #fff;
+}
+
+.agreement-title, .agreement-meta, .agreement-heading, .agreement-body, .agreement-draft { display: block; }
+.agreement-title { font-size: 34rpx; font-weight: 800; color: #172033; }
+.agreement-meta { margin-top: 10rpx; color: #64748b; font-size: 22rpx; }
+.agreement-content { height: 48vh; margin-top: 24rpx; }
+.agreement-section { margin-bottom: 26rpx; }
+.agreement-heading { margin-bottom: 10rpx; color: #172033; font-size: 26rpx; font-weight: 750; }
+.agreement-body { color: #475569; font-size: 24rpx; line-height: 1.8; white-space: pre-wrap; }
+.agreement-draft { margin-top: 10rpx; color: #b45309; font-size: 22rpx; }
+.agreement-notice { margin-top: 22rpx; font-size: 23rpx; font-weight: 700; color: #92400e; line-height: 1.7; white-space: pre-wrap; }
+.agreement-actions { display: flex; gap: 18rpx; margin-top: 22rpx; }
+.agreement-cancel { flex: 1; color: #475569; background: #f1f5f9; font-size: 25rpx; }
+.agreement-confirm { flex: 2; font-size: 25rpx; }

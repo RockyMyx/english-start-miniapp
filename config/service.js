@@ -5,6 +5,8 @@ const service = {
   serviceHours: "",
   responseTime: "",
   privacyVersion: "2026-09-15",
+  membershipVersion: "2026-09-16",
+  draftUpdatedDate: "2026-09-16",
   effectiveDate: "2026-09-15",
   thirdPartyDetails: "",
   retentionDetails: ""

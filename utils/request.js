@@ -6,7 +6,7 @@ async function request(options, canRetry = true) {
   const token = await ensureSession();
   try {
     const requiredGuardian = options.url === "/onboarding/profile" && options.data && options.data.ageBand !== "14+";
-    await ensureLearnerConsent(token, Boolean(requiredGuardian));
+    if (requiredGuardian) await ensureLearnerConsent(token, true);
     const response = await rawRequest({
       ...options,
       header: {
@@ -16,8 +16,9 @@ async function request(options, canRetry = true) {
     });
     return response.data;
   } catch (error) {
-    if (canRetry && error.code === "PRIVACY_CONSENT_REQUIRED") {
+    if (canRetry && error.code === "GUARDIAN_CONSENT_REQUIRED") {
       invalidateConsent();
+      await ensureLearnerConsent(token, true);
       return request(options, false);
     }
     if (canRetry && error.statusCode === 401) {

@@ -1,7 +1,8 @@
 const { request } = require("../../utils/request");
 const { getWechatCode } = require("../../utils/session");
 const config = require("../../config/index");
-const { serviceReady } = require("../../config/service");
+const { service, serviceReady } = require("../../config/service");
+const { buildMembershipAgreement } = require("../../config/service-documents");
 
 function formatDate(value) {
   const date = new Date(value);
@@ -47,7 +48,12 @@ Page({
   data: {
     loading: true,
     paying: false,
-    agreementAccepted: false,
+    showAgreement: false,
+    agreementSections: [],
+    agreementProduct: null,
+    agreementPriceText: "",
+    agreementScrollTop: 0,
+    service,
     serviceReady,
     switching: false,
     isDebug: config.envVersion === "develop",
@@ -59,6 +65,7 @@ Page({
   },
 
   onShow() {
+    this.cancelAgreement();
     this.loadMembership();
   },
 
@@ -91,20 +98,34 @@ Page({
     wx.navigateTo({ url: "/pages/initial-assessment/index" });
   },
 
-  async openMembership() {
-    if (this.data.paying) return;
-    if (!this.data.agreementAccepted) {
-      wx.showToast({ title: "请先阅读并同意会员服务协议", icon: "none" });
-      return;
-    }
-    if (!this.data.isDebug && !this.data.serviceReady) {
-      wx.showToast({ title: "服务信息尚未完善，暂不能购买", icon: "none" });
-      return;
-    }
+  openMembership() {
+    if (this.data.paying || this.data.loading) return;
     if (!this.data.product || !this.data.product.available) {
       wx.showToast({ title: "会员支付暂未开放", icon: "none" });
       return;
     }
+    const product = {
+      priceFen: this.data.product.priceFen,
+      durationDays: this.data.product.durationDays
+    };
+    this.setData({
+      showAgreement: true,
+      agreementProduct: product,
+      agreementPriceText: formatPrice(product.priceFen),
+      agreementSections: buildMembershipAgreement(product),
+      agreementScrollTop: 0
+    });
+  },
+
+  cancelAgreement() {
+    this.setData({ showAgreement: false, agreementProduct: null });
+  },
+
+  async confirmMembershipPurchase() {
+    // 同意仅用于当前一次购买；取消或重复触发不能创建订单。
+    if (!this.data.showAgreement || this.data.paying || !this.data.agreementProduct) return;
+    const agreedProduct = this.data.agreementProduct;
+    this.cancelAgreement();
     this.setData({ paying: true, error: "" });
     try {
       const order = await request({
@@ -112,6 +133,13 @@ Page({
         method: "POST",
         data: { code: await getWechatCode() }
       });
+      const signedOrder = JSON.parse(order.payment.signData);
+      if (signedOrder.goodsPrice !== agreedProduct.priceFen ||
+          !order.product || order.product.durationDays !== agreedProduct.durationDays ||
+          order.product.priceFen !== agreedProduct.priceFen) {
+        await this.loadMembership();
+        throw new Error("会员金额或时长已更新，请重新阅读协议并确认购买");
+      }
       await requestVirtualPayment(order.payment);
       const membership = await this.confirmPayment(order.payment.outTradeNo);
       if (!membership || !membership.active) {
@@ -181,12 +209,12 @@ Page({
     }
   },
 
-  onAgreementChange(event) {
-    this.setData({ agreementAccepted: event.detail.value.includes("agree") });
-  },
-
   openAgreement() {
     wx.navigateTo({ url: "/pages/service-info/index?type=membership" });
+  },
+
+  openPrivacy() {
+    wx.navigateTo({ url: "/pages/service-info/index?type=privacy" });
   },
 
   openSupport() {

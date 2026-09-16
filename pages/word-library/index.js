@@ -1,7 +1,5 @@
 const { request } = require("../../utils/request");
 const config = require("../../config/index");
-const { ensureLearnerConsent } = require("../../utils/privacy-consent");
-const { ensureSession } = require("../../utils/session");
 
 function groupWords(words) {
   const sortedWords = [...words].sort((left, right) =>
@@ -123,15 +121,9 @@ Page({
     wx.navigateTo({ url: "/pages/starter-pack/index" });
   },
 
-  async takeWordPhoto() {
+  takeWordPhoto() {
     if (!this.data.membership.active) {
       this.openMembership();
-      return;
-    }
-    try {
-      await ensureLearnerConsent(await ensureSession());
-    } catch (error) {
-      wx.showToast({ title: error.message, icon: "none" });
       return;
     }
     wx.chooseMedia({

@@ -208,3 +208,5 @@
   color: #cbd5e1;
   font-size: 42rpx;
 }
+.contact-menu { width: 100%; margin: 0; text-align: left; background: transparent; border-radius: 0; font-weight: normal; line-height: 1.5; }
+.contact-menu::after { border: 0; }

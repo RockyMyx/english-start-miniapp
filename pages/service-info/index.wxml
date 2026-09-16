@@ -1,6 +1,6 @@
 <view class="page service-page">
   <text class="page-title">{{title}}</text>
-  <text class="meta">版本 {{service.privacyVersion}} · 更新 {{service.effectiveDate}}</text>
+  <text class="meta">版本 {{version}} · {{serviceReady ? '生效日期' : '初稿更新'}} {{serviceReady ? service.effectiveDate : service.draftUpdatedDate}}</text>
   <view wx:if="{{!serviceReady}}" class="error-banner">服务资料尚未补齐，当前为待发布配置，不能据此提交审核。</view>
   <view class="card"><text class="section-title">运营与联系信息</text><text class="body">运营者：{{service.operatorName || '待配置'}}
 客服时间：{{service.serviceHours || '待配置'}}

@@ -37,23 +37,47 @@
       <view class="plan-row">
         <view class="plan-copy">
           <text class="plan-title">年度会员</text>
-          <text class="plan-note">购买后立即生效，有效期 {{product.durationDays || 365}} 天</text>
+          <text class="plan-note">支付核验后生效，有效期 {{product.durationDays || 365}} 天</text>
         </view>
         <view class="plan-price"><text class="price-symbol">¥</text><text class="price-number">{{priceText}}</text></view>
       </view>
       <button
         class="primary-button payment-button"
         loading="{{paying}}"
-        disabled="{{paying || !product.available || (!isDebug && !serviceReady)}}"
+        disabled="{{paying || !product.available}}"
         bindtap="openMembership"
       >{{membership.active ? '续费年度会员' : '开通会员'}}</button>
       <text wx:if="{{!product.available}}" class="payment-note">支付配置完成后即可购买</text>
       <text wx:else class="payment-note">单次购买，不自动续费</text>
-      <checkbox-group bindchange="onAgreementChange">
-        <label class="agreement-row"><checkbox value="agree" checked="{{agreementAccepted}}" />我已阅读并同意</label>
-      </checkbox-group>
+      <text class="payment-note">点击开通或续费后，请阅读并确认会员服务协议</text>
       <view class="service-links"><text bindtap="openAgreement">《会员服务协议》</text><text bindtap="openSupport">联系客服与售后</text></view>
-      <text wx:if="{{!serviceReady}}" class="payment-note">运营与隐私信息尚未配置完整，提审前须补齐。</text>
     </view>
   </block>
+  <view wx:if="{{showAgreement}}" class="agreement-mask">
+    <view class="agreement-dialog">
+      <text class="agreement-title">会员服务协议</text>
+      <text class="agreement-meta">版本 {{service.membershipVersion}} · 请阅读后决定是否购买</text>
+      <scroll-view scroll-y="{{true}}" scroll-top="{{agreementScrollTop}}" class="agreement-content">
+        <view class="agreement-section">
+          <text class="agreement-heading">运营与联系信息</text>
+          <text class="agreement-body">运营者：{{service.operatorName || '待配置'}}
+联系邮箱：{{service.contactEmail || '待配置'}}
+客服时间：{{service.serviceHours || '待配置'}}
+预计响应：{{service.responseTime || '待配置'}}</text>
+          <text wx:if="{{!serviceReady}}" class="agreement-draft">当前为初稿，运营资料待补齐后发布。</text>
+        </view>
+        <view wx:for="{{agreementSections}}" wx:key="title" class="agreement-section">
+          <text class="agreement-heading">{{item.title}}</text>
+          <text class="agreement-body">{{item.text}}</text>
+        </view>
+        <view class="service-links"><text bindtap="openPrivacy">《隐私保护指引》</text><text bindtap="openSupport">联系客服与售后</text></view>
+      </scroll-view>
+      <view class="agreement-notice">单次 ¥{{agreementPriceText}} · {{agreementProduct.durationDays}} 天 · 不自动续费
+没有自助退款入口不代表排除法定退款权利</view>
+      <view class="agreement-actions">
+        <button class="agreement-cancel" bindtap="cancelAgreement">取消</button>
+        <button class="primary-button agreement-confirm" bindtap="confirmMembershipPurchase" disabled="{{paying}}">同意并支付 ¥{{agreementPriceText}}</button>
+      </view>
+    </view>
+  </view>
 </view>

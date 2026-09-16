@@ -77,8 +77,7 @@
   </block>
   <text class="section-title">帮助与服务</text>
   <view class="menu-card">
-    <view class="menu-row" data-url="/pages/service-info/index?type=privacy" bindtap="openPage"><view class="menu-copy"><text>隐私保护指引</text><text>信息用途与儿童保护说明</text></view><text class="menu-arrow">›</text></view>
-    <view class="menu-row" data-url="/pages/service-info/index?type=membership" bindtap="openPage"><view class="menu-copy"><text>会员服务协议</text><text>购买、续费与服务规则</text></view><text class="menu-arrow">›</text></view>
-    <view class="menu-row" data-url="/pages/service-info/index?type=support" bindtap="openPage"><view class="menu-copy"><text>联系客服与售后</text><text>支付异常、使用问题和数据申请</text></view><text class="menu-arrow">›</text></view>
+    <button class="menu-row contact-menu" open-type="contact"><view class="menu-copy"><text>联系客服</text><text>使用问题与售后咨询</text></view><text class="menu-arrow">›</text></button>
+    <view class="menu-row" data-url="/pages/service-info/index?type=privacy" bindtap="openPage"><view class="menu-copy"><text>隐私保护指引</text><text>了解信息用途与个人信息权利</text></view><text class="menu-arrow">›</text></view>
   </view>
 </view>
