@@ -1,0 +1,25 @@
+.startup-page { position: relative; min-height: 100vh; overflow: hidden; background: #f8fafc; }
+.brand { padding: 90rpx 48rpx 0; text-align: center; }
+.brand-kicker { display: block; color: #2563eb; font-size: 22rpx; font-weight: 800; letter-spacing: 6rpx; }
+.brand-title { display: block; margin-top: 20rpx; color: #17233d; font-size: 68rpx; font-weight: 850; }
+.brand-subtitle { display: block; margin-top: 14rpx; color: #7a8499; font-size: 28rpx; }
+.scene { position: relative; height: 550rpx; margin-top: 60rpx; text-align: center; }
+.scene-circle { position: absolute; border-radius: 50%; }
+.scene-circle-one { top: 24rpx; left: 12%; width: 430rpx; height: 430rpx; background: #dbeafe; }
+.scene-circle-two { top: 110rpx; right: 8%; width: 280rpx; height: 280rpx; background: #bfdbfe; }
+.scene-word { position: relative; display: block; padding-top: 155rpx; color: #1d4ed8; font-size: 94rpx; font-weight: 850; transform: rotate(-8deg); }
+.scene-caption { position: relative; display: block; margin-top: 32rpx; color: #475569; font-size: 28rpx; }
+.overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); }
+.consent-sheet { box-sizing: border-box; position: fixed; right: 0; bottom: 0; left: 0; max-height: 88vh; overflow-y: auto; padding: 58rpx 48rpx calc(56rpx + env(safe-area-inset-bottom)); border-radius: 32rpx 32rpx 0 0; background: #fff; }
+.sheet-title { display: block; color: #17233d; font-size: 36rpx; font-weight: 800; }
+.sheet-copy { display: block; margin-top: 34rpx; color: #64748b; font-size: 27rpx; line-height: 1.75; }
+.privacy-link { color: #2563eb; }
+.draft-note { display: block; margin-top: 16rpx; color: #b45309; font-size: 23rpx; line-height: 1.5; }
+.error-message { display: block; margin-top: 16rpx; color: #dc2626; font-size: 24rpx; }
+.sheet-actions { display: flex; gap: 22rpx; margin-top: 36rpx; }
+.decline-button, .agree-button { flex: 1; min-height: 88rpx; border-radius: 18rpx; }
+.decline-button { color: #17233d; background: #f1f5f9; }
+.agree-button { color: #fff; background: #2563eb; }
+.declined-card { margin: 90rpx 32rpx 0; padding: 40rpx; border-radius: 28rpx; background: #fff; }
+.read-button { margin-top: 40rpx; color: #2563eb; background: #eff6ff; }
+.declined-card .agree-button { width: 100%; margin-top: 20rpx; }

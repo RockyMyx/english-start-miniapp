@@ -1,0 +1,31 @@
+<view class="startup-page">
+  <view class="brand">
+    <text class="brand-kicker">ENGLISH START</text>
+    <text class="brand-title">单词练练</text>
+    <text class="brand-subtitle">从今天开始，轻松练好英语</text>
+  </view>
+  <view class="scene">
+    <view class="scene-circle scene-circle-one"></view>
+    <view class="scene-circle scene-circle-two"></view>
+    <text class="scene-word">Hello!</text>
+    <text class="scene-caption">每天练一点，进步看得见</text>
+  </view>
+
+  <view wx:if="{{!declined}}" class="overlay"></view>
+  <view wx:if="{{!declined}}" class="consent-sheet">
+    <text class="sheet-title">用户隐私保护提示</text>
+    <text class="sheet-copy">在使用单词练练前，请阅读<text class="privacy-link" bindtap="openPrivacy">《单词练练小程序隐私保护指引》</text>。同意后将使用微信登录标识创建学习账号；头像和昵称需由你随后主动选择或填写。未满14周岁的用户，请在监护人陪同下使用。</text>
+    <text wx:if="{{!serviceReady}}" class="draft-note">当前是隐私指引初版，正式启用前需补齐运营和服务商信息。</text>
+    <text wx:if="{{error}}" class="error-message">{{error}}</text>
+    <view class="sheet-actions">
+      <button class="decline-button" disabled="{{saving}}" bindtap="decline">拒绝</button>
+      <button class="agree-button" loading="{{saving}}" disabled="{{saving}}" bindtap="agree">同意并登录</button>
+    </view>
+  </view>
+  <view wx:else class="declined-card">
+    <text class="sheet-title">你已选择暂不同意</text>
+    <text class="sheet-copy">我们不会为你创建学习账号。你仍可阅读隐私保护指引，准备好后再选择是否同意。</text>
+    <button class="read-button" bindtap="openPrivacy">阅读隐私保护指引</button>
+    <button class="agree-button" bindtap="showPrompt">返回选择</button>
+  </view>
+</view>

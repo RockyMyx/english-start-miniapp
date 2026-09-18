@@ -1,18 +1,14 @@
-const { ensureSession } = require("./utils/session");
 const {
   startStudyTimer,
   stopStudyTimer
 } = require("./utils/learning-progress");
+const { service } = require("./config/service");
 
 App({
-  onLaunch() {
-    ensureSession().catch(() => {
-      // 页面会展示可操作的连接错误。
-    });
-  },
-
   onShow() {
-    startStudyTimer();
+    if (wx.getStorageSync("englishStartPrivacyAcceptedVersion") === service.privacyVersion) {
+      startStudyTimer();
+    }
   },
 
   onHide() {

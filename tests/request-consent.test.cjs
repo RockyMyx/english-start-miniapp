@@ -20,21 +20,22 @@ function requestFixture() {
   return { request: context.module.exports.request, calls, consents };
 }
 
-test("startup, library, reports, payment and ordinary practice never trigger custom consent", async () => {
+test("all personal learning requests check recorded consent", async () => {
   const f = requestFixture();
   for (const url of ["/me", "/profile", "/daily-plans/today", "/onboarding", "/words", "/reports/learning", "/membership"]) await f.request({ url });
   for (const url of ["/starter-pack/import", "/practice/answers", "/membership/payment/orders"]) await f.request({ url, method: "POST", data: {} });
-  assert.equal(f.consents.length, 0);
+  assert.equal(f.consents.length, 10);
+  assert.ok(f.consents.every(([token, guardian]) => token === "token" && guardian === false));
   assert.equal(f.calls.length, 10);
 });
 
 test("only submitting child assessment information requests guardian consent", async () => {
   const f = requestFixture();
   await f.request({ url: "/onboarding/profile", method: "PUT", data: { ageBand: "14+" } });
-  assert.equal(f.consents.length, 0);
+  assert.equal(f.consents.length, 1);
   for (const ageBand of ["3-5", "6-7", "8-9", "10-12", "13+"]) await f.request({ url: "/onboarding/profile", method: "PUT", data: { ageBand } });
-  assert.equal(f.consents.length, 5);
-  assert.ok(f.consents.every(([token, guardian]) => token === "token" && guardian === true));
+  assert.equal(f.consents.length, 6);
+  assert.ok(f.consents.slice(1).every(([token, guardian]) => token === "token" && guardian === true));
 });
 
 test("camera, recorder and uploads retain native privacy flow without a custom gate", () => {

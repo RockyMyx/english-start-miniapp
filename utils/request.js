@@ -6,7 +6,7 @@ async function request(options, canRetry = true) {
   const token = await ensureSession();
   try {
     const requiredGuardian = options.url === "/onboarding/profile" && options.data && options.data.ageBand !== "14+";
-    if (requiredGuardian) await ensureLearnerConsent(token, true);
+    await ensureLearnerConsent(token, Boolean(requiredGuardian));
     const response = await rawRequest({
       ...options,
       header: {

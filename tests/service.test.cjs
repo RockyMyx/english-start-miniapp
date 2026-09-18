@@ -136,7 +136,7 @@ for (const changed of ["signed price", "product price", "duration"]) {
 test("privacy covers actual learning, media, orders, caches and provider processing without claiming anonymous data", () => {
   const { privacySections, membershipSections } = require(path.join(root, "config/service-documents.js"));
   const privacy = privacySections.map((section) => section.text).join("\n");
-  for (const term of ["OpenID", "不会自动获取", "点击保存", "年龄段", "学习目标", "录音", "图片", "交易号", "缓存", "IP", "Azure", "有道", "智谱", "OpenAI", "哈希安全标识", "归档", "监护人", "注销"]) assert.ok(privacy.includes(term), term);
+  for (const term of ["OpenID", "不会自动取得", "保存资料", "年龄段", "学习目标", "录音", "图片", "交易号", "缓存", "IP", "Azure", "有道", "智谱", "OpenAI", "哈希安全标识", "归档", "监护人", "注销"]) assert.ok(privacy.includes(term), term);
   const agreement = membershipSections.map((section) => section.text).join("\n");
   assert.match(agreement, /不自动续费/);
   assert.match(agreement, /不属于本次付费承诺/);

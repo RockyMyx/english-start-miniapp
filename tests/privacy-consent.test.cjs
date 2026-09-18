@@ -12,7 +12,7 @@ function fixture() {
   const context = {
     module: { exports: {} },
     require(name) {
-      if (name === "../config/service") return { service: { privacyVersion: "2026-09-15" } };
+      if (name === "../config/service") return { service: { privacyVersion: "2026-09-18" } };
       return { rawRequest: async (options) => {
         calls.push(options);
         const token = options.header.Authorization;
