@@ -183,6 +183,8 @@
 .report-icon { background: #3b82f6; }
 .word-icon { background: #10b981; }
 .goal-icon { background: #8b5cf6; }
+.support-icon { background: #f97316; }
+.privacy-icon { background: #64748b; }
 
 .menu-copy {
   flex: 1;

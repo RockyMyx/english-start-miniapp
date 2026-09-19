@@ -14,12 +14,12 @@
   <view wx:if="{{!declined}}" class="overlay"></view>
   <view wx:if="{{!declined}}" class="consent-sheet">
     <text class="sheet-title">用户隐私保护提示</text>
-    <text class="sheet-copy">在使用单词练练前，请阅读<text class="privacy-link" bindtap="openPrivacy">《单词练练小程序隐私保护指引》</text>。同意后将使用微信登录标识创建学习账号；头像和昵称需由你随后主动选择或填写。未满14周岁的用户，请在监护人陪同下使用。</text>
+    <text class="sheet-copy">在你使用单词练练服务之前，请仔细阅读<text class="privacy-link" bindtap="openPrivacy">《单词练练小程序隐私保护指引》</text>。如你同意该指引，请点击“同意”开始使用本小程序。</text>
     <text wx:if="{{!serviceReady}}" class="draft-note">当前是隐私指引初版，正式启用前需补齐运营和服务商信息。</text>
     <text wx:if="{{error}}" class="error-message">{{error}}</text>
     <view class="sheet-actions">
       <button class="decline-button" disabled="{{saving}}" bindtap="decline">拒绝</button>
-      <button class="agree-button" loading="{{saving}}" disabled="{{saving}}" bindtap="agree">同意并登录</button>
+      <button class="agree-button" loading="{{saving}}" disabled="{{saving}}" bindtap="agree">同意</button>
     </view>
   </view>
   <view wx:else class="declined-card">

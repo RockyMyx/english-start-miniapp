@@ -51,5 +51,6 @@ test("agreement logs in, records the current policy, then unlocks normal request
 test("startup prompt does not ask users to select an age identity", () => {
   const template = fs.readFileSync(path.resolve(__dirname, "../pages/startup/index.wxml"), "utf8");
   assert.doesNotMatch(template, /radio-group|SELF_14_PLUS|GUARDIAN/);
-  assert.match(template, /未满14周岁的用户，请在监护人陪同下使用/);
+  assert.match(template, /如你同意该指引，请点击“同意”开始使用本小程序/);
+  assert.doesNotMatch(template, /同意后将使用微信登录标识|头像和昵称需由/);
 });

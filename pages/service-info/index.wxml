@@ -2,16 +2,15 @@
   <text class="page-title">{{title}}</text>
   <text class="meta">版本 {{version}} · {{serviceReady ? '生效日期' : '初稿更新'}} {{serviceReady ? service.effectiveDate : service.draftUpdatedDate}}</text>
   <view wx:if="{{!serviceReady}}" class="error-banner">服务资料尚未补齐，当前为待发布配置，不能据此提交审核。</view>
-  <view class="card"><text class="section-title">运营与联系信息</text><text class="body">运营者：{{service.operatorName || '待配置'}}
+  <view wx:if="{{type !== 'privacy'}}" class="card"><text class="section-title">运营与联系信息</text><text class="body">运营者：{{service.operatorName || '待配置'}}
 客服时间：{{service.serviceHours || '待配置'}}
 预计响应：{{service.responseTime || '待配置'}}
 联系邮箱：{{service.contactEmail || '待配置'}}</text></view>
   <view wx:for="{{sections}}" wx:key="title" class="card"><text class="section-title">{{item.title}}</text><text class="body">{{item.text}}</text></view>
   <block wx:if="{{type === 'privacy'}}">
-    <view class="card"><text class="section-title">实际启用的第三方服务</text><text class="body">{{service.thirdPartyDetails || '待运营者核对并配置服务商名称、用途、区域、联系方式及处理规则。如涉及境外处理，须核实并落实相应告知、同意及其他义务后才能启用。'}}</text></view>
     <view class="card"><text class="section-title">实际保存与删除安排</text><text class="body">{{service.retentionDetails || '待运营者配置学习数据、头像、日志、备份及账务信息的必要保存期限和删除安排，不得填写尚未执行的承诺。'}}</text></view>
   </block>
-  <view class="card">
+  <view wx:if="{{type !== 'privacy'}}" class="card">
     <button class="primary-button" open-type="contact" binderror="onContactError">联系客服</button>
     <button class="email-button" bindtap="copyEmail">复制联系邮箱</button>
     <text class="body small">客服用于处理学习、支付及隐私问题；无需添加个人微信、进群或私下付款。</text>

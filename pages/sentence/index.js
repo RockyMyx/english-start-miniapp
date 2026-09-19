@@ -5,6 +5,7 @@ const {
   prepareFeedbackSound
 } = require("../../utils/feedback-sound");
 const { syncDailyGoal } = require("../../utils/learning-progress");
+const { countAnswerResults } = require("../../utils/round-stats");
 const {
   ensureRecordPermission,
   recorderStartOptions
@@ -27,6 +28,7 @@ Page({
     voiceResult: null,
     answered: false,
     correctCount: 0,
+    wrongCount: 0,
     finished: false,
     summary: null
     ,
@@ -91,6 +93,7 @@ Page({
         recordingCanceling: false,
         answered: false,
         correctCount: 0,
+        wrongCount: 0,
         finished: false,
         summary: null
       });
@@ -229,6 +232,7 @@ Page({
     const current = { ...this.data.current, answerState };
     const prompts = [...this.data.prompts];
     prompts[this.data.index] = current;
+    const counts = countAnswerResults(prompts.map((prompt) => prompt.answerState));
     this.setData({
       prompts,
       current,
@@ -237,7 +241,7 @@ Page({
       voiceResult: answerState.voiceResult,
       recordingCanceling: false,
       answered: true,
-      correctCount: this.data.correctCount + (answerState.correct ? 1 : 0)
+      ...counts
     });
   },
 
@@ -304,5 +308,9 @@ Page({
 
   restart() {
     this.loadPrompts();
+  },
+
+  onShareAppMessage() {
+    return { title: "一起来单词练练，轻松学英语", path: "/pages/home/index" };
   }
 });

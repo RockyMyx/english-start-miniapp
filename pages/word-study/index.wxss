@@ -100,3 +100,58 @@
   background: #22c55e;
   box-shadow: 0 12rpx 24rpx rgba(34, 197, 94, 0.2);
 }
+
+.example-card {
+  margin-top: 24rpx;
+  padding: 26rpx 30rpx;
+  border: 2rpx solid #dbeafe;
+  border-radius: 26rpx;
+  background: #ffffff;
+}
+
+.example-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+  color: #64748b;
+  font-size: 24rpx;
+}
+
+.example-audio {
+  flex-shrink: 0;
+  min-height: 62rpx;
+  padding: 0 18rpx;
+  color: #2563eb;
+  background: #eff6ff;
+  font-size: 22rpx;
+}
+
+.example-english,
+.example-chinese {
+  display: block;
+  line-height: 1.55;
+}
+
+.example-english {
+  margin-top: 20rpx;
+  color: #25304a;
+  font-size: 31rpx;
+  font-weight: 650;
+}
+
+.example-focus { color: #2563eb; font-weight: 850; }
+
+.example-chinese {
+  margin-top: 10rpx;
+  color: #64748b;
+  font-size: 25rpx;
+}
+
+.example-unavailable {
+  display: block;
+  margin: 20rpx 8rpx 0;
+  color: #94a3b8;
+  font-size: 22rpx;
+  line-height: 1.5;
+}

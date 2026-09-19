@@ -71,6 +71,8 @@ test("my page exposes privacy and native contact support without requiring a loa
   assert.match(template, /data-url="\/pages\/service-info\/index\?type=privacy" bindtap="openPage"/);
   assert.doesNotMatch(template, /service-info\/index\?type=(membership|support)/);
   assert.match(template, /<button class="menu-row contact-menu" open-type="contact">/);
+  assert.match(template, /menu-icon support-icon/);
+  assert.match(template, /menu-icon privacy-icon/);
   assert.equal((template.match(/open-type="contact"/g) || []).length, 1);
   const serviceTemplate = read("pages/service-info/index.wxml");
   assert.match(serviceTemplate, /open-type="contact"/);
@@ -133,10 +135,18 @@ for (const changed of ["signed price", "product price", "duration"]) {
   });
 }
 
-test("privacy covers actual learning, media, orders, caches and provider processing without claiming anonymous data", () => {
+test("privacy follows the six-section guide and covers actual data processing", () => {
   const { privacySections, membershipSections } = require(path.join(root, "config/service-documents.js"));
   const privacy = privacySections.map((section) => section.text).join("\n");
-  for (const term of ["OpenID", "不会自动取得", "保存资料", "年龄段", "学习目标", "录音", "图片", "交易号", "缓存", "IP", "Azure", "有道", "智谱", "OpenAI", "哈希安全标识", "归档", "监护人", "注销"]) assert.ok(privacy.includes(term), term);
+  assert.deepEqual(privacySections.map((section) => section.title), [
+    "开发者处理的信息", "未成年人保护", "你的权利", "开发者对信息的存储",
+    "信息的使用规则", "信息对外提供"
+  ]);
+  for (const term of ["OpenID", "头像", "学习目标", "词库", "录音", "图片", "订单号", "IP", "监护人", "注销"]) assert.ok(privacy.includes(term), term);
+  assert.doesNotMatch(privacy, /马宇翔|46821618@qq.com|客服时间|一般当天会回复/);
+  assert.doesNotMatch(privacy, /Azure|智谱|有道|实际启用的第三方服务/);
+  assert.match(read("pages/service-info/index.wxml"), /wx:if="\{\{type !== 'privacy'\}\}"/);
+  assert.doesNotMatch(read("pages/service-info/index.wxml"), /实际启用的第三方服务/);
   const agreement = membershipSections.map((section) => section.text).join("\n");
   assert.match(agreement, /不自动续费/);
   assert.match(agreement, /不属于本次付费承诺/);

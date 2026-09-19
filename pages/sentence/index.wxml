@@ -18,10 +18,14 @@
   </view>
 
   <block wx:else>
-    <view class="progress-line">
-      <text>把下面的中文表达成英文</text>
+    <view class="progress-line round-progress">
       <text>第 {{index + 1}} 题 · 共 {{prompts.length}} 题</text>
+      <view class="round-progress-right">
+        <view class="round-counts"><text class="round-count-correct">✓ {{correctCount}}</text><text class="round-count-wrong">✕ {{wrongCount}}</text></view>
+        <button class="mini-share-button" open-type="share" aria-label="分享小程序给微信好友"><image class="mini-share-icon" src="/assets/icons/wechat-share.svg" /></button>
+      </view>
     </view>
+    <text class="progress-instruction">把下面的中文表达成英文</text>
     <view class="card prompt-card">
       <text class="question-number">{{index + 1}}</text>
       <view class="prompt-content">

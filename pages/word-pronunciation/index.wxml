@@ -15,10 +15,14 @@
   </view>
 
   <block wx:else>
-    <view class="progress-line">
-      <text>听标准发音，再按住跟读</text>
+    <view class="progress-line round-progress">
       <text>{{index + 1}} / {{words.length}}</text>
+      <view class="round-progress-right">
+        <view class="round-counts"><text class="round-count-correct">✓ {{passedCount}}</text><text class="round-count-wrong">✕ {{failedCount}}</text></view>
+        <button class="mini-share-button" open-type="share" aria-label="分享小程序给微信好友"><image class="mini-share-icon" src="/assets/icons/wechat-share.svg" /></button>
+      </view>
     </view>
+    <text class="progress-instruction">听标准发音，再按住跟读</text>
 
     <view class="pronunciation-card">
       <text class="pronunciation-index">{{index + 1}}</text>

@@ -163,6 +163,52 @@ button::after {
   font-size: 25rpx;
 }
 
+.round-progress {
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 14rpx;
+}
+
+.round-progress-right {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.round-counts {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  font-size: 24rpx;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.round-count-correct { color: #16a34a; }
+.round-count-wrong { color: #ef4444; }
+
+.mini-share-button {
+  flex-shrink: 0;
+  width: 64rpx;
+  min-height: 64rpx;
+  height: 64rpx;
+  padding: 0;
+  border-radius: 50%;
+  background: #e9f9ef;
+}
+
+.mini-share-icon {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.progress-instruction {
+  display: block;
+  margin-bottom: 20rpx;
+  color: #7b859b;
+  font-size: 24rpx;
+}
+
 .practice-question {
   display: block;
   margin: 36rpx 0;

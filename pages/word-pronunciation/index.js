@@ -1,6 +1,7 @@
 const { request } = require("../../utils/request");
 const { uploadFile } = require("../../utils/upload");
 const { playSpeech, stopSpeech } = require("../../utils/speech");
+const { countPronunciationResults } = require("../../utils/round-stats");
 const {
   playFeedbackSound,
   prepareFeedbackSound
@@ -30,6 +31,7 @@ Page({
     voiceResult: null,
     answered: false,
     passedCount: 0,
+    failedCount: 0,
     finished: false
   },
 
@@ -85,6 +87,7 @@ Page({
         voiceResult: null,
         answered: false,
         passedCount: 0,
+        failedCount: 0,
         finished: false
       });
     } catch (error) {
@@ -200,7 +203,7 @@ Page({
         current,
         voiceResult,
         answered: true,
-        passedCount: this.data.passedCount + (!wasPassed && voiceResult.correct ? 1 : 0)
+        ...countPronunciationResults(words)
       });
       playFeedbackSound(voiceResult.correct);
     } catch (error) {
@@ -242,5 +245,9 @@ Page({
 
   restart() {
     this.loadWords();
+  },
+
+  onShareAppMessage() {
+    return { title: "一起来单词练练，轻松学英语", path: "/pages/home/index" };
   }
 });

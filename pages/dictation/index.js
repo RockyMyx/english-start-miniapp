@@ -5,6 +5,7 @@ const {
   prepareFeedbackSound
 } = require("../../utils/feedback-sound");
 const { syncDailyGoal } = require("../../utils/learning-progress");
+const { countAnswerResults } = require("../../utils/round-stats");
 
 function shuffled(items) {
   return [...items].sort(() => Math.random() - 0.5);
@@ -27,6 +28,8 @@ Page({
     answer: "",
     result: null,
     correctCount: 0,
+    wrongCount: 0,
+    submitting: false,
     finished: false,
     summary: null,
     speaking: false,
@@ -101,6 +104,8 @@ Page({
         answer: "",
         result: null,
         correctCount: 0,
+        wrongCount: 0,
+        submitting: false,
         finished: false,
         summary: null
       });
@@ -130,6 +135,8 @@ Page({
       answer: "",
       result: null,
       correctCount: 0,
+      wrongCount: 0,
+      submitting: false,
       finished: false,
       summary: null,
       setupComplete: true,
@@ -182,8 +189,9 @@ Page({
   },
 
   async submit() {
-    if (!this.data.answer.trim() || this.data.result) return;
+    if (!this.data.answer.trim() || this.data.result || this.data.submitting) return;
     prepareFeedbackSound();
+    this.setData({ submitting: true });
     try {
       const result = await request({
         url: "/practice/answers",
@@ -205,16 +213,21 @@ Page({
       };
       const words = [...this.data.words];
       words[this.data.index] = answeredWord;
+      const counts = countAnswerResults(
+        words.map((word) => word.answerState && word.answerState.result)
+      );
       this.setData({
         words,
         current: answeredWord,
         result,
-        correctCount: this.data.correctCount + (result.correct ? 1 : 0)
+        ...counts
       });
       playFeedbackSound(result.correct);
       if (result.correct) syncDailyGoal();
     } catch (error) {
       this.setData({ error: error.message });
+    } finally {
+      this.setData({ submitting: false });
     }
   },
 
@@ -289,8 +302,14 @@ Page({
       answer: "",
       result: null,
       correctCount: 0,
+      wrongCount: 0,
+      submitting: false,
       finished: false,
       summary: null
     });
+  },
+
+  onShareAppMessage() {
+    return { title: "一起来单词练练，轻松学英语", path: "/pages/home/index" };
   }
 });

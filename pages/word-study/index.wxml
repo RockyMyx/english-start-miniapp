@@ -15,10 +15,13 @@
   </view>
 
   <block wx:else>
-    <view class="progress-line">
-      <text>先听、再看、最后判断是否认识</text>
+    <view class="progress-line round-progress">
       <text>{{index + 1}} / {{words.length}}</text>
+      <button class="mini-share-button" open-type="share" aria-label="分享小程序给微信好友">
+        <image class="mini-share-icon" src="/assets/icons/wechat-share.svg" />
+      </button>
     </view>
+    <text class="progress-instruction">先听、再看、最后判断是否认识</text>
 
     <view class="study-card {{revealed ? 'study-card-revealed' : ''}}" bindtap="reveal">
       <text class="study-index">{{index + 1}}</text>
@@ -30,6 +33,16 @@
         <text wx:else class="reveal-hint">轻点卡片查看中文</text>
       </view>
     </view>
+
+    <view wx:if="{{revealed && current.example}}" class="example-card">
+      <view class="example-heading">
+        <text>例句 · 看看这个词怎么用</text>
+        <button class="example-audio" loading="{{speakingExample}}" bindtap="playExample">🔊 听句子</button>
+      </view>
+      <text class="example-english"><text>{{current.example.before}}</text><text class="example-focus">{{current.example.focus}}</text><text>{{current.example.after}}</text></text>
+      <text class="example-chinese">{{current.example.chinese}}</text>
+    </view>
+    <text wx:elif="{{revealed}}" class="example-unavailable">当前词库还不足以组成这个词的例句，继续积累词汇吧。</text>
 
     <view wx:if="{{!current.learningResult}}" class="learning-actions">
       <button

@@ -72,10 +72,19 @@
     </view>
 
     <block wx:elif="{{current}}">
-      <view class="progress-line">
-        <text>听发音，输入英文</text>
+      <view class="progress-line round-progress">
         <text>第 {{index + 1}} 题 · 共 {{words.length}} 题</text>
+        <view class="round-progress-right">
+          <view class="round-counts">
+            <text class="round-count-correct">✓ {{correctCount}}</text>
+            <text class="round-count-wrong">✕ {{wrongCount}}</text>
+          </view>
+          <button class="mini-share-button" open-type="share" aria-label="分享小程序给微信好友">
+            <image class="mini-share-icon" src="/assets/icons/wechat-share.svg" />
+          </button>
+        </view>
       </view>
+      <text class="progress-instruction">听发音，输入英文</text>
 
       <view class="card dictation-question-card">
         <text class="question-number">{{index + 1}}</text>
@@ -95,7 +104,7 @@
         <text class="practice-hint">可以重复播放，不区分大小写</text>
       </view>
 
-      <button wx:if="{{!result}}" class="action-button submit-button {{!answer ? 'nav-disabled' : ''}}" disabled="{{!answer}}" bindtap="submit">提交答案</button>
+      <button wx:if="{{!result}}" class="action-button submit-button {{!answer || submitting ? 'nav-disabled' : ''}}" disabled="{{!answer || submitting}}" loading="{{submitting}}" bindtap="submit">提交答案</button>
       <view wx:if="{{result}}" class="{{result.correct ? 'success-banner' : 'error-banner'}}">{{result.feedback}}</view>
       <view class="practice-nav">
         <button

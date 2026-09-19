@@ -10,6 +10,7 @@ Page({
     loading: true,
     saving: false,
     speaking: false,
+    speakingExample: false,
     error: "",
     words: [],
     index: 0,
@@ -42,10 +43,17 @@ Page({
       const wordsUrl = this.data.dailyPlanId
         ? `/daily-plans/${this.data.dailyPlanId}/tasks/${this.data.dailyTaskKey}/words`
         : "/words";
-      const [result, review] = await Promise.all([
+      const [result, review, examplesResult] = await Promise.all([
         request({ url: wordsUrl }),
-        this.data.scope === "weak" ? request({ url: "/review" }) : Promise.resolve(null)
+        this.data.scope === "weak" ? request({ url: "/review" }) : Promise.resolve(null),
+        request({ url: "/words/examples" }).catch((error) => {
+          if (error.statusCode === 404) return { examples: [] };
+          throw error;
+        })
       ]);
+      const examplesByWordId = new Map(
+        (examplesResult.examples || []).map((example) => [example.wordId, example])
+      );
       const pendingIds = review
         ? new Set(
             review.items
@@ -59,7 +67,11 @@ Page({
       const words = (this.data.dailyPlanId ? sourceWords : shuffled(sourceWords))
         .sort((left, right) => (right.incorrectCount || 0) - (left.incorrectCount || 0))
         .slice(0, 10)
-        .map((word) => ({ ...word, learningResult: "" }));
+        .map((word) => ({
+          ...word,
+          learningResult: "",
+          example: examplesByWordId.get(word.id) || null
+        }));
       this.setData({
         words,
         index: 0,
@@ -89,6 +101,19 @@ Page({
       this.setData({ error: error.message });
     } finally {
       this.setData({ speaking: false });
+    }
+  },
+
+  async playExample() {
+    const example = this.data.current && this.data.current.example;
+    if (!example || this.data.speakingExample || this.data.speaking) return;
+    this.setData({ speakingExample: true, error: "" });
+    try {
+      await playSpeech(example.english, "sentence");
+    } catch (error) {
+      this.setData({ error: error.message });
+    } finally {
+      this.setData({ speakingExample: false });
     }
   },
 
@@ -139,13 +164,20 @@ Page({
   },
 
   showWord(index) {
+    stopSpeech();
     const current = this.data.words[index];
     this.setData({
       index,
       current,
       revealed: Boolean(current.learningResult),
+      speaking: false,
+      speakingExample: false,
       error: ""
     });
+  },
+
+  onShareAppMessage() {
+    return { title: "一起来单词练练，轻松学英语", path: "/pages/home/index" };
   },
 
   goHome() {
